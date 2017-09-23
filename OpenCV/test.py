@@ -7,10 +7,11 @@ import argparse
 import imutils
 import cv2
 
+#To find the midpoint
 def midpoint(point1, point2):
 	return (point1[0] + point2[0]) * 0.5, (point1[1] + point2[1]) * 0.5
 
-
+#To find the marker
 def find_marker(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #convert image to grayscale
     blur = cv2.cvtColor(gray, (5,5), 0)
@@ -37,6 +38,7 @@ IMAGE_PATHS = ["*.png", "*.png", "*.png"]
 # load the furst image that contains an object that is KNOWN TO BE 2 feet
 # from our camera, then find the paper marker in the image, and initialize
 # the focal length
-image = cv2.imread(IMAGE_PATHS[0])
+# image = cv2.imread(IMAGE_PATHS[0])
+image = cv2.imread("images/2ft.png")
 marker = find_marker(image)
 focalLength = (marker[1][0] * KNOWN_DISTANCE) / KNOWN_WIDTH
