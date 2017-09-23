@@ -34,15 +34,18 @@ def find_marker(image):
 
 # compute and return the distance from the maker to the camera
 def distance_to_camera(knownWidth, focalLength, perWidth):
+    print "perWidth", perWidth
+    print "focalLength", focalLength
+    print "returning = ", (knownWidth * focalLength) / perWidth
     return (knownWidth * focalLength) / perWidth
 
 # initialize the known distance from the camera to the object, which in this case is 24 inches
 KNOWN_DISTANCE = 24.0
 # initialize the known object width, which in this case, the piece of paper is 11 inches wide
 KNOWN_WIDTH = 11.0
-
+KNOWN_FOCAL_LENGTH = 543.458329634
 # initialize the list of images that we'll be using
-IMAGE_PATHS = ["*.png", "*.png", "*.png"]
+IMAGE_PATHS = ["images/2ft.png", "images/3ft.png", "images/4ft.png"]
 
 # load the furst image that contains an object that is KNOWN TO BE 2 feet
 # from our camera, then find the paper marker in the image, and initialize
@@ -51,6 +54,10 @@ IMAGE_PATHS = ["*.png", "*.png", "*.png"]
 image = cv2.imread("images/4ft.png")
 marker = find_marker(image)
 focalLength = (marker[1][0] * KNOWN_DISTANCE) / KNOWN_WIDTH
-print distance_to_camera(KNOWN_WIDTH, focalLength, marker[1][0])
-print focalLength
+dis = distance_to_camera(KNOWN_WIDTH, KNOWN_FOCAL_LENGTH, marker[1][0])
+# print "Focal length "  , focalLength
+print "Distace to camera =", dis
+
+
+
 
