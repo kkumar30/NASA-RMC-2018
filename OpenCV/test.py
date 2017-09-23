@@ -14,7 +14,14 @@ def midpoint(point1, point2):
 #To find the marker
 def find_marker(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #convert image to grayscale
-    blur = cv2.cvtColor(gray, (5,5), 0)
+    # blur = cv2.cvtColor(gray, (5,5), 0)
+
+    # --------GAUSSIAN BLUR--------------------------------------------------------
+    # Gaussian Blurring to remove noise
+    # Define a kernel size for Gaussian smoothing / blurring
+    kernel_size = 5
+    blur = cv2.GaussianBlur(gray, (kernel_size, kernel_size), 0)
+
     edged = cv2.Canny(blur, 35, 125)
     # Find the contours in the edged image and keep the largest one;
     # we'll assume that this is our piece of paper in the image
