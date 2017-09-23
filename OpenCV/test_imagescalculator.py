@@ -26,9 +26,10 @@ def find_marker(image):
     blur = cv2.GaussianBlur(gray, (kernel_size, kernel_size), 0)
 
     edged = cv2.Canny(blur, 35, 125)
+    edged = cv2.Canny(blur, 100, 200)
     # Find the contours in the edged image and keep the largest one;
     # we'll assume that this is our piece of paper in the image
-    cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     (_, cnts, _) = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     print len(cnts)
     plt.imshow(edged)
@@ -48,22 +49,22 @@ def distance_to_camera(knownWidth, focalLength, perWidth):
     return (knownWidth * focalLength) / perWidth
 
 # initialize the known distance from the camera to the object, which in this case is 24 inches
-KNOWN_DISTANCE = 24.0
+KNOWN_DISTANCE = 48.0
 # initialize the known object width, which in this case, the piece of paper is 11 inches wide
 KNOWN_WIDTH = 11.0
 KNOWN_FOCAL_LENGTH = 543.458329634
 # initialize the list of images that we'll be using
-IMAGE_PATHS = ["images/2ft.png", "images/3ft.png", "images/4ft.png"]
+IMAGE_PATHS = ["test_images/48.jpg", "test_images/24.jpg"]
 
 # load the furst image that contains an object that is KNOWN TO BE 2 feet
 # from our camera, then find the paper marker in the image, and initialize
 # the focal length
 # image = cv2.imread(IMAGE_PATHS[0])
-image = cv2.imread("images/2ft.png")
+image = cv2.imread("test_images/48.jpg")
 
 marker = find_marker(image)
 focalLength = (marker[1][0] * KNOWN_DISTANCE) / KNOWN_WIDTH
-dis = distance_to_camera(KNOWN_WIDTH, KNOWN_FOCAL_LENGTH, marker[1][0])
+dis = distance_to_camera(KNOWN_WIDTH, focalLength, marker[1][0])
 # print "Focal length "  , focalLength
 print "Distace to camera =", dis
 
