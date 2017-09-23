@@ -1,0 +1,5 @@
+#IDEA workspace xml
+*.xml
+
+#Unwanted repo named stuff
+*.iml
