@@ -7,7 +7,7 @@ import argparse
 import imutils
 import cv2
 import time
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 
 #To find the midpoint
@@ -32,8 +32,8 @@ def find_marker(image):
     # cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     (_, cnts, _) = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     print len(cnts)
-    plt.imshow(edged)
-    plt.show()
+    # plt.imshow(edged)
+    # plt.show()
 #    (cnts, _) = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     c = max(cnts, key=cv2.contourArea)
     # print cv2.minAreaRect(c)
