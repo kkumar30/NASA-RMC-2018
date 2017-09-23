@@ -1,8 +1,3 @@
-"""
-wewe
-""""
-
-
 import numpy  # requires the numpy+mkl pkg
 from scipy.spatial import distance as dist
 from imutils import perspective
@@ -14,8 +9,6 @@ import cv2
 
 def midpoint(point1, point2):
 	return (point1[0] + point2[0]) * 0.5, (point1[1] + point2[1]) * 0.5
-
-
 
 
 def find_marker(image):
