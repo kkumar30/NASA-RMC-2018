@@ -58,6 +58,25 @@ dis = distance_to_camera(KNOWN_WIDTH, KNOWN_FOCAL_LENGTH, marker[1][0])
 # print "Focal length "  , focalLength
 print "Distace to camera =", dis
 
+"""
+Better display of the image files
+"""
+# loop over the images
+for imagePath in IMAGE_PATHS:
+    # load the image, find the marker in the image, then compute the
+    # distance to the marker from the camera
+    image = cv2.imread(imagePath)
+    marker = find_marker(image)
+    inches = distance_to_camera(KNOWN_WIDTH, focalLength, marker[1][0])
+
+    # draw a bounding box around the image and display it
+    box = np.int0(cv2.cv.BoxPoints(marker))
+    cv2.drawContours(image, [box], -1, (0, 255, 0), 2)
+    cv2.putText(image, "%.2fft" % (inches / 12),
+                (image.shape[1] - 200, image.shape[0] - 20), cv2.FONT_HERSHEY_SIMPLEX,
+                2.0, (0, 255, 0), 3)
+    cv2.imshow("image", image)
+    cv2.waitKey(0)
 
 
 
