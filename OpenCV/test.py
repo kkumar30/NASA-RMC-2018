@@ -31,8 +31,8 @@ def find_marker(image):
     cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     (_, cnts, _) = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     print len(cnts)
-    plt.imshow(edged)
-    plt.show()
+    # plt.imshow(edged)
+    # plt.show()
 #    (cnts, _) = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     c = max(cnts, key=cv2.contourArea)
     # print cv2.minAreaRect(c)
@@ -87,6 +87,7 @@ for imagePath in IMAGE_PATHS:
                 (image.shape[1] - 200, image.shape[0] - 20), cv2.FONT_HERSHEY_SIMPLEX,
                 2.0, (0, 255, 0), 3)
     cv2.imshow("image", image)
+    cv2.imwrite(imagePath + "_output.png", image)
     cv2.waitKey(0)
 
 
