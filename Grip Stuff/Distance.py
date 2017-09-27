@@ -10,10 +10,24 @@ import argparse
 import imutils
 import time
 import cv2
+import math
 #import matplotlib.pyplot as plt
 
 # from Pipeline import GripPipeline
 from redObject import RedObjectPipeline
+
+cameraWidth = 1280 #px
+cameraHeight = 720 #px
+focalLength = 4 #mm http://support.logitech.com/en_us/article/17556
+widthOfObject = 292.1 #mm, 11.5in
+
+# TODO##########
+camera_x_center = cameraWidth/2   #in px
+camera_y_center = cameraHeight/2  #in px
+
+###############
+def convertPxToMM(px):
+   return widthOfObject*focalLength/px
 
 def getDistance(pipeline):
     """
@@ -26,11 +40,7 @@ def getDistance(pipeline):
     widths = []
     heights = []
 
-    #TODO##########
-    camera_x_center =  #in px
-    camera_y_center =  #in px
 
-    ###############
 
 
     # Find the bounding boxes of the contours to get x, y, width, and height
@@ -41,28 +51,34 @@ def getDistance(pipeline):
         widths.append(w)
         heights.append(h)
 
-        print widths,heights
+        #print widths,heights
 
     # TODO implement this for an array
     #TODO implement a pxToFt function
     #We have now found hopefully only one contour
     #TODO find the distance from the center of the camera to the wall
+    if len(widths) == 1:
+        print center_x_positions[0],center_y_positions[0],widths[0],heights[0]
+        distToWall = convertPxToMM(widths[0])
+        print "Horizontal Distance to object", distToWall / 100, "m"
+        #With this distance we can use trig with the center of the camera to the x coordinate of the object to find the diagonal distance
+        #find the difference in X
 
-    # distToWall =
+        # x_diff = convertPxToIn(center_x_positions[1]-camera_x_center)
+        x_diff = center_x_positions[0] - camera_x_center
+        print "x diff", x_diff, "in"
+        yaw = math.degrees(math.atan(abs(x_diff)/distToWall))
+        yaw_dist = distToWall/math.cos(yaw)
 
-    #With this distance we can use trig with the center of the camera to the x coordinate of the object to find the diagonal distance
-    #find the difference in X
+        print "yaw distance", yaw_dist/12, "ft"
 
-    # x_diff = convertPxToFt(abs(center_x_positions()-camera_x_center))
-    # yaw = atan(x_diff/distToWall)
-    # yaw_dist = distToWall*cos(yaw)
+        #Now figure out the other diagonal distance with the y coordinate of the object
+        y_diff = convertPxToMM(abs(center_y_positions[0]-camera_y_center))
+        pitch = math.atan(y_diff/distToWall)
+        diagonalDist = yaw_dist/math.cos(pitch)
+        print "pitch angle", pitch, "deg"
+        print "Total Distance to object", diagonalDist/12, "ft"
 
-    #Now figure out the other diagonal distance with the y coordinate of the object
-    # y_diff = convertPxToFt(abs(center_y_positions()-camera_y_center))
-    pitch = atan(y_diff/distToWall)
-    # diagonalDist = yaw_dist*cos(pitch)
-    print "Total Distance to object" diagonalDist "ft"
-    print "Horizontal Distance to object" distToWall "ft"
 
 
 
