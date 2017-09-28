@@ -11,15 +11,24 @@ import imutils
 import time
 import cv2
 import math
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 # from Pipeline import GripPipeline
 from redObject import RedObjectPipeline
 
-cameraWidth = 1280 #px
-cameraHeight = 720 #px
-focalLength = 4 #mm http://support.logitech.com/en_us/article/17556
+cameraWidth = 640 #px
+cameraHeight = 480 #px
+#focalLength = 4 #mm http://support.logitech.com/en_us/article/17556
 widthOfObject = 292.1 #mm, 11.5in
+dFoV = 74 #deg
+dFoV_test = 60 #deg
+
+diagonal = math.sqrt(math.pow(cameraWidth,2)+math.pow(cameraHeight,2))
+# focalLength = (diagonal/2)/math.tan(math.radians(dFoV/2))     #Using a ratio with a known focal length and FOV of a similar logitech webcam
+#focalLength = 3 #mm
+focalLength = (diagonal/2)/math.tan(math.radians(dFoV_test/2))
+print "first focal length",focalLength
+#print "2nd focal length",focalLength2
 
 # TODO##########
 camera_x_center = cameraWidth/2   #in px
@@ -27,7 +36,7 @@ camera_y_center = cameraHeight/2  #in px
 
 ###############
 def convertPxToMM(px):
-   return widthOfObject*focalLength/px
+   return (widthOfObject*focalLength)/px
 
 def getDistance(pipeline):
     """
@@ -60,24 +69,24 @@ def getDistance(pipeline):
     if len(widths) == 1:
         print center_x_positions[0],center_y_positions[0],widths[0],heights[0]
         distToWall = convertPxToMM(widths[0])
-        print "Horizontal Distance to object", distToWall / 100, "m"
+        print "Horizontal Distance to object", distToWall/1000, "m"
         #With this distance we can use trig with the center of the camera to the x coordinate of the object to find the diagonal distance
         #find the difference in X
 
         # x_diff = convertPxToIn(center_x_positions[1]-camera_x_center)
-        x_diff = center_x_positions[0] - camera_x_center
-        print "x diff", x_diff, "in"
-        yaw = math.degrees(math.atan(abs(x_diff)/distToWall))
+        x_diff = abs(center_x_positions[0] - camera_x_center)
+        print "x diff", x_diff, "px"
+        yaw = math.atan(x_diff/focalLength)
         yaw_dist = distToWall/math.cos(yaw)
-
-        print "yaw distance", yaw_dist/12, "ft"
+        print "yaw", math.degrees(yaw), "deg"
+        print "yaw distance", yaw_dist/1000, "m"
 
         #Now figure out the other diagonal distance with the y coordinate of the object
-        y_diff = convertPxToMM(abs(center_y_positions[0]-camera_y_center))
-        pitch = math.atan(y_diff/distToWall)
+        y_diff = abs(center_y_positions[0]-camera_y_center)
+        pitch = math.atan(y_diff/focalLength)
         diagonalDist = yaw_dist/math.cos(pitch)
-        print "pitch angle", pitch, "deg"
-        print "Total Distance to object", diagonalDist/12, "ft"
+        print "pitch angle", math.degrees(pitch), "deg"
+        print "Total Distance to object", diagonalDist/1000, "m"
 
 
 
