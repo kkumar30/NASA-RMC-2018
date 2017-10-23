@@ -1,0 +1,926 @@
+JInput version: Unversioned
+Controller Env = net.java.games.input.DefaultControllerEnvironment@29453f44
+HID-compliant mouse
+Type: Mouse
+Component Count: 8
+Component 0: x
+    Identifier: x
+    ComponentType: Relative Analog
+Component 1: y
+    Identifier: y
+    ComponentType: Relative Analog
+Component 2: z
+    Identifier: z
+    ComponentType: Relative Analog
+Component 3: Left
+    Identifier: Left
+    ComponentType: Absolute Digital
+Component 4: Right
+    Identifier: Right
+    ComponentType: Absolute Digital
+Component 5: Middle
+    Identifier: Middle
+    ComponentType: Absolute Digital
+Component 6: 3
+    Identifier: 3
+    ComponentType: Absolute Digital
+Component 7: 4
+    Identifier: 4
+    ComponentType: Absolute Digital
+---------------------------------
+HID Keyboard Device
+Type: Keyboard
+Component Count: 114
+Component 0: Back
+    Identifier: Back
+    ComponentType: Absolute Digital
+Component 1: Tab
+    Identifier: Tab
+    ComponentType: Absolute Digital
+Component 2: Return
+    Identifier: Return
+    ComponentType: Absolute Digital
+Component 3: Left Shift
+    Identifier: Left Shift
+    ComponentType: Absolute Digital
+Component 4: Left Control
+    Identifier: Left Control
+    ComponentType: Absolute Digital
+Component 5: Left Alt
+    Identifier: Left Alt
+    ComponentType: Absolute Digital
+Component 6: Pause
+    Identifier: Pause
+    ComponentType: Absolute Digital
+Component 7: Caps Lock
+    Identifier: Caps Lock
+    ComponentType: Absolute Digital
+Component 8: Kana
+    Identifier: Kana
+    ComponentType: Absolute Digital
+Component 9: Kana
+    Identifier: Kana
+    ComponentType: Absolute Digital
+Component 10: Kana
+    Identifier: Kana
+    ComponentType: Absolute Digital
+Component 11: Kanji
+    Identifier: Kanji
+    ComponentType: Absolute Digital
+Component 12: Kanji
+    Identifier: Kanji
+    ComponentType: Absolute Digital
+Component 13: Escape
+    Identifier: Escape
+    ComponentType: Absolute Digital
+Component 14: Convert
+    Identifier: Convert
+    ComponentType: Absolute Digital
+Component 15:  
+    Identifier:  
+    ComponentType: Absolute Digital
+Component 16: Pg Up
+    Identifier: Pg Up
+    ComponentType: Absolute Digital
+Component 17: Pg Down
+    Identifier: Pg Down
+    ComponentType: Absolute Digital
+Component 18: End
+    Identifier: End
+    ComponentType: Absolute Digital
+Component 19: Home
+    Identifier: Home
+    ComponentType: Absolute Digital
+Component 20: Left
+    Identifier: Left
+    ComponentType: Absolute Digital
+Component 21: Up
+    Identifier: Up
+    ComponentType: Absolute Digital
+Component 22: Right
+    Identifier: Right
+    ComponentType: Absolute Digital
+Component 23: Down
+    Identifier: Down
+    ComponentType: Absolute Digital
+Component 24: SysRq
+    Identifier: SysRq
+    ComponentType: Absolute Digital
+Component 25: Insert
+    Identifier: Insert
+    ComponentType: Absolute Digital
+Component 26: Delete
+    Identifier: Delete
+    ComponentType: Absolute Digital
+Component 27: 0
+    Identifier: 0
+    ComponentType: Absolute Digital
+Component 28: 1
+    Identifier: 1
+    ComponentType: Absolute Digital
+Component 29: 2
+    Identifier: 2
+    ComponentType: Absolute Digital
+Component 30: 3
+    Identifier: 3
+    ComponentType: Absolute Digital
+Component 31: 4
+    Identifier: 4
+    ComponentType: Absolute Digital
+Component 32: 5
+    Identifier: 5
+    ComponentType: Absolute Digital
+Component 33: 6
+    Identifier: 6
+    ComponentType: Absolute Digital
+Component 34: 7
+    Identifier: 7
+    ComponentType: Absolute Digital
+Component 35: 8
+    Identifier: 8
+    ComponentType: Absolute Digital
+Component 36: 9
+    Identifier: 9
+    ComponentType: Absolute Digital
+Component 37: A
+    Identifier: A
+    ComponentType: Absolute Digital
+Component 38: B
+    Identifier: B
+    ComponentType: Absolute Digital
+Component 39: C
+    Identifier: C
+    ComponentType: Absolute Digital
+Component 40: D
+    Identifier: D
+    ComponentType: Absolute Digital
+Component 41: E
+    Identifier: E
+    ComponentType: Absolute Digital
+Component 42: F
+    Identifier: F
+    ComponentType: Absolute Digital
+Component 43: G
+    Identifier: G
+    ComponentType: Absolute Digital
+Component 44: H
+    Identifier: H
+    ComponentType: Absolute Digital
+Component 45: I
+    Identifier: I
+    ComponentType: Absolute Digital
+Component 46: J
+    Identifier: J
+    ComponentType: Absolute Digital
+Component 47: K
+    Identifier: K
+    ComponentType: Absolute Digital
+Component 48: L
+    Identifier: L
+    ComponentType: Absolute Digital
+Component 49: M
+    Identifier: M
+    ComponentType: Absolute Digital
+Component 50: N
+    Identifier: N
+    ComponentType: Absolute Digital
+Component 51: O
+    Identifier: O
+    ComponentType: Absolute Digital
+Component 52: P
+    Identifier: P
+    ComponentType: Absolute Digital
+Component 53: Q
+    Identifier: Q
+    ComponentType: Absolute Digital
+Component 54: R
+    Identifier: R
+    ComponentType: Absolute Digital
+Component 55: S
+    Identifier: S
+    ComponentType: Absolute Digital
+Component 56: T
+    Identifier: T
+    ComponentType: Absolute Digital
+Component 57: U
+    Identifier: U
+    ComponentType: Absolute Digital
+Component 58: V
+    Identifier: V
+    ComponentType: Absolute Digital
+Component 59: W
+    Identifier: W
+    ComponentType: Absolute Digital
+Component 60: X
+    Identifier: X
+    ComponentType: Absolute Digital
+Component 61: Y
+    Identifier: Y
+    ComponentType: Absolute Digital
+Component 62: Z
+    Identifier: Z
+    ComponentType: Absolute Digital
+Component 63: Left Windows
+    Identifier: Left Windows
+    ComponentType: Absolute Digital
+Component 64: Right Windows
+    Identifier: Right Windows
+    ComponentType: Absolute Digital
+Component 65: Apps
+    Identifier: Apps
+    ComponentType: Absolute Digital
+Component 66: Sleep
+    Identifier: Sleep
+    ComponentType: Absolute Digital
+Component 67: Num 0
+    Identifier: Num 0
+    ComponentType: Absolute Digital
+Component 68: Num 1
+    Identifier: Num 1
+    ComponentType: Absolute Digital
+Component 69: Num 2
+    Identifier: Num 2
+    ComponentType: Absolute Digital
+Component 70: Num 3
+    Identifier: Num 3
+    ComponentType: Absolute Digital
+Component 71: Num 4
+    Identifier: Num 4
+    ComponentType: Absolute Digital
+Component 72: Num 5
+    Identifier: Num 5
+    ComponentType: Absolute Digital
+Component 73: Num 6
+    Identifier: Num 6
+    ComponentType: Absolute Digital
+Component 74: Num 7
+    Identifier: Num 7
+    ComponentType: Absolute Digital
+Component 75: Num 8
+    Identifier: Num 8
+    ComponentType: Absolute Digital
+Component 76: Num 9
+    Identifier: Num 9
+    ComponentType: Absolute Digital
+Component 77: Multiply
+    Identifier: Multiply
+    ComponentType: Absolute Digital
+Component 78: Num +
+    Identifier: Num +
+    ComponentType: Absolute Digital
+Component 79: Num ,
+    Identifier: Num ,
+    ComponentType: Absolute Digital
+Component 80: Num -
+    Identifier: Num -
+    ComponentType: Absolute Digital
+Component 81: Num .
+    Identifier: Num .
+    ComponentType: Absolute Digital
+Component 82: Num /
+    Identifier: Num /
+    ComponentType: Absolute Digital
+Component 83: F1
+    Identifier: F1
+    ComponentType: Absolute Digital
+Component 84: F2
+    Identifier: F2
+    ComponentType: Absolute Digital
+Component 85: F3
+    Identifier: F3
+    ComponentType: Absolute Digital
+Component 86: F4
+    Identifier: F4
+    ComponentType: Absolute Digital
+Component 87: F5
+    Identifier: F5
+    ComponentType: Absolute Digital
+Component 88: F6
+    Identifier: F6
+    ComponentType: Absolute Digital
+Component 89: F7
+    Identifier: F7
+    ComponentType: Absolute Digital
+Component 90: F8
+    Identifier: F8
+    ComponentType: Absolute Digital
+Component 91: F9
+    Identifier: F9
+    ComponentType: Absolute Digital
+Component 92: F10
+    Identifier: F10
+    ComponentType: Absolute Digital
+Component 93: F11
+    Identifier: F11
+    ComponentType: Absolute Digital
+Component 94: F12
+    Identifier: F12
+    ComponentType: Absolute Digital
+Component 95: F13
+    Identifier: F13
+    ComponentType: Absolute Digital
+Component 96: F14
+    Identifier: F14
+    ComponentType: Absolute Digital
+Component 97: F15
+    Identifier: F15
+    ComponentType: Absolute Digital
+Component 98: Num Lock
+    Identifier: Num Lock
+    ComponentType: Absolute Digital
+Component 99: Scroll Lock
+    Identifier: Scroll Lock
+    ComponentType: Absolute Digital
+Component 100: Num =
+    Identifier: Num =
+    ComponentType: Absolute Digital
+Component 101: Num =
+    Identifier: Num =
+    ComponentType: Absolute Digital
+Component 102: Left Shift
+    Identifier: Left Shift
+    ComponentType: Absolute Digital
+Component 103: Right Shift
+    Identifier: Right Shift
+    ComponentType: Absolute Digital
+Component 104: Left Control
+    Identifier: Left Control
+    ComponentType: Absolute Digital
+Component 105: Right Control
+    Identifier: Right Control
+    ComponentType: Absolute Digital
+Component 106: Left Alt
+    Identifier: Left Alt
+    ComponentType: Absolute Digital
+Component 107: Right Alt
+    Identifier: Right Alt
+    ComponentType: Absolute Digital
+Component 108: ,
+    Identifier: ,
+    ComponentType: Absolute Digital
+Component 109: .
+    Identifier: .
+    ComponentType: Absolute Digital
+Component 110: ~
+    Identifier: ~
+    ComponentType: Absolute Digital
+Component 111: [
+    Identifier: [
+    ComponentType: Absolute Digital
+Component 112: ]
+    Identifier: ]
+    ComponentType: Absolute Digital
+Component 113: Ax
+    Identifier: Ax
+    ComponentType: Absolute Digital
+---------------------------------
+Standard PS/2 Keyboard
+Type: Keyboard
+Component Count: 114
+Component 0: Back
+    Identifier: Back
+    ComponentType: Absolute Digital
+Component 1: Tab
+    Identifier: Tab
+    ComponentType: Absolute Digital
+Component 2: Return
+    Identifier: Return
+    ComponentType: Absolute Digital
+Component 3: Left Shift
+    Identifier: Left Shift
+    ComponentType: Absolute Digital
+Component 4: Left Control
+    Identifier: Left Control
+    ComponentType: Absolute Digital
+Component 5: Left Alt
+    Identifier: Left Alt
+    ComponentType: Absolute Digital
+Component 6: Pause
+    Identifier: Pause
+    ComponentType: Absolute Digital
+Component 7: Caps Lock
+    Identifier: Caps Lock
+    ComponentType: Absolute Digital
+Component 8: Kana
+    Identifier: Kana
+    ComponentType: Absolute Digital
+Component 9: Kana
+    Identifier: Kana
+    ComponentType: Absolute Digital
+Component 10: Kana
+    Identifier: Kana
+    ComponentType: Absolute Digital
+Component 11: Kanji
+    Identifier: Kanji
+    ComponentType: Absolute Digital
+Component 12: Kanji
+    Identifier: Kanji
+    ComponentType: Absolute Digital
+Component 13: Escape
+    Identifier: Escape
+    ComponentType: Absolute Digital
+Component 14: Convert
+    Identifier: Convert
+    ComponentType: Absolute Digital
+Component 15:  
+    Identifier:  
+    ComponentType: Absolute Digital
+Component 16: Pg Up
+    Identifier: Pg Up
+    ComponentType: Absolute Digital
+Component 17: Pg Down
+    Identifier: Pg Down
+    ComponentType: Absolute Digital
+Component 18: End
+    Identifier: End
+    ComponentType: Absolute Digital
+Component 19: Home
+    Identifier: Home
+    ComponentType: Absolute Digital
+Component 20: Left
+    Identifier: Left
+    ComponentType: Absolute Digital
+Component 21: Up
+    Identifier: Up
+    ComponentType: Absolute Digital
+Component 22: Right
+    Identifier: Right
+    ComponentType: Absolute Digital
+Component 23: Down
+    Identifier: Down
+    ComponentType: Absolute Digital
+Component 24: SysRq
+    Identifier: SysRq
+    ComponentType: Absolute Digital
+Component 25: Insert
+    Identifier: Insert
+    ComponentType: Absolute Digital
+Component 26: Delete
+    Identifier: Delete
+    ComponentType: Absolute Digital
+Component 27: 0
+    Identifier: 0
+    ComponentType: Absolute Digital
+Component 28: 1
+    Identifier: 1
+    ComponentType: Absolute Digital
+Component 29: 2
+    Identifier: 2
+    ComponentType: Absolute Digital
+Component 30: 3
+    Identifier: 3
+    ComponentType: Absolute Digital
+Component 31: 4
+    Identifier: 4
+    ComponentType: Absolute Digital
+Component 32: 5
+    Identifier: 5
+    ComponentType: Absolute Digital
+Component 33: 6
+    Identifier: 6
+    ComponentType: Absolute Digital
+Component 34: 7
+    Identifier: 7
+    ComponentType: Absolute Digital
+Component 35: 8
+    Identifier: 8
+    ComponentType: Absolute Digital
+Component 36: 9
+    Identifier: 9
+    ComponentType: Absolute Digital
+Component 37: A
+    Identifier: A
+    ComponentType: Absolute Digital
+Component 38: B
+    Identifier: B
+    ComponentType: Absolute Digital
+Component 39: C
+    Identifier: C
+    ComponentType: Absolute Digital
+Component 40: D
+    Identifier: D
+    ComponentType: Absolute Digital
+Component 41: E
+    Identifier: E
+    ComponentType: Absolute Digital
+Component 42: F
+    Identifier: F
+    ComponentType: Absolute Digital
+Component 43: G
+    Identifier: G
+    ComponentType: Absolute Digital
+Component 44: H
+    Identifier: H
+    ComponentType: Absolute Digital
+Component 45: I
+    Identifier: I
+    ComponentType: Absolute Digital
+Component 46: J
+    Identifier: J
+    ComponentType: Absolute Digital
+Component 47: K
+    Identifier: K
+    ComponentType: Absolute Digital
+Component 48: L
+    Identifier: L
+    ComponentType: Absolute Digital
+Component 49: M
+    Identifier: M
+    ComponentType: Absolute Digital
+Component 50: N
+    Identifier: N
+    ComponentType: Absolute Digital
+Component 51: O
+    Identifier: O
+    ComponentType: Absolute Digital
+Component 52: P
+    Identifier: P
+    ComponentType: Absolute Digital
+Component 53: Q
+    Identifier: Q
+    ComponentType: Absolute Digital
+Component 54: R
+    Identifier: R
+    ComponentType: Absolute Digital
+Component 55: S
+    Identifier: S
+    ComponentType: Absolute Digital
+Component 56: T
+    Identifier: T
+    ComponentType: Absolute Digital
+Component 57: U
+    Identifier: U
+    ComponentType: Absolute Digital
+Component 58: V
+    Identifier: V
+    ComponentType: Absolute Digital
+Component 59: W
+    Identifier: W
+    ComponentType: Absolute Digital
+Component 60: X
+    Identifier: X
+    ComponentType: Absolute Digital
+Component 61: Y
+    Identifier: Y
+    ComponentType: Absolute Digital
+Component 62: Z
+    Identifier: Z
+    ComponentType: Absolute Digital
+Component 63: Left Windows
+    Identifier: Left Windows
+    ComponentType: Absolute Digital
+Component 64: Right Windows
+    Identifier: Right Windows
+    ComponentType: Absolute Digital
+Component 65: Apps
+    Identifier: Apps
+    ComponentType: Absolute Digital
+Component 66: Sleep
+    Identifier: Sleep
+    ComponentType: Absolute Digital
+Component 67: Num 0
+    Identifier: Num 0
+    ComponentType: Absolute Digital
+Component 68: Num 1
+    Identifier: Num 1
+    ComponentType: Absolute Digital
+Component 69: Num 2
+    Identifier: Num 2
+    ComponentType: Absolute Digital
+Component 70: Num 3
+    Identifier: Num 3
+    ComponentType: Absolute Digital
+Component 71: Num 4
+    Identifier: Num 4
+    ComponentType: Absolute Digital
+Component 72: Num 5
+    Identifier: Num 5
+    ComponentType: Absolute Digital
+Component 73: Num 6
+    Identifier: Num 6
+    ComponentType: Absolute Digital
+Component 74: Num 7
+    Identifier: Num 7
+    ComponentType: Absolute Digital
+Component 75: Num 8
+    Identifier: Num 8
+    ComponentType: Absolute Digital
+Component 76: Num 9
+    Identifier: Num 9
+    ComponentType: Absolute Digital
+Component 77: Multiply
+    Identifier: Multiply
+    ComponentType: Absolute Digital
+Component 78: Num +
+    Identifier: Num +
+    ComponentType: Absolute Digital
+Component 79: Num ,
+    Identifier: Num ,
+    ComponentType: Absolute Digital
+Component 80: Num -
+    Identifier: Num -
+    ComponentType: Absolute Digital
+Component 81: Num .
+    Identifier: Num .
+    ComponentType: Absolute Digital
+Component 82: Num /
+    Identifier: Num /
+    ComponentType: Absolute Digital
+Component 83: F1
+    Identifier: F1
+    ComponentType: Absolute Digital
+Component 84: F2
+    Identifier: F2
+    ComponentType: Absolute Digital
+Component 85: F3
+    Identifier: F3
+    ComponentType: Absolute Digital
+Component 86: F4
+    Identifier: F4
+    ComponentType: Absolute Digital
+Component 87: F5
+    Identifier: F5
+    ComponentType: Absolute Digital
+Component 88: F6
+    Identifier: F6
+    ComponentType: Absolute Digital
+Component 89: F7
+    Identifier: F7
+    ComponentType: Absolute Digital
+Component 90: F8
+    Identifier: F8
+    ComponentType: Absolute Digital
+Component 91: F9
+    Identifier: F9
+    ComponentType: Absolute Digital
+Component 92: F10
+    Identifier: F10
+    ComponentType: Absolute Digital
+Component 93: F11
+    Identifier: F11
+    ComponentType: Absolute Digital
+Component 94: F12
+    Identifier: F12
+    ComponentType: Absolute Digital
+Component 95: F13
+    Identifier: F13
+    ComponentType: Absolute Digital
+Component 96: F14
+    Identifier: F14
+    ComponentType: Absolute Digital
+Component 97: F15
+    Identifier: F15
+    ComponentType: Absolute Digital
+Component 98: Num Lock
+    Identifier: Num Lock
+    ComponentType: Absolute Digital
+Component 99: Scroll Lock
+    Identifier: Scroll Lock
+    ComponentType: Absolute Digital
+Component 100: Num =
+    Identifier: Num =
+    ComponentType: Absolute Digital
+Component 101: Num =
+    Identifier: Num =
+    ComponentType: Absolute Digital
+Component 102: Left Shift
+    Identifier: Left Shift
+    ComponentType: Absolute Digital
+Component 103: Right Shift
+    Identifier: Right Shift
+    ComponentType: Absolute Digital
+Component 104: Left Control
+    Identifier: Left Control
+    ComponentType: Absolute Digital
+Component 105: Right Control
+    Identifier: Right Control
+    ComponentType: Absolute Digital
+Component 106: Left Alt
+    Identifier: Left Alt
+    ComponentType: Absolute Digital
+Component 107: Right Alt
+    Identifier: Right Alt
+    ComponentType: Absolute Digital
+Component 108: ,
+    Identifier: ,
+    ComponentType: Absolute Digital
+Component 109: .
+    Identifier: .
+    ComponentType: Absolute Digital
+Component 110: ~
+    Identifier: ~
+    ComponentType: Absolute Digital
+Component 111: [
+    Identifier: [
+    ComponentType: Absolute Digital
+Component 112: ]
+    Identifier: ]
+    ComponentType: Absolute Digital
+Component 113: Ax
+    Identifier: Ax
+    ComponentType: Absolute Digital
+---------------------------------
+Lenovo Pointing Device
+Type: Mouse
+Component Count: 8
+Component 0: x
+    Identifier: x
+    ComponentType: Relative Analog
+Component 1: y
+    Identifier: y
+    ComponentType: Relative Analog
+Component 2: z
+    Identifier: z
+    ComponentType: Relative Analog
+Component 3: Left
+    Identifier: Left
+    ComponentType: Absolute Digital
+Component 4: Right
+    Identifier: Right
+    ComponentType: Absolute Digital
+Component 5: Middle
+    Identifier: Middle
+    ComponentType: Absolute Digital
+Component 6: 3
+    Identifier: 3
+    ComponentType: Absolute Digital
+Component 7: 4
+    Identifier: 4
+    ComponentType: Absolute Digital
+---------------------------------
+2.4G Keyboard Mouse
+Type: Unknown
+Component Count: 31
+Component 0: Button 0
+    Identifier: 0
+    ComponentType: Absolute Digital
+Component 1: Consumer Control
+    Identifier: 1
+    ComponentType: Absolute Digital
+Component 2: Numeric Key Pad
+    Identifier: 2
+    ComponentType: Absolute Digital
+Component 3: Button 3
+    Identifier: 3
+    ComponentType: Absolute Digital
+Component 4: Button 4
+    Identifier: 4
+    ComponentType: Absolute Digital
+Component 5: Button 5
+    Identifier: 5
+    ComponentType: Absolute Digital
+Component 6: Button 6
+    Identifier: 6
+    ComponentType: Absolute Digital
+Component 7: Button 7
+    Identifier: 7
+    ComponentType: Absolute Digital
+Component 8: Button 8
+    Identifier: 8
+    ComponentType: Absolute Digital
+Component 9: Button 9
+    Identifier: 9
+    ComponentType: Absolute Digital
+Component 10: Button 10
+    Identifier: 10
+    ComponentType: Absolute Digital
+Component 11: Button 11
+    Identifier: 11
+    ComponentType: Absolute Digital
+Component 12: Button 12
+    Identifier: 12
+    ComponentType: Absolute Digital
+Component 13: Button 13
+    Identifier: 13
+    ComponentType: Absolute Digital
+Component 14: Button 14
+    Identifier: 14
+    ComponentType: Absolute Digital
+Component 15: Button 15
+    Identifier: 15
+    ComponentType: Absolute Digital
+Component 16: Button 16
+    Identifier: 16
+    ComponentType: Absolute Digital
+Component 17: Button 17
+    Identifier: 17
+    ComponentType: Absolute Digital
+Component 18: Button 18
+    Identifier: 18
+    ComponentType: Absolute Digital
+Component 19: Button 19
+    Identifier: 19
+    ComponentType: Absolute Digital
+Component 20: Button 20
+    Identifier: 20
+    ComponentType: Absolute Digital
+Component 21: Button 21
+    Identifier: 21
+    ComponentType: Absolute Digital
+Component 22: Button 22
+    Identifier: 23
+    ComponentType: Absolute Digital
+Component 23: Button 23
+    Identifier: 24
+    ComponentType: Absolute Digital
+Component 24: Button 24
+    Identifier: 25
+    ComponentType: Absolute Digital
+Component 25: Button 25
+    Identifier: 26
+    ComponentType: Absolute Digital
+Component 26: Button 26
+    Identifier: 27
+    ComponentType: Absolute Digital
+Component 27: Button 27
+    Identifier: 28
+    ComponentType: Absolute Digital
+Component 28: Button 28
+    Identifier: 29
+    ComponentType: Absolute Digital
+Component 29: Button 29
+    Identifier: 30
+    ComponentType: Absolute Digital
+Component 30: Button 30
+    Identifier: 31
+    ComponentType: Absolute Digital
+---------------------------------
+2.4G Keyboard Mouse
+Type: Unknown
+Component Count: 3
+Component 0: System Power
+    Identifier: 0
+    ComponentType: Absolute Digital
+Component 1: System Sleep
+    Identifier: 1
+    ComponentType: Absolute Digital
+Component 2: System Wake Up
+    Identifier: 2
+    ComponentType: Absolute Digital
+---------------------------------
+2.4G Keyboard Mouse
+Type: Unknown
+Component Count: 0
+---------------------------------
+UMDF HID minidriver Device
+Type: Unknown
+Component Count: 1
+Component 0: Button 0
+    Identifier: 0
+    ComponentType: Absolute Digital
+---------------------------------
+Logitech Dual Action
+Type: Stick
+Component Count: 17
+Component 0: Z Rotation
+    Identifier: rz
+    ComponentType: Absolute Analog
+Component 1: Z Axis
+    Identifier: z
+    ComponentType: Absolute Analog
+Component 2: Y Axis
+    Identifier: y
+    ComponentType: Absolute Analog
+Component 3: X Axis
+    Identifier: x
+    ComponentType: Absolute Analog
+Component 4: Hat Switch
+    Identifier: pov
+    ComponentType: Absolute Digital
+Component 5: Button 0
+    Identifier: 0
+    ComponentType: Absolute Digital
+Component 6: Button 1
+    Identifier: 1
+    ComponentType: Absolute Digital
+Component 7: Button 2
+    Identifier: 2
+    ComponentType: Absolute Digital
+Component 8: Button 3
+    Identifier: 3
+    ComponentType: Absolute Digital
+Component 9: Button 4
+    Identifier: 4
+    ComponentType: Absolute Digital
+Component 10: Button 5
+    Identifier: 5
+    ComponentType: Absolute Digital
+Component 11: Button 6
+    Identifier: 6
+    ComponentType: Absolute Digital
+Component 12: Button 7
+    Identifier: 7
+    ComponentType: Absolute Digital
+Component 13: Button 8
+    Identifier: 8
+    ComponentType: Absolute Digital
+Component 14: Button 9
+    Identifier: 9
+    ComponentType: Absolute Digital
+Component 15: Button 10
+    Identifier: 10
+    ComponentType: Absolute Digital
+Component 16: Button 11
+    Identifier: 11
+    ComponentType: Absolute Digital
+---------------------------------

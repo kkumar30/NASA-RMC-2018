@@ -1,0 +1,25 @@
+package data;
+
+import common.MotorMode;
+
+public class MotorData 
+{
+	private final int deviceID;
+	private double current = 0.0;
+	private double temperature = 0.0;
+	private double voltageOutput = 0.0;
+	private double speed = 0.0;
+	private double position = 0.0;
+	private double setpoint = 0.0;
+	private MotorMode mode = MotorMode.K_PERCENT_VBUS;
+	private boolean fowrardLimit = false;
+	private boolean reverseLimit = false;
+	
+	public MotorData(int deviceID)
+	{
+		this.deviceID = deviceID;
+	}
+	
+	
+	
+}
