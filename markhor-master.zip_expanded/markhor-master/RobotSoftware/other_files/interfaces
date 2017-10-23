@@ -1,0 +1,30 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+auto p1p1
+iface p1p1 inet static
+    address 192.168.0.150
+    netmask 255.255.255.0
+    gateway 192.168.0.1
+
+#auto wlan0
+#iface wlan0 inet static
+#    address 192.168.1.102
+#    netmask 255.255.255.0
+#    gateway 192.168.1.1
+
+#allow-hotplug wlan0
+#iface wlan0 inet manual
+#    wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+
+#auto wlan0
+#iface wlan0 inet static
+#    address 192.168.1.101
+#    netmask 255.255.255.0
+#    gateway 192.168.1.1
+#    wpa-essid Markhor2_4
+#    wpa-psk markhor!

@@ -1,0 +1,13 @@
+package common;
+
+public enum MotorMode 
+{
+	K_PERCENT_VBUS,
+	K_CURRENT,
+	K_SPEED,
+	K_POSITION,
+	K_VOLTAGE,
+	K_FOLLOWER,
+	K_MOTION_PROFILE,
+	K_MOTION_MAGIC;
+}
