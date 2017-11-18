@@ -11,15 +11,17 @@ import imutils
 import time
 import cv2
 import math
-import matplotlib.pyplot as plt
-
+# import matplotlib.pyplot as plt
+#test commit
 # from Pipeline import GripPipeline
 from redObject import RedObjectPipeline
+from techbible import GripPipeline
 
 cameraWidth = 640 #px
 cameraHeight = 480 #px
 #focalLength = 4 #mm http://support.logitech.com/en_us/article/17556
-widthOfObject = 292.1 #mm, 11.5in
+# widthOfObject = 292.1 #mm, 11.5in
+widthOfObject = 152.4
 dFoV = 74 #deg
 dFoV_test = 60 #deg
 
@@ -93,12 +95,12 @@ def getDistance(pipeline):
 
 def main():
     print('Creating video capture')
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(2)
     print "framerate", cap.get(5)
 
     print('Creating pipeline')
-    pipeline = RedObjectPipeline()
-
+    #pipeline = RedObjectPipeline()
+    pipeline = GripPipeline()
     print('Running pipeline')
     while cap.isOpened():
         have_frame, frame = cap.read()
@@ -110,7 +112,7 @@ def main():
             getDistance(pipeline)
 
         if cv2.waitKey(1) & 0xFF == ord("q"):
-            break
+                break
     print('Capture closed')
     cap.release()
 
