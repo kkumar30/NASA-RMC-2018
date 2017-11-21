@@ -1,0 +1,43 @@
+import serial
+import time
+import sys
+class SerialHandler():
+
+	def __init__(self, port):
+		self.ser = serial.Serial(timeout=1)
+		self.ser.baudrate = 57600
+		self.ser.port = port
+		self.msg = ""
+
+	def initSerial(self):
+		ser_port_str = str(self.ser.port)
+		print "Attempting to open serial port: " + ser_port_str
+		for i in range(3):
+			try:
+				self.ser.open()
+				print "SUCCESS: Serial port opened on port: " + ser_port_str
+				return;
+			except:
+				print "FAILED: Open serial on port: " + ser_port_str
+				if(i != 2):
+					print "Retry in 5 seconds"
+				time.sleep(5)
+
+		print "CRITICAL FAILURE: Unable to open serial on port: " + ser_port_str
+		time.sleep(0.1)
+		sys.exit("Could not begin serial communications with SensorBoard")
+
+	def sendMessage(self, msg):
+		self.ser.write(msg.encode())
+		pass
+
+	def getMessage(self):
+		print "Getting Message"
+		line = ""
+		if(self.ser.is_open):
+			line = self.ser.readline()
+		return str(line)
+		pass
+
+if __name__ == "__main__":
+	sh = SerialHandler('COM3')

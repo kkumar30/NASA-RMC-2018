@@ -1,0 +1,8 @@
+import java.io.*;
+import java.net.*;
+
+package common;
+
+public class NetworkServer {
+
+}

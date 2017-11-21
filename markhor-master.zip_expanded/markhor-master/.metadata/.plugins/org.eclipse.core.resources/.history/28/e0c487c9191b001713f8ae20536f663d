@@ -1,0 +1,15 @@
+package data;
+
+public class MotorData 
+{
+	private int deviceID;
+	private double current;
+	private double temperature;
+	private double voltageOutput;
+	private double speed;
+	private double position;
+	private double setpoint;
+	private MotorMode mode;
+	private boolean fowrardLimit;
+	private boolean reverseLimit;
+}

@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;RobotSoftware/network&apos;" deleteContents="false" description="Delete resource &apos;RobotSoftware/network&apos;" element1="/RobotSoftware/network" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1489370124423"/>&#x0A;<refactoring comment="Delete resource &apos;ControlStation/test/network/NetworkReceiveTest.java&apos;" deleteContents="false" description="Delete resource &apos;ControlStation/test/network/NetworkReceiveTest.java&apos;" element1="/ControlStation/test/network/NetworkReceiveTest.java" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1489427192947"/>
+</session>

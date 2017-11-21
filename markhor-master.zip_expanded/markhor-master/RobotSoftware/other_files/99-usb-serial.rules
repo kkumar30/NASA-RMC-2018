@@ -1,0 +1,14 @@
+SUBSYSTEM=="tty",
+ATTRS{idVendor}=="2341",
+ATTRS{idProduct}=="0042",
+ATTRS{serial}=="95433343733351016201",
+GROUP="users",
+MODE="0666",
+SYMLINK+="arduino"
+
+SUBSYSTEM=="tty",
+ATTRS{idVendor}=="067B",
+ATTRS{idProduct}=="2303",
+GROUP="users",
+MODE="0666",
+SYSLINK+="hero"

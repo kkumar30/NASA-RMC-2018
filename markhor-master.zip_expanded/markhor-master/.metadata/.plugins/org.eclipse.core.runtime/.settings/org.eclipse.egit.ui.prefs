@@ -1,0 +1,7 @@
+BranchProjectTracker__E\:\\My_Documents\\MQP\\markhor\\.git_controlStationBackend=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<projects branch\="controlStationBackend">\r\n<project>\\ControlStation</project>\r\n<project>\\RobotSoftware</project>\r\n</projects>
+BranchProjectTracker__E\:\\My_Documents\\MQP\\markhor\\.git_linuxPCTest=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<projects branch\="linuxPCTest">\r\n<project>\\RobotSoftware</project>\r\n</projects>
+BranchProjectTracker__E\:\\My_Documents\\MQP\\markhor\\.git_master=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<projects branch\="master">\r\n<project>\\RobotSoftware</project>\r\n</projects>
+commit_dialog_history_messages=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<messages>\r\n<message>added a RobotData page</message>\r\n<message>robot side now generates data to send back to control station</message>\r\n<message>actually moved robotdatatests to common</message>\r\n<message>mvoed robotDataTests from default package to test/common</message>\r\n<message>added a singleton for robot data, uses regex to parse values from str</message>\r\n<message>tweaks made on robot to remove errors</message>\r\n<message>robot capable of interpreting messages from control station</message>\r\n<message>preliminary implementation of states from network messages</message>\r\n<message>code works with joystick on robot</message>\r\n<message>began port of control station to java</message>\r\n</messages>
+eclipse.preferences.version=1
+resourcehistory_graph_split=500,500
+resourcehistory_rev_split=700,300

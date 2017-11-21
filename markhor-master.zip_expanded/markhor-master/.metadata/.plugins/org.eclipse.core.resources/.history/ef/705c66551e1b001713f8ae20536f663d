@@ -1,0 +1,1110 @@
+package gui;
+
+import javax.swing.JFrame;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.GridBagLayout;
+import javax.swing.JPanel;
+import java.awt.Point;
+import javax.swing.SpringLayout;
+import javax.swing.JTabbedPane;
+import javax.swing.DefaultListModel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JButton;
+import javax.swing.JList;
+import java.awt.Color;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import java.awt.Font;
+import java.awt.List;
+import javax.swing.SwingConstants;
+
+import common.Message;
+import common.MessageFactory;
+import common.MessageQueue;
+import common.MessageType;
+import messages.*;
+
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class GUI extends JFrame{
+	
+	private JFrame frame;
+	private JTextField tbox_messageAddPosition;
+	private JTextField tbox_data0;
+	private JTextField tbox_data1;
+	private JTextField tbox_data2;
+	private JTextField tbox_data3;
+	private JTextField tbox_data4;
+	private JTextField tbox_data5;
+	private JTextField tbox_data6;
+	private JTextField tbox_data7;
+	
+	private MessageQueue messageQueue;
+	private DefaultListModel<String> model = new DefaultListModel<String>();
+	private JList messageList = new JList<String>(model);
+	private MessageType selectedMessageType = MessageType.MSG_STOP;
+	private Message selectedMessage = new MsgStop();
+	private JLabel[] messageLabels = new JLabel[8];
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private JTextField textField_4;
+	private JTextField textField_5;
+	private JTextField textField_6;
+	private JTextField textField_7;
+	private JTextField textField_8;
+	private JTextField textField_9;
+	private JTextField textField_10;
+	private JTextField textField_11;
+	private JTextField textField_12;
+	private JTextField textField_13;
+	private JTextField textField_14;
+	private JTextField textField_15;
+	private JTextField textField_16;
+	private JTextField textField_17;
+	private JTextField textField_18;
+	private JTextField textField_19;
+	private JTextField textField_20;
+	private JTextField textField_21;
+	private JTextField textField_22;
+	private JTextField textField_23;
+	private JTextField textField_24;
+	private JTextField textField_25;
+	private JTextField textField_26;
+	private JTextField textField_27;
+	private JTextField textField_28;
+	private JTextField textField_29;
+	private JTextField textField_30;
+	private JTextField textField_31;
+	private JTextField textField_32;
+	private JTextField textField_33;
+	private JTextField textField_34;
+	private JTextField textField_35;
+	private JTextField textField_36;
+	private JTextField textField_37;
+	private JTextField textField_38;
+	private JTextField textField_39;
+	private JTextField textField_40;
+	private JTextField textField_41;
+	private JTextField textField_42;
+	private JTextField textField_43;
+	private JTextField textField_44;
+	private JTextField textField_45;
+	private JTextField textField_46;
+	private JTextField textField_47;
+	private JTextField textField_48;
+	private JTextField textField_49;
+	
+	public static void main(String[] args) 
+	{
+		MessageQueue messageQueue = new MessageQueue();
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					GUI window = new GUI(messageQueue);
+					window.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	
+	private void initialize(MessageQueue messageQueue)
+	{
+		this.messageQueue = messageQueue;
+		
+		frame = new JFrame();
+		frame.setBounds(0, 0, 1600, 900);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		 
+		setTitle("Markhor.exe");
+		setSize(new Dimension(1600, 900));
+		setResizable(false);
+		
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setMaximumSize(new Dimension(785, 32767));
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(Color.LIGHT_GRAY);
+		
+		
+		
+		JPanel panel_1 = new JPanel();
+		
+		
+		
+		JLabel lblStatus = new JLabel("Status:");
+		
+		JLabel lblResolution = new JLabel("Resolution");
+		
+		JComboBox<String> comboBox = new JComboBox<String>();
+		
+		JRadioButton rdbtnEnabled = new JRadioButton("Enabled");
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 787, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(lblResolution)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(rdbtnEnabled)
+									.addPreferredGap(ComponentPlacement.RELATED, 501, Short.MAX_VALUE))
+								.addComponent(panel, GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)))
+						.addComponent(lblStatus))
+					.addContainerGap())
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+							.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblResolution)
+								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(rdbtnEnabled)))
+						.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 594, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+					.addComponent(lblStatus)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
+		
+		JList<String> list_1 = new JList<String>();
+		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
+		gl_panel_1.setHorizontalGroup(
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(list_1, GroupLayout.DEFAULT_SIZE, 1362, Short.MAX_VALUE)
+					.addGap(37))
+		);
+		gl_panel_1.setVerticalGroup(
+			gl_panel_1.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(list_1, GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE))
+		);
+		panel_1.setLayout(gl_panel_1);
+		
+		JPanel panel_2 = new JPanel();
+		tabbedPane.addTab("Main", null, panel_2, null);
+		
+		JButton btnRemoveSelected = new JButton("Remove");
+		btnRemoveSelected.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) 
+			{
+				int removalIndex;
+				try
+				{
+					removalIndex = messageList.getSelectedIndex();
+					messageQueue.removeAtIndex(removalIndex);
+					updateMessageQueueList(messageList);
+				}
+				catch(Exception exception)
+				{
+					System.out.println("Failed to remove message.");
+				}
+				
+				
+			}
+		});
+		btnRemoveSelected.setBackground(new Color(0, 0, 128));
+		btnRemoveSelected.setForeground(new Color(255, 255, 255));
+		btnRemoveSelected.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnRemoveSelected.setPreferredSize(new Dimension(100, 100));
+		
+		JButton btnClearAll = new JButton("Clear All");
+		btnClearAll.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) 
+			{
+				messageQueue.clear();
+				updateMessageQueueList(messageList);
+			}
+		});
+		btnClearAll.setBackground(new Color(0, 0, 128));
+		btnClearAll.setForeground(new Color(255, 255, 255));
+		btnClearAll.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		
+		JButton btnStop = new JButton("STOP");
+		btnStop.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnStop.setForeground(new Color(255, 255, 255));
+		btnStop.setBackground(new Color(255, 0, 0));
+		
+		JButton btnStartQueue = new JButton("START");
+		btnStartQueue.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnStartQueue.setBackground(new Color(0, 128, 0));
+		btnStartQueue.setForeground(new Color(255, 255, 255));
+		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
+		gl_panel_2.setHorizontalGroup(
+			gl_panel_2.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_2.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(messageList, GroupLayout.PREFERRED_SIZE, 616, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnStop, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+						.addComponent(btnStartQueue, GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+						.addComponent(btnClearAll, GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+						.addComponent(btnRemoveSelected, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
+		);
+		gl_panel_2.setVerticalGroup(
+			gl_panel_2.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_2.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+						.addComponent(messageList, GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addComponent(btnRemoveSelected, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnClearAll, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnStop, GroupLayout.PREFERRED_SIZE, 114, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnStartQueue, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)))
+					.addContainerGap())
+		);
+		panel_2.setLayout(gl_panel_2);
+		
+		JPanel panel_3 = new JPanel();
+		tabbedPane.addTab("Commands", null, panel_3, null);
+		panel_3.setLayout(null);
+		
+		JPanel panel_5 = new JPanel();
+		panel_5.setBounds(10, 11, 395, 515);
+		panel_5.setLayout(null);
+		
+		JLabel lblCommandType = new JLabel("Command Type");
+		lblCommandType.setBounds(10, 8, 140, 25);
+		panel_5.add(lblCommandType);
+		lblCommandType.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		
+		JLabel lbl_data0 = new JLabel("Data 0");
+		lbl_data0.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_data0.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_data0.setBounds(10, 58, 168, 31);
+		panel_5.add(lbl_data0);
+		
+		JLabel lbl_data1 = new JLabel("Data 1");
+		lbl_data1.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_data1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_data1.setBounds(10, 100, 168, 31);
+		panel_5.add(lbl_data1);
+		
+		JLabel lbl_data2 = new JLabel("Data 2");
+		lbl_data2.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_data2.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_data2.setBounds(10, 142, 168, 31);
+		panel_5.add(lbl_data2);
+		
+		JLabel lbl_data3 = new JLabel("Data 3");
+		lbl_data3.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_data3.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_data3.setBounds(10, 184, 168, 31);
+		panel_5.add(lbl_data3);
+		
+		JLabel lbl_data4 = new JLabel("Data 4");
+		lbl_data4.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_data4.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_data4.setBounds(10, 226, 168, 31);
+		panel_5.add(lbl_data4);
+		
+		JLabel lbl_data5 = new JLabel("Data 5");
+		lbl_data5.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_data5.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_data5.setBounds(10, 268, 168, 31);
+		panel_5.add(lbl_data5);
+		
+		JLabel lbl_data6 = new JLabel("Data 6");
+		lbl_data6.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_data6.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_data6.setBounds(10, 310, 168, 31);
+		panel_5.add(lbl_data6);
+		
+		JLabel lbl_data7 = new JLabel("Data 7");
+		lbl_data7.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_data7.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_data7.setBounds(10, 352, 168, 31);
+		panel_5.add(lbl_data7);
+		
+		messageLabels[0] = lbl_data0;
+		messageLabels[1] = lbl_data1;
+		messageLabels[2] = lbl_data2;
+		messageLabels[3] = lbl_data3;
+		messageLabels[4] = lbl_data4;
+		messageLabels[5] = lbl_data5;
+		messageLabels[6] = lbl_data6;
+		messageLabels[7] = lbl_data7;
+		
+		JComboBox<String> cbox_cmdType = new JComboBox<String>();
+		cbox_cmdType.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) 
+			{
+				MessageType newMessageType = MessageType.values()[cbox_cmdType.getSelectedIndex()];
+				if(newMessageType != selectedMessageType)
+				{
+					selectedMessageType = newMessageType;
+					selectedMessage = MessageFactory.makeMessage(selectedMessageType);
+					updateMessageLabels();
+					System.out.println("Selected a Message of Type: " + selectedMessageType.toString());
+				}
+			}
+		});
+		cbox_cmdType.setBounds(160, 5, 225, 31);
+		setCommandComboBoxStrings(cbox_cmdType);
+		
+		panel_5.add(cbox_cmdType);
+		cbox_cmdType.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		
+		panel_3.add(panel_5);
+		
+		
+		
+		tbox_data0 = new JTextField();
+		tbox_data0.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		tbox_data0.setColumns(10);
+		tbox_data0.setBounds(188, 58, 197, 31);
+		panel_5.add(tbox_data0);
+		
+		tbox_data1 = new JTextField();
+		tbox_data1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		tbox_data1.setColumns(10);
+		tbox_data1.setBounds(188, 100, 197, 31);
+		panel_5.add(tbox_data1);
+		
+		tbox_data2 = new JTextField();
+		tbox_data2.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		tbox_data2.setColumns(10);
+		tbox_data2.setBounds(188, 142, 197, 31);
+		panel_5.add(tbox_data2);
+		
+		tbox_data3 = new JTextField();
+		tbox_data3.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		tbox_data3.setColumns(10);
+		tbox_data3.setBounds(188, 184, 197, 31);
+		panel_5.add(tbox_data3);
+
+		tbox_data4 = new JTextField();
+		tbox_data4.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		tbox_data4.setColumns(10);
+		tbox_data4.setBounds(188, 226, 197, 31);
+		panel_5.add(tbox_data4);
+		
+		tbox_data5 = new JTextField();
+		tbox_data5.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		tbox_data5.setColumns(10);
+		tbox_data5.setBounds(188, 268, 197, 31);
+		panel_5.add(tbox_data5);
+		
+		tbox_data6 = new JTextField();
+		tbox_data6.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		tbox_data6.setColumns(10);
+		tbox_data6.setBounds(188, 310, 197, 31);
+		panel_5.add(tbox_data6);
+		
+		tbox_data7 = new JTextField();
+		tbox_data7.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		tbox_data7.setColumns(10);
+		tbox_data7.setBounds(188, 352, 197, 31);
+		panel_5.add(tbox_data7);
+		
+		JButton btnAddToEnd = new JButton("Add to End");
+		btnAddToEnd.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				messageQueue.addAtBack(selectedMessage);
+				updateMessageQueueList(messageList);
+				selectedMessage = MessageFactory.makeMessage(selectedMessageType);
+			}
+		});
+		btnAddToEnd.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnAddToEnd.setBounds(10, 394, 375, 41);
+		panel_5.add(btnAddToEnd);
+		
+		JButton btnAddAtPosition = new JButton("Add at Position");
+		btnAddAtPosition.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) 
+			{
+				int messageIndex;
+				try
+				{
+					messageIndex = Integer.parseInt(tbox_messageAddPosition.getText());
+					messageQueue.addAtPosition(selectedMessage, messageIndex);
+					
+				}
+				catch(Exception exception)
+				{
+					System.out.println("Could not add message at selected index, added to back of queue.");
+					messageQueue.addAtBack(selectedMessage);
+				}
+				updateMessageQueueList(messageList);
+				selectedMessage = MessageFactory.makeMessage(selectedMessageType);
+			}
+		});
+		btnAddAtPosition.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnAddAtPosition.setBounds(10, 446, 247, 58);
+		panel_5.add(btnAddAtPosition);
+		
+		tbox_messageAddPosition = new JTextField();
+		tbox_messageAddPosition.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		tbox_messageAddPosition.setBounds(267, 446, 118, 58);
+		panel_5.add(tbox_messageAddPosition);
+		tbox_messageAddPosition.setColumns(10);
+		
+		JPanel panel_4 = new JPanel();
+		tabbedPane.addTab("Robot Data", null, panel_4, null);
+		
+		JPanel panel_6 = new JPanel();
+		
+		JPanel panel_7 = new JPanel();
+		panel_7.setLayout(null);
+		
+		JLabel lbl_rightMotorID = new JLabel("Device ID:");
+		lbl_rightMotorID.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_rightMotorID.setBounds(10, 48, 88, 14);
+		panel_7.add(lbl_rightMotorID);
+		
+		textField_10 = new JTextField();
+		textField_10.setColumns(10);
+		textField_10.setBounds(108, 48, 86, 20);
+		panel_7.add(textField_10);
+		
+		JLabel lbl_rightMotorCurrent = new JLabel("Current (A):");
+		lbl_rightMotorCurrent.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_rightMotorCurrent.setBounds(10, 76, 88, 14);
+		panel_7.add(lbl_rightMotorCurrent);
+		
+		textField_11 = new JTextField();
+		textField_11.setColumns(10);
+		textField_11.setBounds(108, 73, 86, 20);
+		panel_7.add(textField_11);
+		
+		textField_12 = new JTextField();
+		textField_12.setColumns(10);
+		textField_12.setBounds(108, 126, 86, 20);
+		panel_7.add(textField_12);
+		
+		JLabel lbl_rightMotorVoltage = new JLabel("Voltage (V):");
+		lbl_rightMotorVoltage.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_rightMotorVoltage.setBounds(10, 126, 88, 14);
+		panel_7.add(lbl_rightMotorVoltage);
+		
+		JLabel lbl_rightMotorTemperature = new JLabel("Temperature (C):");
+		lbl_rightMotorTemperature.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_rightMotorTemperature.setBounds(0, 101, 98, 14);
+		panel_7.add(lbl_rightMotorTemperature);
+		
+		textField_13 = new JTextField();
+		textField_13.setColumns(10);
+		textField_13.setBounds(108, 101, 86, 20);
+		panel_7.add(textField_13);
+		
+		textField_14 = new JTextField();
+		textField_14.setColumns(10);
+		textField_14.setBounds(261, 126, 86, 20);
+		panel_7.add(textField_14);
+		
+		JLabel lbl_rightMotorMode = new JLabel("Mode:");
+		lbl_rightMotorMode.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_rightMotorMode.setBounds(179, 126, 72, 14);
+		panel_7.add(lbl_rightMotorMode);
+		
+		JLabel lbl_rightMotorSetpoint = new JLabel("Setpoint:");
+		lbl_rightMotorSetpoint.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_rightMotorSetpoint.setBounds(179, 101, 72, 14);
+		panel_7.add(lbl_rightMotorSetpoint);
+		
+		textField_15 = new JTextField();
+		textField_15.setColumns(10);
+		textField_15.setBounds(261, 101, 86, 20);
+		panel_7.add(textField_15);
+		
+		textField_16 = new JTextField();
+		textField_16.setColumns(10);
+		textField_16.setBounds(261, 73, 86, 20);
+		panel_7.add(textField_16);
+		
+		JLabel lbl_rightMotorPosition = new JLabel("Position:");
+		lbl_rightMotorPosition.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_rightMotorPosition.setBounds(179, 76, 72, 14);
+		panel_7.add(lbl_rightMotorPosition);
+		
+		JLabel lbl_rightMotorSpeed = new JLabel("Speed:");
+		lbl_rightMotorSpeed.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_rightMotorSpeed.setBounds(179, 48, 72, 14);
+		panel_7.add(lbl_rightMotorSpeed);
+		
+		textField_17 = new JTextField();
+		textField_17.setColumns(10);
+		textField_17.setBounds(261, 48, 86, 20);
+		panel_7.add(textField_17);
+		
+		JLabel lbl_rightMotorFLimit = new JLabel("F. Limit?:");
+		lbl_rightMotorFLimit.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_rightMotorFLimit.setBounds(10, 151, 88, 14);
+		panel_7.add(lbl_rightMotorFLimit);
+		
+		textField_18 = new JTextField();
+		textField_18.setColumns(10);
+		textField_18.setBounds(108, 151, 86, 20);
+		panel_7.add(textField_18);
+		
+		JLabel lbl_rightMotorRLimit = new JLabel("R. Limit?:");
+		lbl_rightMotorRLimit.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_rightMotorRLimit.setBounds(179, 151, 72, 14);
+		panel_7.add(lbl_rightMotorRLimit);
+		
+		textField_19 = new JTextField();
+		textField_19.setColumns(10);
+		textField_19.setBounds(261, 151, 86, 20);
+		panel_7.add(textField_19);
+		
+		JLabel lbl_rightDriveMotor = new JLabel("Right Drive Motor");
+		lbl_rightDriveMotor.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_rightDriveMotor.setBounds(10, 11, 337, 26);
+		panel_7.add(lbl_rightDriveMotor);
+		
+		JPanel panel_8 = new JPanel();
+		panel_8.setLayout(null);
+		
+		JLabel lbl_scoopMotorID = new JLabel("Device ID:");
+		lbl_scoopMotorID.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_scoopMotorID.setBounds(10, 48, 88, 14);
+		panel_8.add(lbl_scoopMotorID);
+		
+		textField_20 = new JTextField();
+		textField_20.setColumns(10);
+		textField_20.setBounds(108, 48, 86, 20);
+		panel_8.add(textField_20);
+		
+		JLabel lbl_scoopMotorCurrent = new JLabel("Current (A):");
+		lbl_scoopMotorCurrent.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_scoopMotorCurrent.setBounds(10, 76, 88, 14);
+		panel_8.add(lbl_scoopMotorCurrent);
+		
+		textField_21 = new JTextField();
+		textField_21.setColumns(10);
+		textField_21.setBounds(108, 73, 86, 20);
+		panel_8.add(textField_21);
+		
+		textField_22 = new JTextField();
+		textField_22.setColumns(10);
+		textField_22.setBounds(108, 126, 86, 20);
+		panel_8.add(textField_22);
+		
+		JLabel lbl_scoopMotorVoltage = new JLabel("Voltage (V):");
+		lbl_scoopMotorVoltage.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_scoopMotorVoltage.setBounds(10, 126, 88, 14);
+		panel_8.add(lbl_scoopMotorVoltage);
+		
+		JLabel lbl_scoopMotorTemperature = new JLabel("Temperature (C):");
+		lbl_scoopMotorTemperature.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_scoopMotorTemperature.setBounds(-17, 101, 115, 14);
+		panel_8.add(lbl_scoopMotorTemperature);
+		
+		textField_23 = new JTextField();
+		textField_23.setColumns(10);
+		textField_23.setBounds(108, 101, 86, 20);
+		panel_8.add(textField_23);
+		
+		textField_24 = new JTextField();
+		textField_24.setColumns(10);
+		textField_24.setBounds(261, 126, 86, 20);
+		panel_8.add(textField_24);
+		
+		JLabel lbl_scoopMotorMode = new JLabel("Mode:");
+		lbl_scoopMotorMode.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_scoopMotorMode.setBounds(179, 126, 72, 14);
+		panel_8.add(lbl_scoopMotorMode);
+		
+		JLabel lbl_scoopMotorSetpoint = new JLabel("Setpoint:");
+		lbl_scoopMotorSetpoint.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_scoopMotorSetpoint.setBounds(179, 101, 72, 14);
+		panel_8.add(lbl_scoopMotorSetpoint);
+		
+		textField_25 = new JTextField();
+		textField_25.setColumns(10);
+		textField_25.setBounds(261, 101, 86, 20);
+		panel_8.add(textField_25);
+		
+		textField_26 = new JTextField();
+		textField_26.setColumns(10);
+		textField_26.setBounds(261, 73, 86, 20);
+		panel_8.add(textField_26);
+		
+		JLabel lbl_scoopMotorPosition = new JLabel("Position:");
+		lbl_scoopMotorPosition.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_scoopMotorPosition.setBounds(179, 76, 72, 14);
+		panel_8.add(lbl_scoopMotorPosition);
+		
+		JLabel lbl_scoopMotorSpeed = new JLabel("Speed:");
+		lbl_scoopMotorSpeed.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_scoopMotorSpeed.setBounds(179, 48, 72, 14);
+		panel_8.add(lbl_scoopMotorSpeed);
+		
+		textField_27 = new JTextField();
+		textField_27.setColumns(10);
+		textField_27.setBounds(261, 48, 86, 20);
+		panel_8.add(textField_27);
+		
+		JLabel lbl_scoopMotorFLimit = new JLabel("F. Limit?:");
+		lbl_scoopMotorFLimit.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_scoopMotorFLimit.setBounds(10, 151, 88, 14);
+		panel_8.add(lbl_scoopMotorFLimit);
+		
+		textField_28 = new JTextField();
+		textField_28.setColumns(10);
+		textField_28.setBounds(108, 151, 86, 20);
+		panel_8.add(textField_28);
+		
+		JLabel lbl_scoopMotorRLimit = new JLabel("R. Limit?:");
+		lbl_scoopMotorRLimit.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_scoopMotorRLimit.setBounds(179, 151, 72, 14);
+		panel_8.add(lbl_scoopMotorRLimit);
+		
+		textField_29 = new JTextField();
+		textField_29.setColumns(10);
+		textField_29.setBounds(261, 151, 86, 20);
+		panel_8.add(textField_29);
+		
+		JLabel lbl_scoopMotor = new JLabel("Scoop Motor");
+		lbl_scoopMotor.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_scoopMotor.setBounds(10, 11, 337, 26);
+		panel_8.add(lbl_scoopMotor);
+		
+		JPanel panel_9 = new JPanel();
+		panel_9.setLayout(null);
+		
+		JLabel lbl_depthMotorID = new JLabel("Device ID:");
+		lbl_depthMotorID.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_depthMotorID.setBounds(10, 48, 88, 14);
+		panel_9.add(lbl_depthMotorID);
+		
+		textField_30 = new JTextField();
+		textField_30.setColumns(10);
+		textField_30.setBounds(108, 48, 86, 20);
+		panel_9.add(textField_30);
+		
+		JLabel lbl_depthMotorCurrent = new JLabel("Current (A):");
+		lbl_depthMotorCurrent.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_depthMotorCurrent.setBounds(10, 76, 88, 14);
+		panel_9.add(lbl_depthMotorCurrent);
+		
+		textField_31 = new JTextField();
+		textField_31.setColumns(10);
+		textField_31.setBounds(108, 73, 86, 20);
+		panel_9.add(textField_31);
+		
+		textField_32 = new JTextField();
+		textField_32.setColumns(10);
+		textField_32.setBounds(108, 126, 86, 20);
+		panel_9.add(textField_32);
+		
+		JLabel lbl_depthMotorVoltage = new JLabel("Voltage (V):");
+		lbl_depthMotorVoltage.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_depthMotorVoltage.setBounds(10, 126, 88, 14);
+		panel_9.add(lbl_depthMotorVoltage);
+		
+		JLabel lbl_depthMotorTemperature = new JLabel("Temperature (C):");
+		lbl_depthMotorTemperature.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_depthMotorTemperature.setBounds(0, 101, 98, 14);
+		panel_9.add(lbl_depthMotorTemperature);
+		
+		textField_33 = new JTextField();
+		textField_33.setColumns(10);
+		textField_33.setBounds(108, 101, 86, 20);
+		panel_9.add(textField_33);
+		
+		textField_34 = new JTextField();
+		textField_34.setColumns(10);
+		textField_34.setBounds(261, 126, 86, 20);
+		panel_9.add(textField_34);
+		
+		JLabel lbl_depthMotorMode = new JLabel("Mode:");
+		lbl_depthMotorMode.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_depthMotorMode.setBounds(179, 126, 72, 14);
+		panel_9.add(lbl_depthMotorMode);
+		
+		JLabel lbl_depthMotorSetpoint = new JLabel("Setpoint:");
+		lbl_depthMotorSetpoint.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_depthMotorSetpoint.setBounds(179, 101, 72, 14);
+		panel_9.add(lbl_depthMotorSetpoint);
+		
+		textField_35 = new JTextField();
+		textField_35.setColumns(10);
+		textField_35.setBounds(261, 101, 86, 20);
+		panel_9.add(textField_35);
+		
+		textField_36 = new JTextField();
+		textField_36.setColumns(10);
+		textField_36.setBounds(261, 73, 86, 20);
+		panel_9.add(textField_36);
+		
+		JLabel lbl_depthMotorPosition = new JLabel("Position:");
+		lbl_depthMotorPosition.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_depthMotorPosition.setBounds(179, 76, 72, 14);
+		panel_9.add(lbl_depthMotorPosition);
+		
+		JLabel lbl_depthMotorSpeed = new JLabel("Speed:");
+		lbl_depthMotorSpeed.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_depthMotorSpeed.setBounds(179, 48, 72, 14);
+		panel_9.add(lbl_depthMotorSpeed);
+		
+		textField_37 = new JTextField();
+		textField_37.setColumns(10);
+		textField_37.setBounds(261, 48, 86, 20);
+		panel_9.add(textField_37);
+		
+		JLabel lbl_depthMotorFLimit = new JLabel("F. Limit?:");
+		lbl_depthMotorFLimit.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_depthMotorFLimit.setBounds(10, 151, 88, 14);
+		panel_9.add(lbl_depthMotorFLimit);
+		
+		textField_38 = new JTextField();
+		textField_38.setColumns(10);
+		textField_38.setBounds(108, 151, 86, 20);
+		panel_9.add(textField_38);
+		
+		JLabel lbl_depthMotorRLimit = new JLabel("R. Limit?:");
+		lbl_depthMotorRLimit.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_depthMotorRLimit.setBounds(179, 151, 72, 14);
+		panel_9.add(lbl_depthMotorRLimit);
+		
+		textField_39 = new JTextField();
+		textField_39.setColumns(10);
+		textField_39.setBounds(261, 151, 86, 20);
+		panel_9.add(textField_39);
+		
+		JLabel lbl_depthMotor = new JLabel("Depth Motor");
+		lbl_depthMotor.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_depthMotor.setBounds(10, 11, 337, 26);
+		panel_9.add(lbl_depthMotor);
+		
+		JPanel panel_10 = new JPanel();
+		panel_10.setLayout(null);
+		
+		JLabel lbl_winchMotorID = new JLabel("Device ID:");
+		lbl_winchMotorID.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_winchMotorID.setBounds(10, 48, 88, 14);
+		panel_10.add(lbl_winchMotorID);
+		
+		textField_40 = new JTextField();
+		textField_40.setColumns(10);
+		textField_40.setBounds(108, 48, 86, 20);
+		panel_10.add(textField_40);
+		
+		JLabel lbl_winchMotorCurrent = new JLabel("Current (A):");
+		lbl_winchMotorCurrent.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_winchMotorCurrent.setBounds(10, 76, 88, 14);
+		panel_10.add(lbl_winchMotorCurrent);
+		
+		textField_41 = new JTextField();
+		textField_41.setColumns(10);
+		textField_41.setBounds(108, 73, 86, 20);
+		panel_10.add(textField_41);
+		
+		textField_42 = new JTextField();
+		textField_42.setColumns(10);
+		textField_42.setBounds(108, 126, 86, 20);
+		panel_10.add(textField_42);
+		
+		JLabel lbl_winchMotorVoltage = new JLabel("Voltage (V):");
+		lbl_winchMotorVoltage.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_winchMotorVoltage.setBounds(10, 126, 88, 14);
+		panel_10.add(lbl_winchMotorVoltage);
+		
+		JLabel lbl_winchMotorTemperature = new JLabel("Temperature (C):");
+		lbl_winchMotorTemperature.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_winchMotorTemperature.setBounds(0, 101, 98, 14);
+		panel_10.add(lbl_winchMotorTemperature);
+		
+		textField_43 = new JTextField();
+		textField_43.setColumns(10);
+		textField_43.setBounds(108, 101, 86, 20);
+		panel_10.add(textField_43);
+		
+		textField_44 = new JTextField();
+		textField_44.setColumns(10);
+		textField_44.setBounds(261, 126, 86, 20);
+		panel_10.add(textField_44);
+		
+		JLabel lbl_winchMotorMode = new JLabel("Mode:");
+		lbl_winchMotorMode.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_winchMotorMode.setBounds(179, 126, 72, 14);
+		panel_10.add(lbl_winchMotorMode);
+		
+		JLabel lbl_winchMotorSetpoint = new JLabel("Setpoint:");
+		lbl_winchMotorSetpoint.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_winchMotorSetpoint.setBounds(179, 101, 72, 14);
+		panel_10.add(lbl_winchMotorSetpoint);
+		
+		textField_45 = new JTextField();
+		textField_45.setColumns(10);
+		textField_45.setBounds(261, 101, 86, 20);
+		panel_10.add(textField_45);
+		
+		textField_46 = new JTextField();
+		textField_46.setColumns(10);
+		textField_46.setBounds(261, 73, 86, 20);
+		panel_10.add(textField_46);
+		
+		JLabel lbl_winchMotorPosition = new JLabel("Position:");
+		lbl_winchMotorPosition.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_winchMotorPosition.setBounds(179, 76, 72, 14);
+		panel_10.add(lbl_winchMotorPosition);
+		
+		JLabel lbl_winchMotorSpeed = new JLabel("Speed:");
+		lbl_winchMotorSpeed.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_winchMotorSpeed.setBounds(179, 48, 72, 14);
+		panel_10.add(lbl_winchMotorSpeed);
+		
+		textField_47 = new JTextField();
+		textField_47.setColumns(10);
+		textField_47.setBounds(261, 48, 86, 20);
+		panel_10.add(textField_47);
+		
+		JLabel lbl_winchMotorFLimit = new JLabel("F. Limit?:");
+		lbl_winchMotorFLimit.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_winchMotorFLimit.setBounds(10, 151, 88, 14);
+		panel_10.add(lbl_winchMotorFLimit);
+		
+		textField_48 = new JTextField();
+		textField_48.setColumns(10);
+		textField_48.setBounds(108, 151, 86, 20);
+		panel_10.add(textField_48);
+		
+		JLabel lbl_winchMotorRLimit = new JLabel("R. Limit?:");
+		lbl_winchMotorRLimit.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_winchMotorRLimit.setBounds(179, 151, 72, 14);
+		panel_10.add(lbl_winchMotorRLimit);
+		
+		textField_49 = new JTextField();
+		textField_49.setColumns(10);
+		textField_49.setBounds(261, 151, 86, 20);
+		panel_10.add(textField_49);
+		
+		JLabel lbl_winchMotor = new JLabel("Winch Motor");
+		lbl_winchMotor.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_winchMotor.setBounds(10, 11, 337, 26);
+		panel_10.add(lbl_winchMotor);
+		GroupLayout gl_panel_4 = new GroupLayout(panel_4);
+		gl_panel_4.setHorizontalGroup(
+			gl_panel_4.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_4.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_4.createSequentialGroup()
+							.addComponent(panel_6, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(panel_7, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_4.createSequentialGroup()
+							.addComponent(panel_8, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(panel_9, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE))
+						.addComponent(panel_10, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(46, Short.MAX_VALUE))
+		);
+		gl_panel_4.setVerticalGroup(
+			gl_panel_4.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_4.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_7, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_6, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_8, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_9, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(panel_10, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))
+		);
+		panel_6.setLayout(null);
+		
+		JLabel lbl_leftMotorID = new JLabel("Device ID:");
+		lbl_leftMotorID.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_leftMotorID.setBounds(10, 48, 88, 14);
+		panel_6.add(lbl_leftMotorID);
+		
+		textField = new JTextField();
+		textField.setBounds(108, 48, 86, 20);
+		panel_6.add(textField);
+		textField.setColumns(10);
+		
+		JLabel lbl_leftMotorCurrent = new JLabel("Current (A):");
+		lbl_leftMotorCurrent.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_leftMotorCurrent.setBounds(10, 76, 88, 14);
+		panel_6.add(lbl_leftMotorCurrent);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.setBounds(108, 73, 86, 20);
+		panel_6.add(textField_1);
+		
+		textField_2 = new JTextField();
+		textField_2.setColumns(10);
+		textField_2.setBounds(108, 126, 86, 20);
+		panel_6.add(textField_2);
+		
+		JLabel leftMotorVoltage = new JLabel("Voltage (V):");
+		leftMotorVoltage.setHorizontalAlignment(SwingConstants.TRAILING);
+		leftMotorVoltage.setBounds(10, 126, 88, 14);
+		panel_6.add(leftMotorVoltage);
+		
+		JLabel lbl_leftMotorTemperature = new JLabel("Temperature (C):");
+		lbl_leftMotorTemperature.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_leftMotorTemperature.setBounds(-11, 101, 109, 14);
+		panel_6.add(lbl_leftMotorTemperature);
+		
+		textField_3 = new JTextField();
+		textField_3.setColumns(10);
+		textField_3.setBounds(108, 101, 86, 20);
+		panel_6.add(textField_3);
+		
+		textField_4 = new JTextField();
+		textField_4.setColumns(10);
+		textField_4.setBounds(261, 126, 86, 20);
+		panel_6.add(textField_4);
+		
+		JLabel lbl_leftMotorMode = new JLabel("Mode:");
+		lbl_leftMotorMode.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_leftMotorMode.setBounds(179, 126, 72, 14);
+		panel_6.add(lbl_leftMotorMode);
+		
+		JLabel lbl_leftMotorSetpoint = new JLabel("Setpoint:");
+		lbl_leftMotorSetpoint.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_leftMotorSetpoint.setBounds(179, 101, 72, 14);
+		panel_6.add(lbl_leftMotorSetpoint);
+		
+		textField_5 = new JTextField();
+		textField_5.setColumns(10);
+		textField_5.setBounds(261, 101, 86, 20);
+		panel_6.add(textField_5);
+		
+		textField_6 = new JTextField();
+		textField_6.setColumns(10);
+		textField_6.setBounds(261, 73, 86, 20);
+		panel_6.add(textField_6);
+		
+		JLabel lbl_leftMotorPosition = new JLabel("Position:");
+		lbl_leftMotorPosition.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_leftMotorPosition.setBounds(179, 76, 72, 14);
+		panel_6.add(lbl_leftMotorPosition);
+		
+		JLabel lbl_leftMotorSpeed = new JLabel("Speed:");
+		lbl_leftMotorSpeed.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_leftMotorSpeed.setBounds(179, 48, 72, 14);
+		panel_6.add(lbl_leftMotorSpeed);
+		
+		textField_7 = new JTextField();
+		textField_7.setColumns(10);
+		textField_7.setBounds(261, 48, 86, 20);
+		panel_6.add(textField_7);
+		
+		JLabel lbl_leftMotorFLimit = new JLabel("F. Limit?:");
+		lbl_leftMotorFLimit.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_leftMotorFLimit.setBounds(10, 151, 88, 14);
+		panel_6.add(lbl_leftMotorFLimit);
+		
+		textField_8 = new JTextField();
+		textField_8.setColumns(10);
+		textField_8.setBounds(108, 151, 86, 20);
+		panel_6.add(textField_8);
+		
+		JLabel lbl_leftMotorRLimit = new JLabel("R. Limit?:");
+		lbl_leftMotorRLimit.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_leftMotorRLimit.setBounds(179, 151, 72, 14);
+		panel_6.add(lbl_leftMotorRLimit);
+		
+		textField_9 = new JTextField();
+		textField_9.setColumns(10);
+		textField_9.setBounds(261, 151, 86, 20);
+		panel_6.add(textField_9);
+		
+		JLabel lbl_leftMotor = new JLabel("Left Drive Motor");
+		lbl_leftMotor.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_leftMotor.setBounds(10, 11, 337, 26);
+		panel_6.add(lbl_leftMotor);
+		panel_4.setLayout(gl_panel_4);
+		
+		getContentPane().setLayout(groupLayout);
+		
+		
+	}
+	
+	private void updateMessageQueueList(JList<String> messageList)
+	{
+		model.clear();
+		for(int i = 0; i < messageQueue.getSize(); i++)
+		{
+			Message msg = messageQueue.peekAtIndex(i);
+			String listItem = "";
+			listItem += "(" + i + ") ";
+			listItem += msg.getType().toString() + ": ";
+			listItem += msg.getMessageString();
+			model.addElement(listItem);
+			
+		}
+	}
+	
+	private void setCommandComboBoxStrings(JComboBox<String> cbox)
+	{
+		cbox.addItem("STOP");
+		cbox.addItem("Drive Time");
+		cbox.addItem("Drive Distance");
+		cbox.addItem("Rotate Time");
+		cbox.addItem("Scoop Time");
+		cbox.addItem("Scoop Distance");
+		cbox.addItem("Depth Time");
+		cbox.addItem("Depth Distance");
+		cbox.addItem("Bucket Time");
+		cbox.addItem("Bucket Distance");
+		cbox.addItem("Bucket Position");
+		cbox.addItem("Stop Time");
+		cbox.addItem("Motor Values");
+	}
+	
+	private void updateMessageLabels()
+	{
+		for(int i = 0; i < 8; i++)
+		{
+			System.out.println(selectedMessage.getDataTagByIndex(i));
+			if(selectedMessage != null)
+			{
+				messageLabels[i].setText(selectedMessage.getDataTagByIndex(i));
+			}
+		}
+	}
+
+	public GUI(MessageQueue messageQueue) {
+		initialize(messageQueue);
+	}
+}
