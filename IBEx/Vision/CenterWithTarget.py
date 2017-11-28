@@ -23,6 +23,9 @@ cameraHeight = 480 #px
 #focalLength = 4 #mm http://support.logitech.com/en_us/article/17556
 #widthOfObject = 292.1 #mm, 11.5in
 widthOfObject = 152.4
+widthOfTall = 100
+widthOfWide = 200
+widthOfTarget = 0
 
 #CHANGE THIS TO THE REAL NUMBER
 distToWall = 10;
@@ -43,8 +46,8 @@ camera_x_center = cameraWidth/2   #in px
 camera_y_center = cameraHeight/2  #in px
 
 ###############
-def convertPxToMM(px, width):
-   return (width*focalLength)/px
+def convertPxToMM(px):
+   return (widthOfTarget*focalLength)/px
 
 def center(pipeline):
     """
@@ -81,9 +84,6 @@ def center(pipeline):
     if numContours == 2:
         #Determine which target is closer to the robot
 
-        #First Target
-        x_diff1 = center_x_positions[0] - camera_x_center
-        widthOfTarget= widths[0]
         print widths
         print heights
         area = []
@@ -91,12 +91,43 @@ def center(pipeline):
             area.append(widths[i]*heights[i])
         areas = np.array(area)
         maxAreaIndex = np.argsort(areas)[-1]
+        minAreaIndex = np.argsort(areas)[-2]
 
+        MAX_BOX_AREA = 1000
+        MIN_BOX_AREA= 10
+        curr_box1 = widths[maxAreaIndex]*heights[maxAreaIndex] #left
+        curr_box2 = widths[minAreaIndex]*heights[minAreaIndex]
+        # curr_angle = 90
+
+        #if we are closer to the tall rectangle
         if heights[maxAreaIndex]> widths[maxAreaIndex]:
+            widthOfTarget = widthOfTall
+            ratio_angle = curr_box2/float(curr_box1)
             print "we are on the left"
 
+
+        #if we are closer to the wide rectangle
         elif heights[maxAreaIndex]< widths[maxAreaIndex]:
+            widthOfTarget = widthOfWide
+            ratio_angle = curr_box1/float(curr_box2)
             print "we are on the right"
+
+        print ratio_angle
+        print math.degrees(math.asin(ratio_angle))
+
+        #get close enough to the center of the closest target
+        # x_diff = center_x_positions[maxAreaIndex]-camera_x_center
+        # convertPxToMM(x_diff)
+
+
+
+
+
+
+        # If on the left
+        # gen_angle = MAX_BOX_AREA-curr_box1/float(curr_box2)
+        # print gen_angle
+        # print math.degrees(math.asin(gen_angle))
 
         # print area
         # #convertPxToMM(x_diff1, widthOfTarget)
