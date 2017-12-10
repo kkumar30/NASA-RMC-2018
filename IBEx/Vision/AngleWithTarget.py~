@@ -128,6 +128,7 @@ def center(pipeline):
 
         curr_angle = getRobotAngle(heights,widths,minAreaIndex,maxAreaIndex)
         print curr_angle
+
 	############################################################################################
 
         #get close enough to the center of the closest target

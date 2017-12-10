@@ -100,13 +100,13 @@ def center(pipeline):
         heights.append(h)
         numContours+=1
 
-        #print widths,heights
+    # print widths,heights
 
     # TODO implement this for an array
 
-    #TODO implement a pxToFt function
-    #We have now found hopefully only 2 contours
-    #TODO find the distance from the center of the camera to the wall
+    # TODO implement a pxToFt function
+    # We have now found hopefully only 2 contours
+    # TODO find the distance from the center of the camera to the wall
 
     if numContours == 2:
         #Determine which target is closer to the robot
@@ -128,6 +128,7 @@ def center(pipeline):
 
         curr_angle = getRobotAngle(heights,widths,minAreaIndex,maxAreaIndex)
         print curr_angle
+
 	############################################################################################
 
         #get close enough to the center of the closest target
