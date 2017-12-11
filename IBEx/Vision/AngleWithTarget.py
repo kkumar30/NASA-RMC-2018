@@ -11,11 +11,12 @@ import imutils
 import time
 import cv2
 import math
-import CameraClient
+#import CameraClient
 # import matplotlib.pyplot as plt
 #test commit
 # from Pipeline import GripPipeline
 from grip import GripPipeline
+from pipeline_with_angle import Pipeline
 
 
 cameraWidth = 640 #px
@@ -70,8 +71,14 @@ def getRobotAngle(heights, widths, minAreaIndex, maxAreaIndex):
 
     print "Areas are \n"
     print "Left Area = ", curr_box1, "Right Area= ", curr_box2
+    print "Diff = ", curr_box1 - curr_box2
     print ratio_angle
-    angle = math.degrees(math.asin(ratio_angle))
+    try:
+        angle = math.degrees(math.asin(ratio_angle))
+    except ValueError as e:
+        print 'ValueError'
+        # angle = -100
+        angle = math.degrees(math.asin(1/float(ratio_angle)))
     print "Angle = ", angle
     return angle
 
@@ -216,7 +223,7 @@ def main():
 
     print('Creating pipeline')
     # pipeline = RedObjectPipeline()
-    pipeline = GripPipeline()
+    pipeline = Pipeline()
 
     print('Running pipeline')
     while cap.isOpened():
@@ -224,7 +231,7 @@ def main():
         if have_frame:
             pipeline.process(frame)
             img1 = frame.copy()
-            CameraClient.sendIMGtoMaster(img1)
+            #CameraClient.sendIMGtoMaster(img1)
             cv2.imshow("contours", cv2.drawContours(img1, pipeline.filter_contours_output, -1, (255, 0, 0), 3))
             center(pipeline)
 
