@@ -76,7 +76,7 @@ class Motor:
 			speed = CONSTANTS.MIN_SPEED
 		self.setpoint_val = speed
 
-	# set the mode of the motor 
+	# set the mode of the motor
 	def setMode(self, mode):
 		if mode in MOTOR_MODES.ALL_MODES:
 			self.mode = mode
@@ -86,15 +86,14 @@ class Motor:
 	def setSetpoint(self, mode, setpoint):
 		self.setMode(mode)
 		self.setpoint_val = setpoint
-	    
 
 
-	#def getStateMessage(self):
-	#	return "<" + str(self.deviceID) + ":" + str(self.mode) + ":" + str(int(self.setpoint_val * 1000)) + ">"
 
+	# Get the setpointStatus from the HERO
 	def getStateMessage(self):
 		return "<" + str(self.deviceID) + ":" + str(self.mode) + ":" + str(self.setpoint_val) + ">"
 
+	# Get the whole motor data from network message
 	def getNetworkMessage(self):
 		msg = "<"
 		msg += str(self.deviceID) + ":"
@@ -108,5 +107,3 @@ class Motor:
 		msg += str(int(self.forward_limit)) + ":"
 		msg += str(int(self.reverse_limit)) + ">"
 		return msg
-
-	

@@ -28,19 +28,24 @@ from time import gmtime, strftime
 
 LOGGER.Low("Beginning Program Execution")
 
+
+#Threading stuff... i still don't know this
 motorHandlerLock = threading.Lock()
 #sensorHandlerLock = threading.Lock()
 #LOGGER.Low("Motor Handler Lock: " + str(motorHandlerLock))
 
+
 def motorCommunicationThread():
 	while True:
 		motorHandlerLock.acquire()
+		#get the messages of each motor status from the HERO and update our motor values
 		inboundMotorMessage = motorSerialHandler.getMessage()
 		motorHandler.updateMotors(inboundMotorMessage)
+		#Get our motor state message and send that to the HERO
 		outboundMotorMessage = motorHandler.getMotorStateMessage()
 		motorSerialHandler.sendMessage(outboundMotorMessage)
 		motorHandlerLock.release()
-	
+
 def sensorCommunicationThread():
 	while True:
 		#sensorHandlerLock.acquire()
@@ -50,8 +55,9 @@ def sensorCommunicationThread():
 		LOGGER.Debug(outboundSensorMessage)
 		sensorSerialHandler.sendMessage(outboundSensorMessage)
 		#sensorHandlerLock.release()
-		
+
 def ceaseAllMotorFunctions():
+	#Stop all motors
 	leftDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
 	rightDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
 	collectorDepthMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
@@ -63,7 +69,7 @@ LOGGER.Debug("Initializing handlers...")
 motorHandler = MotorHandler()
 sensorHandler = SensorHandler()
 
-	
+
 if CONSTANTS.USING_SENSOR_BOARD:
 	LOGGER.Debug("Initializing sensor serial handler...")
 	sensorSerialHandler = SerialHandler(CONSTANTS.SENSOR_BOARD_PORT)
@@ -121,6 +127,7 @@ winchMotorCurrentSense = Sensor("WinchMotorCurrentSense")
 scoopReedSwitch = Sensor("ScoopReedSwitch")
 bucketMaterialDepthSense = Sensor("BucketMaterialDepthSense")
 
+#initialize servos
 ratchetServo = Servo()
 camServo1 = Servo()
 camServo2 = Servo()
@@ -155,7 +162,7 @@ if CONSTANTS.USING_JOYSTICK:
 	joystick1 = pygame.joystick.Joystick(0)
 	joystick1.init()
 	jReader = JoystickReader(joystick1)
-	
+
 ceaseAllMotorFunctions()
 
 if CONSTANTS.USING_MOTOR_BOARD:
@@ -204,44 +211,44 @@ while robotEnabled:
 				LOGGER.Critical("Could not connect to network, attempting to reconnect...")
 				ceaseAllMotorFunctions()
 
-	
+
 	# +----------------------------------------------+
 	# |              Current State Logic             |
 	# +----------------------------------------------+
 	# State machine handles the robot's current states
 	if CONSTANTS.USING_NETWORK_COMM and connected:
-		
+
 		if(not inboundMessageQueue.isEmpty()):
 			currentMessage = inboundMessageQueue.getNext()
 			currentMessage.printMessage()
 			lastReceivedMessageNumber = currentReceivedMessageNumber
 			currentReceivedMessageNumber = currentMessage.messageNumber
-			
+
 		#new message has arrived, process
 		if(lastReceivedMessageNumber != currentReceivedMessageNumber):
-			
+
 			stateStartTime = time.time()
 			robotState.setState(currentMessage.type)
 			print currentMessage.type
-			
+
 			if(currentMessage.type == "MSG_STOP"):
 				LOGGER.Debug("Received a MSG_STOP")
-				
+
 			elif(currentMessage.type == "MSG_DRIVE_TIME"):
 				LOGGER.Debug("Received a MSG_DRIVE_TIME")
 
 			elif(currentMessage.type == "MSG_ROTATE_TIME"):
 				LOGGER.Debug("Received a MSG_ROTATE_TIME")
-				
+
 			elif(currentMessage.type == "MSG_SCOOP_TIME"):
 				LOGGER.Debug("Received a MSG_SCOOP_TIME")
-				
+
 			elif(currentMessage.type == "MSG_DEPTH_TIME"):
 				LOGGER.Debug("Received a MSG_DEPTH_TIME")
-				
+
 			elif(currentMessage.type == "MSG_BUCKET_TIME"):
 				LOGGER.Debug("Received a MSG_BUCKET_TIME")
-			
+
 			elif(currentMessage.type == "MSG_DRIVE_DISTANCE"):
 				LOGGER.Low("Received a MSG_DRIVE_DISTANCE")
 				leftDriveMotor.setMode(MOTOR_MODES.K_POSITION)
@@ -268,13 +275,13 @@ while robotEnabled:
 			elif(currentMessage.type == "MSG_MOTOR_VALUES"):
 				LOGGER.Debug("Received a MSG_MOTOR_VALUES")
 				print "MADE IT 1"
-			
+
 			elif(currentMessage.type == "MSG_RATCHET_POSITION"):
 				LOGGER.Debug("Received a MSG_RATCHET_POSITION")
-		    
+
 			else:
 				LOGGER.Moderate("Received an invalid message.")
-				
+
 		#
 		# MSG_STOP:
 		# Stop all motors immediately
@@ -282,7 +289,7 @@ while robotEnabled:
 		if(currentMessage.type == "MSG_STOP"):
 			ceaseAllMotorFunctions()
 			outboundMessageQueue.add("Finished\n")
-		
+
 		#
 		# MSG_DRIVE_TIME:
 		# Drive forward/backward with both motors at the same value
@@ -321,7 +328,7 @@ while robotEnabled:
 		# Drive the scoops for a set time at a specified speed
 		# Data 0: The time in seconds the scoop motor should run
 		# Data 1: The power/speed to run the motor at
-		#		
+		#
 		elif(currentMessage.type == "MSG_SCOOP_TIME"):
 			currentMessage.printMessage()
 			if(time.time() < stateStartTime + currentMessage.messageData[0]):
@@ -335,7 +342,7 @@ while robotEnabled:
 		# Drive the depth motor for a set time at a specified power/speed
 		# Data 0: The time in seconds the depth motor should run
 		# Data 1: The power/speed to run the motor at
-		#			
+		#
 		elif(currentMessage.type == "MSG_DEPTH_TIME"):
 			currentMessage.printMessage()
 			if(time.time() < stateStartTime + currentMessage.messageData[0]):
@@ -349,7 +356,7 @@ while robotEnabled:
 		# Drive the bucket for a set time at a specified speed
 		# Data 0: The time in seconds the bucket motor should run
 		# Data 1: The power/speed to run the motor at
-		#			
+		#
 		elif(currentMessage.type == "MSG_BUCKET_TIME"):
 			currentMessage.printMessage()
 			if(time.time() < stateStartTime + currentMessage.messageData[0]):
@@ -358,8 +365,8 @@ while robotEnabled:
 			else:
 				ceaseAllMotorFunctions()
 				outboundMessageQueue.add("Finished\n")
-		
-				
+
+
 		elif(currentMessage.type == "MSG_DRIVE_DISTANCE"):
 			currentMessage.printMessage()
 			positionVal = -currentMessage.messageData[0]
@@ -389,7 +396,7 @@ while robotEnabled:
 			#if(leftDriveMotor.getDistance() > startingDistance + currentMessage.messageData[0]):
 			#	driveSpeed = currentMessage.messageData[1]
 			#	leftDriveMotor.setSpeed(driveSpeed)
-			#	rightDriveMotor.setSpeed(-driveSpeed)	
+			#	rightDriveMotor.setSpeed(-driveSpeed)
 			#else:
 			#	ceaseAllMotorFunctions()
 			#	outboundMessageQueue.add("Finished\n")
@@ -411,7 +418,7 @@ while robotEnabled:
 			else:
 				ceaseAllMotorFunctions()
 				outboundMessageQueue.add("Finished\n")
-			
+
 		elif(currentMessage.type == "MSG_MOTOR_VALUES"):
 			leftDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, currentMessage.messageData[0])
 			rightDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS,currentMessage.messageData[1])
@@ -422,7 +429,7 @@ while robotEnabled:
 		elif(currentMessage.type == "MSG_RATCHET_POSITION"):
 			ratchetServo.setSetpoint(int(currentMessage.messageData[0]))
 			outboundMessageQueue.add("Finished\n")
-		
+
 
 	if CONSTANTS.USING_JOYSTICK:
 		#pygame.event.get()
@@ -434,7 +441,7 @@ while robotEnabled:
 		collectorDepthMotor.setSpeed(0)
 		collectorScoopsMotor.setSpeed(0)
 		winchMotor.setSpeed(0)
-	
+
 #	else:
 #		if(test_speed_val > 1.0):
 #			test_speed_val = 0
@@ -446,7 +453,7 @@ while robotEnabled:
 		#collectorDepthMotor.setSpeed(0)
 		#collectorScoopsMotor.setSpeed(0)
 		#winchMotor.setSpeed(0)
-		
+
 	#LOGGER.Low("LMotor Speed: " + str(leftDriveMotor.speed) + " RMotor Speed: " + str(rightDriveMotor.speed))
 	#LOGGER.Low("LMotor Position: " + str(leftDriveMotor.position) + "RMotor Position: " + str(rightDriveMotor.position))
 	#sleep to maintain a more constant thread time (specified in Constants.py)
@@ -457,6 +464,3 @@ while robotEnabled:
 	sleepTime = CONSTANTS.LOOP_DELAY_TIME - loopExecutionTime
 	if(sleepTime > 0):
 		time.sleep(sleepTime)
-
-
-
