@@ -1,0 +1,39 @@
+c:\users\dom\documents\visual studio 2013\Projects\GameControllerInterface\GameControllerInterface\bin\Debug\GameControllerInterface.exe.config
+C:\Users\Dom\Documents\Visual Studio 2013\Projects\GameControllerInterface\GameControllerInterface\obj\Debug\GameControllerInterface.csprojResolveAssemblyReference.cache
+C:\Users\Dom\Documents\Visual Studio 2013\Projects\GameControllerInterface\GameControllerInterface\obj\Debug\GameControllerInterface.Form1.resources
+C:\Users\Dom\Documents\Visual Studio 2013\Projects\GameControllerInterface\GameControllerInterface\obj\Debug\GameControllerInterface.Properties.Resources.resources
+C:\Users\Dom\Documents\Visual Studio 2013\Projects\GameControllerInterface\GameControllerInterface\obj\Debug\GameControllerInterface.csproj.GenerateResource.Cache
+C:\Users\Dom\Documents\Visual Studio 2013\Projects\GameControllerInterface\GameControllerInterface\bin\Debug\GameControllerInterface.exe
+C:\Users\Dom\Documents\Visual Studio 2013\Projects\GameControllerInterface\GameControllerInterface\bin\Debug\GameControllerInterface.pdb
+C:\Users\Dom\Documents\Visual Studio 2013\Projects\GameControllerInterface\GameControllerInterface\bin\Debug\SlimDX.dll
+C:\Users\Dom\Documents\Visual Studio 2013\Projects\GameControllerInterface\GameControllerInterface\bin\Debug\SlimDX.pdb
+C:\Users\Dom\Documents\Visual Studio 2013\Projects\GameControllerInterface\GameControllerInterface\bin\Debug\SlimDX.xml
+C:\Users\Dom\Documents\Visual Studio 2013\Projects\GameControllerInterface\GameControllerInterface\obj\Debug\GameControllerInterface.exe
+C:\Users\Dom\Documents\Visual Studio 2013\Projects\GameControllerInterface\GameControllerInterface\obj\Debug\GameControllerInterface.pdb
+C:\Users\Domenic\Documents\MARKHOR\markhor\GameControllerInterface\GameControllerInterface\bin\Debug\GameControllerInterface.exe.config
+C:\Users\Domenic\Documents\MARKHOR\markhor\GameControllerInterface\GameControllerInterface\obj\Debug\GameControllerInterface.exe
+C:\Users\Domenic\Documents\MARKHOR\markhor\GameControllerInterface\GameControllerInterface\obj\Debug\GameControllerInterface.pdb
+C:\Users\Domenic\Documents\MARKHOR\markhor\GameControllerInterface\GameControllerInterface\bin\Debug\GameControllerInterface.exe
+C:\Users\Domenic\Documents\MARKHOR\markhor\GameControllerInterface\GameControllerInterface\bin\Debug\GameControllerInterface.pdb
+C:\Users\Domenic\Documents\MARKHOR\markhor\GameControllerInterface\GameControllerInterface\bin\Debug\SlimDX.dll
+C:\Users\Domenic\Documents\MARKHOR\markhor\GameControllerInterface\GameControllerInterface\bin\Debug\SlimDX.pdb
+C:\Users\Domenic\Documents\MARKHOR\markhor\GameControllerInterface\GameControllerInterface\bin\Debug\SlimDX.xml
+C:\Users\Domenic\Documents\MARKHOR\markhor\GameControllerInterface\GameControllerInterface\obj\Debug\GameControllerInterface.csprojResolveAssemblyReference.cache
+C:\Users\Domenic\Documents\MARKHOR\markhor\GameControllerInterface\GameControllerInterface\obj\Debug\GameControllerInterface.Form1.resources
+C:\Users\Domenic\Documents\MARKHOR\markhor\GameControllerInterface\GameControllerInterface\obj\Debug\GameControllerInterface.Properties.Resources.resources
+C:\Users\Domenic\Documents\MARKHOR\markhor\GameControllerInterface\GameControllerInterface\obj\Debug\GameControllerInterface.csproj.GenerateResource.Cache
+E:\My_Documents\MQP\GameControllerInterface\bin\Debug\GameControllerInterface.exe.config
+E:\My_Documents\MQP\GameControllerInterface\obj\Debug\GameControllerInterface.exe
+E:\My_Documents\MQP\GameControllerInterface\obj\Debug\GameControllerInterface.pdb
+E:\My_Documents\MQP\GameControllerInterface\bin\Debug\GameControllerInterface.exe
+E:\My_Documents\MQP\GameControllerInterface\bin\Debug\GameControllerInterface.pdb
+E:\My_Documents\MQP\GameControllerInterface\bin\Debug\SlimDX.dll
+E:\My_Documents\MQP\GameControllerInterface\bin\Debug\SlimDX.pdb
+E:\My_Documents\MQP\GameControllerInterface\bin\Debug\SlimDX.xml
+E:\My_Documents\MQP\GameControllerInterface\obj\Debug\GameControllerInterface.csprojResolveAssemblyReference.cache
+E:\My_Documents\MQP\GameControllerInterface\obj\Debug\GameControllerInterface.Form1.resources
+E:\My_Documents\MQP\GameControllerInterface\obj\Debug\GameControllerInterface.Properties.Resources.resources
+E:\My_Documents\MQP\GameControllerInterface\obj\Debug\GameControllerInterface.csproj.GenerateResource.Cache
+E:\My_Documents\MQP\markhor\GameControllerInterface\bin\Debug\GameControllerInterface.exe.config
+E:\My_Documents\MQP\markhor\GameControllerInterface\obj\Debug\GameControllerInterface.exe
+E:\My_Documents\MQP\markhor\GameControllerInterface\obj\Debug\GameControllerInterface.pdb
