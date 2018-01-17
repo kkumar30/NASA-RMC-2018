@@ -13,6 +13,7 @@ namespace Ibex_Motor_Control
 
         }
 
+        //Parses a string and returns an ArrayList of SetpointData
         public static ArrayList parseMessage(String msg)
         {
             ArrayList controlData = new ArrayList();
@@ -29,36 +30,6 @@ namespace Ibex_Motor_Control
                 Double setpoint = Double.Parse(subparts[2]);
                 controlData.Add(new SetpointData(deviceID, mode, setpoint));
             }
-
-
-            /*
-            try
-            {
-                String[] msg_parts = msg.Split('|');
-                //msg format: <DEVICE_ID:MODE:SETPOINT>
-                foreach (String part in msg_parts)
-                {
-                    try
-                    {
-                        //check the end delimiters for the full message
-                        if (part[0].Equals('<') && part[part.Length - 1].Equals('>'))
-                        {
-                            String[] subparts = part.Split(':');
-                            int deviceID = Int32.Parse(subparts[0]);
-                            int mode = Int32.Parse(subparts[1]);
-                            int setpoint = Int32.Parse(subparts[2]);
-                            controlData.Add(new SetpointData(deviceID, mode, setpoint));
-                        }
-                    }
-                    catch { }
-                }
-
-            }
-            catch
-            {
-                return new ArrayList();
-            }
-            */
 
             return controlData;
         }

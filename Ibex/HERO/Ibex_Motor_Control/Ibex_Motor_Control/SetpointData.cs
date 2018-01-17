@@ -22,33 +22,6 @@ namespace Ibex_Motor_Control
         public int getDeviceID() { return deviceID; }
         public CTRE.TalonSrx.ControlMode getMode() { return mode; }
         public Double getSetpoint() { return setpoint; }
-        //public float getConvertedSetpoint() { return setpoint_converted; }
-        
-
-
-//        private float convertSetpointToVbus()
-//        {
-//            return (float)(setpoint / 1000.0);
-//        }
-
-//        private float convertSetpointToCurrent()
-//        {
-//            return (float)(setpoint / 1000.0);
-//        }
-
-//        private float convertSetpoint()
-//        {
-//            switch(mode)
-//            {
-//                case CTRE.TalonSrx.ControlMode.kPercentVbus:
-//                    return convertSetpointToVbus();
-//                case CTRE.TalonSrx.ControlMode.kCurrent:
-//                    return convertSetpointToCurrent();
-//                default:
-//                    return (float)0.0;
-//            }
-//        }
-
 
     }
 }

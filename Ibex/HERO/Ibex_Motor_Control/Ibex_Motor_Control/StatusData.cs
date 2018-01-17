@@ -25,7 +25,8 @@ namespace Ibex_Motor_Control
             this.talonDeviceID = talonDeviceID;
             this.talon = talon;
         }
-
+        
+        //reads the talons and updates the data
         public void updateStatusData()
         {
             talonCurrent = (talon.GetOutputCurrent());          
@@ -39,6 +40,7 @@ namespace Ibex_Motor_Control
             controlMode = talon.GetControlMode();
         }
 
+        //Generates an outbound message to the Linux box detailing the status
         public String getOutboundMessage()
         {
             String outboundMessage = "<";
