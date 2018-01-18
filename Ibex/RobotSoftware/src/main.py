@@ -41,9 +41,11 @@ def motorCommunicationThread():
 		#get the messages of each motor status from the HERO and update our motor values
 		inboundMotorMessage = motorSerialHandler.getMessage()
 		motorHandler.updateMotors(inboundMotorMessage)
+
 		#Get our motor state message and send that to the HERO
 		outboundMotorMessage = motorHandler.getMotorStateMessage()
 		motorSerialHandler.sendMessage(outboundMotorMessage)
+
 		motorHandlerLock.release()
 
 def sensorCommunicationThread():
@@ -51,6 +53,7 @@ def sensorCommunicationThread():
 		#sensorHandlerLock.acquire()
 		inboundSensorMessage = sensorSerialHandler.getMessage()
 		sensorHandler.updateSensors(inboundSensorMessage)
+
 		outboundSensorMessage = sensorHandler.getServoStateMessage()
 		LOGGER.Debug(outboundSensorMessage)
 		sensorSerialHandler.sendMessage(outboundSensorMessage)
@@ -79,7 +82,6 @@ if CONSTANTS.USING_MOTOR_BOARD:
 	LOGGER.Debug("Initializing motor serial handler...")
 	motorSerialHandler = SerialHandler(CONSTANTS.MOTOR_BOARD_PORT)
 	motorSerialHandler.initSerial()
-	#motorSerialHandler.sendMessage("<ResetDriveEncoders>\n")
 
 
 #initialize network comms & server thread
@@ -167,12 +169,14 @@ ceaseAllMotorFunctions()
 
 if CONSTANTS.USING_MOTOR_BOARD:
 	LOGGER.Debug("Initializing motor board thread...")
+	#Sets up an isr essentially using the motorCommunicationThread()
 	motorCommThread = Thread(target=motorCommunicationThread)
 	motorCommThread.daemon = True
 	motorCommThread.start()
 
 if CONSTANTS.USING_SENSOR_BOARD:
 	LOGGER.Debug("Initializing sensor board thread...")
+	#sets up an isr essentially using the sensorCommunicationThread
 	sensorCommThread = Thread(target=sensorCommunicationThread)
 	sensorCommThread.daemon = True
 	sensorCommThread.start()
@@ -193,6 +197,8 @@ while robotEnabled:
 
 	currentState = robotState.getState()
 	lastState = robotState.getLastState()
+
+	winchMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 50)
 
 	# +----------------------------------------------+
 	# |                Communication                 |
@@ -383,9 +389,6 @@ while robotEnabled:
 				    leftDriveMotor.setSetpoint(MOTOR_MODES.K_POSITION, positionVal)
     				    rightDriveMotor.setSetpoint(MOTOR_MODES.K_POSITION, -positionVal)
 
-			#elif( (not (abs(leftDriveMotor.position) - abs(positionVal)) < 2) or
-			#      (not (abs(rightDriveMotor.position) - abs(positionVal)) < 2)):
-			#	pass
 			elif( (abs(leftDriveMotor.position) < abs(0.95 * positionVal)) or
 			      (abs(rightDriveMotor.position) < abs(0.95 * positionVal))):
 				pass
@@ -393,13 +396,7 @@ while robotEnabled:
 			else:
 				ceaseAllMotorFunctions()
 				outboundMessageQueue.add("Finished\n")
-			#if(leftDriveMotor.getDistance() > startingDistance + currentMessage.messageData[0]):
-			#	driveSpeed = currentMessage.messageData[1]
-			#	leftDriveMotor.setSpeed(driveSpeed)
-			#	rightDriveMotor.setSpeed(-driveSpeed)
-			#else:
-			#	ceaseAllMotorFunctions()
-			#	outboundMessageQueue.add("Finished\n")
+
 
 		elif(currentMessage.type == "MSG_BUCKET_POSITION"):
 			currentMessage.printMessage()
@@ -432,31 +429,12 @@ while robotEnabled:
 
 
 	if CONSTANTS.USING_JOYSTICK:
-		#pygame.event.get()
-		#jReader.updateValues()
-		#leftDriveMotor.setSpeed(jReader.axis_y1)
-		#rightDriveMotor.setSpeed(jReader.axis_y2)
-		leftDriveMotor.setSpeed(1.0)
-		rightDriveMotor.setSpeed(-1.0)
+		# y1,y2 = jReader.getAxisValues()
+		# leftDriveMotor.setSpeed(y1)
+		# rightDriveMotor.setSpeed(y2)
 		collectorDepthMotor.setSpeed(0)
 		collectorScoopsMotor.setSpeed(0)
 		winchMotor.setSpeed(0)
-
-#	else:
-#		if(test_speed_val > 1.0):
-#			test_speed_val = 0
-#		else:
-#			test_speed_val += 0.001
-#		test_speed_val += 0.001
-		#leftDriveMotor.setSpeed(0)
-		#rightDriveMotor.setSpeed(0)
-		#collectorDepthMotor.setSpeed(0)
-		#collectorScoopsMotor.setSpeed(0)
-		#winchMotor.setSpeed(0)
-
-	#LOGGER.Low("LMotor Speed: " + str(leftDriveMotor.speed) + " RMotor Speed: " + str(rightDriveMotor.speed))
-	#LOGGER.Low("LMotor Position: " + str(leftDriveMotor.position) + "RMotor Position: " + str(rightDriveMotor.position))
-	#sleep to maintain a more constant thread time (specified in Constants.py)
 
 
 	loopEndTime = time.time()

@@ -1,5 +1,5 @@
-K_PERCENT_VBUS = 0
-K_POSITION = 3
+K_PERCENT_VBUS = 0  # With a setpoint it drives for a time
+K_POSITION = 3      # With a setpoint it goes to that setpoint
 K_SPEED = 2
 K_CURRENT = 1
 K_VOLTAGE = 4
