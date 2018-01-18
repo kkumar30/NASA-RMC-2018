@@ -21,7 +21,7 @@ class Pipeline:
 
         self.__hsv_threshold_input = self.blur_output
         self.__hsv_threshold_hue = [0.0, 180.0]
-        self.__hsv_threshold_saturation = [0.0, 255.0]        
+        self.__hsv_threshold_saturation = [0.0, 255.0]
         self.__hsv_threshold_value = [225.0, 255.0]
         self.hsv_threshold_output = None
 
@@ -63,7 +63,7 @@ class Pipeline:
 
         #Step Filter_Contours0:
         self.__filter_contours_contours = self.find_contours_output
-        (self.filter_contours_output ) = self.__filter_contours(self.__filter_contours_contours, self.__filter_contours_min_area, self.__filter_contours_min_perimeter, self.__filter_contours_min_width, self.__filter_contours_max_width, self.__filter_contours_min_height, self.__filter_contours_max_height, self.__filter_contours_solidity, self.__filter_contours_max_vertices, self.__filter_contours_min_vertices, self.__filter_contours_min_ratio, self.__filter_contours_max_ratio)
+        (self.filter_contours_output ) = self.__filter_contours(source0,self.__filter_contours_contours, self.__filter_contours_min_area, self.__filter_contours_min_perimeter, self.__filter_contours_min_width, self.__filter_contours_max_width, self.__filter_contours_min_height, self.__filter_contours_max_height, self.__filter_contours_solidity, self.__filter_contours_max_vertices, self.__filter_contours_min_vertices, self.__filter_contours_min_ratio, self.__filter_contours_max_ratio)
 
     def set_source0(self, value):
         """Sets source0 to given value checking for correct type.
@@ -127,7 +127,7 @@ class Pipeline:
         return contours
 
     @staticmethod
-    def __filter_contours(input_contours, min_area, min_perimeter, min_width, max_width,
+    def __filter_contours(source0, input_contours, min_area, min_perimeter, min_width, max_width,
                         min_height, max_height, solidity, max_vertex_count, min_vertex_count,
                         min_ratio, max_ratio):
         """Filters out contours that do not meet certain criteria.
@@ -168,7 +168,10 @@ class Pipeline:
             ratio = (float)(w) / h
             if (ratio < min_ratio or ratio > max_ratio):
                 continue
+            cv2.drawContours(source0, contour, -1, (0, 255, 0), 2)
             output.append(contour)
+
+
         return output
 
 

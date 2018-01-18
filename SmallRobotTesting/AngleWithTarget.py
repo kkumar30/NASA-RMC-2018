@@ -79,7 +79,7 @@ def getRobotAngle(heights, widths, minAreaIndex, maxAreaIndex):
 
     print "Areas are \n"
     print "Left Area = ", curr_box1, "Right Area= ", curr_box2
-    print "Diff = ", curr_box1 - curr_box2    
+    print "Diff = ", curr_box1 - curr_box2
     print "Serial read: ",ser.read()
     print ratio_angle
     try:
@@ -94,7 +94,7 @@ def getRobotAngle(heights, widths, minAreaIndex, maxAreaIndex):
 def getContourAreas(heights, widths, minAreaIndex, maxAreaIndex):
     box1 = widths[maxAreaIndex]*heights[maxAreaIndex] #left
     box2 = widths[minAreaIndex]*heights[minAreaIndex] #right
-    return box1, box2  
+    return box1, box2
 
 def center(pipeline):
     """
@@ -160,8 +160,7 @@ def main():
         have_frame, frame = cap.read()
         if have_frame:
             pipeline.process(frame)
-            img1 = frame.copy()
-            cv2.imshow("contours", cv2.drawContours(img1, pipeline.filter_contours_output, -1, (255, 0, 0), 3))
+            cv2.imshow(frame)
             center(pipeline)
 
         if cv2.waitKey(1) & 0xFF == ord("q"):
