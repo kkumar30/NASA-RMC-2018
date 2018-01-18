@@ -17,12 +17,12 @@ import math
 # from Pipeline import GripPipeline
 
 
-
+from fart import RedRanger
 from grip import GripPipeline
 from pipeline_with_angle import Pipeline
 import serial
 
-ser = serial.Serial('/dev/tty.usbserial', 9600)
+ser = serial.Serial('/dev/ttyACM0', 9600)
 
 
 cameraWidth = 640 #px
@@ -66,7 +66,7 @@ def getRobotAngle(heights, widths, minAreaIndex, maxAreaIndex):
     if heights[maxAreaIndex]> widths[maxAreaIndex]:
         widthOfTarget = widthOfTall
         ratio_angle = curr_box2/float(curr_box1)
-        ser.write('l')
+        side = 4
         print "we are on the left"
 
 
@@ -74,9 +74,10 @@ def getRobotAngle(heights, widths, minAreaIndex, maxAreaIndex):
     elif heights[maxAreaIndex]< widths[maxAreaIndex]:
         widthOfTarget = widthOfWide
         ratio_angle = curr_box1/float(curr_box2)
-        ser.write('r')
+        side = 5
         print "we are on the right"
 
+    ser.write(side)
     print "Areas are \n"
     print "Left Area = ", curr_box1, "Right Area= ", curr_box2
     print "Diff = ", curr_box1 - curr_box2
@@ -130,7 +131,7 @@ def center(pipeline):
     print "Number Contours=", numContours
     if numContours == 2:
         #Determine which target is closer to the robot
-        ser.write('C')
+        ser.write('9')
         print widths
         print heights
         area = []
@@ -148,19 +149,18 @@ def center(pipeline):
 def main():
     print('Creating video capture')
 
-    cap = cv2.VideoCapture(1)
-    print "framerate", cap.get(5)
+    cap = cv2.VideoCapture(0)
 
     print('Creating pipeline')
-    # pipeline = RedObjectPipeline()
-    pipeline = Pipeline()
-
+    #pipeline = Pipeline()
+    pipeline = RedRanger()
     print('Running pipeline')
+    ser.write('a')
     while cap.isOpened():
         have_frame, frame = cap.read()
         if have_frame:
             pipeline.process(frame)
-            cv2.imshow(frame)
+            cv2.imshow("top kek",frame)
             center(pipeline)
 
         if cv2.waitKey(1) & 0xFF == ord("q"):

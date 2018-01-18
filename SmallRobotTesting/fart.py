@@ -53,7 +53,7 @@ class RedRanger:
 
         # Step Filter_Contours0:
         self.__filter_contours_contours = self.find_contours_output
-        (self.filter_contours_output) = self.__filter_contours(self.__filter_contours_contours, self.__filter_contours_min_area, self.__filter_contours_min_perimeter, self.__filter_contours_min_width, self.__filter_contours_max_width, self.__filter_contours_min_height, self.__filter_contours_max_height, self.__filter_contours_solidity, self.__filter_contours_max_vertices, self.__filter_contours_min_vertices, self.__filter_contours_min_ratio, self.__filter_contours_max_ratio)
+        (self.filter_contours_output) = self.__filter_contours(source0, self.__filter_contours_contours, self.__filter_contours_min_area, self.__filter_contours_min_perimeter, self.__filter_contours_min_width, self.__filter_contours_max_width, self.__filter_contours_min_height, self.__filter_contours_max_height, self.__filter_contours_solidity, self.__filter_contours_max_vertices, self.__filter_contours_min_vertices, self.__filter_contours_min_ratio, self.__filter_contours_max_ratio)
 
 
     @staticmethod
@@ -84,11 +84,13 @@ class RedRanger:
         else:
             mode = cv2.RETR_LIST
         method = cv2.CHAIN_APPROX_SIMPLE
-        im2, contours, hierarchy =cv2.findContours(input, mode=mode, method=method)
-        return contours
+        contours, hierarchy =cv2.findContours(input, mode=mode, method=method)
+        #im2, contours, hierarchy =cv2.findContours(input, mode=mode, method=method)
+       
+	return contours
 
     @staticmethod
-    def __filter_contours(input_contours, min_area, min_perimeter, min_width, max_width,
+    def __filter_contours(source0, input_contours, min_area, min_perimeter, min_width, max_width,
                         min_height, max_height, solidity, max_vertex_count, min_vertex_count,
                         min_ratio, max_ratio):
         """Filters out contours that do not meet certain criteria.
@@ -130,6 +132,7 @@ class RedRanger:
             if (ratio < min_ratio or ratio > max_ratio):
                 continue
             output.append(contour)
+            cv2.drawContours(source0, contour, -1, (0,255,0),2)
         return output
 
 
