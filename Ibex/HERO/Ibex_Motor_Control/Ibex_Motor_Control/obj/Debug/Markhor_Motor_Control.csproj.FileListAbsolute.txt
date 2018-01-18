@@ -1,0 +1,36 @@
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\le\HERO Serial Example.exe
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\be\HERO Serial Example.exe
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\le\HERO Serial Example.pdb
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\be\HERO Serial Example.pdb
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\HERO Serial Example.exe
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\HERO Serial Example.pdb
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\le\HERO Serial Example.pe
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\le\HERO Serial Example.pdbx
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\be\HERO Serial Example.pe
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\be\HERO Serial Example.pdbx
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\obj\Debug\Markhor_Motor_Control.csprojResolveAssemblyReference.cache
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\obj\Debug\TinyCLR_DebugReferences.cache
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\obj\Debug\be\HERO Serial Example.pe
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\obj\Debug\be\HERO Serial Example.pdbx
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\obj\Debug\le\HERO Serial Example.pe
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\obj\Debug\le\HERO Serial Example.pdbx
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\obj\Debug\HERO Serial Example.exe
+E:\My_Documents\MQP\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\obj\Debug\HERO Serial Example.pdb
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\le\HERO Serial Example.exe
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\be\HERO Serial Example.exe
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\le\HERO Serial Example.pdb
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\be\HERO Serial Example.pdb
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\HERO Serial Example.exe
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\HERO Serial Example.pdb
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\le\HERO Serial Example.pe
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\le\HERO Serial Example.pdbx
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\be\HERO Serial Example.pe
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\bin\Debug\be\HERO Serial Example.pdbx
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\obj\Debug\Markhor_Motor_Control.csprojResolveAssemblyReference.cache
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\obj\Debug\TinyCLR_DebugReferences.cache
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\obj\Debug\be\HERO Serial Example.pe
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\obj\Debug\be\HERO Serial Example.pdbx
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\obj\Debug\le\HERO Serial Example.pe
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\obj\Debug\le\HERO Serial Example.pdbx
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\obj\Debug\HERO Serial Example.exe
+C:\Users\Domenic\git\markhor\HERO\Markhor_Motor_Control\Markhor_Motor_Control\obj\Debug\HERO Serial Example.pdb

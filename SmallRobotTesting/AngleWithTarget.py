@@ -15,11 +15,15 @@ import math
 # import matplotlib.pyplot as plt
 #test commit
 # from Pipeline import GripPipeline
-#from grip import GripPipeline
+
+
+
+from grip import GripPipeline
 from pipeline_with_angle import Pipeline
 import serial
 
-ser = serial.Serial('/dev/ttyACM0', 9600)
+ser = serial.Serial('/dev/tty.usbserial', 9600)
+
 
 cameraWidth = 640 #px
 cameraHeight = 480 #px
@@ -75,10 +79,8 @@ def getRobotAngle(heights, widths, minAreaIndex, maxAreaIndex):
 
     print "Areas are \n"
     print "Left Area = ", curr_box1, "Right Area= ", curr_box2
-    print "Diff = ", curr_box1 - curr_box2
+    print "Diff = ", curr_box1 - curr_box2    
     print "Serial read: ",ser.read()
-    print
-
     print ratio_angle
     try:
         angle = math.degrees(math.asin(ratio_angle))
@@ -94,8 +96,6 @@ def getContourAreas(heights, widths, minAreaIndex, maxAreaIndex):
     box2 = widths[minAreaIndex]*heights[minAreaIndex] #right
     return box1, box2  
 
-
-   
 def center(pipeline):
     """
     Performs extra processing on the pipeline's outputs and publishes data to NetworkTables.
@@ -140,99 +140,15 @@ def center(pipeline):
         maxAreaIndex = np.argsort(areas)[-1]
         minAreaIndex = np.argsort(areas)[-2]
 
-        #################GETTING ROBOT LOCATION AND ANGLE FROM THE AREAS########################
-        # MAX_BOX_AREA = 1000
-        # MIN_BOX_AREA= 10
-        # curr_box1 = widths[maxAreaIndex]*heights[maxAreaIndex] #left
-        # curr_box2 = widths[minAreaIndex]*heights[minAreaIndex]
 
         curr_angle = getRobotAngle(heights,widths,minAreaIndex,maxAreaIndex)
         print curr_angle
 
-	############################################################################################
-
-        #get close enough to the center of the closest target
-        # x_diff = center_x_positions[maxAreaIndex]-camera_x_center
-        # convertPxToMM(x_diff)
-
-
-
-
-
-
-        # If on the left
-        # gen_angle = MAX_BOX_AREA-curr_box1/float(curr_box2)
-        # print gen_angle
-        # print math.degrees(math.asin(gen_angle))
-
-        # print area
-        # #convertPxToMM(x_diff1, widthOfTarget)
-        # yaw1 = math.degrees(math.atan(x_diff1/focalLength))
-        # distToTarget1 = distToWall/math.cos(math.radians(yaw1))
-        #
-        # #Second Contour
-        # x_diff2 = center_x_positions[1] - camera_x_center
-        # yaw2 = math.degrees(math.atan(x_diff2/focalLength))
-        #
-        # distToTarget2 = distToWall/math.cos(math.radians(yaw2))
-        #
-        # print "Yaw1 ", yaw1, " distance 1", distToTarget1
-        # print "Yaw2 ", yaw2, " distance 2", distToTarget2
-        #
-        #
-        #
-
-
-        # print center_x_positions[0],center_y_positions[0],widths[0],heights[0]
-        # distToWall = convertPxToMM(widths[0])
-        # # if(distToWall/1000 > .5):
-        # #     ser.write('1')
-        #
-        #
-        #
-        # print "Horizontal Distance to object", distToWall/1000, "m"
-        # #With this distance we can use trig with the center of the camera to the x coordinate of the object to find the diagonal distance
-        # #find the difference in X
-        # # while True:
-        #     # x_diff = convertPxToIn(center_x_positions[1]-camera_x_center)
-        # print "x diff", x_diff, "px"
-        #
-        # yaw_dist = distToWall/math.cos(yaw)
-        #
-        # print "yaw", math.degrees(yaw), "deg"
-        # print "yaw distance", yaw_dist/1000, "m"
-        # global foundAngle
-        # global gotDist
-        # if(math.degrees(yaw)>5):
-        #     ser.write('4')
-        #     foundAngle = 1
-        # elif(math.degrees(yaw)<-5):
-        #     ser.write('3')
-        #     foundAngle = 1
-        # else:
-        #     if(foundAngle):
-        #         ser.write('1')
-        #         foundAngle = 0
-        #     elif(distToWall/1000 <.35):
-        #          ser.write('0')
-        #          gotDist = True
-        #     # This Sends the signal to the mini robot to turn left
-        #     # ser.write(3)
-        #
-        # #Now figure out the other diagonal distance with the y coordinate of the object
-        # y_diff = abs(center_y_positions[0]-camera_y_center)
-        # pitch = math.atan(y_diff/focalLength)
-        # diagonalDist = yaw_dist/math.cos(pitch)
-        # print "pitch angle", math.degrees(pitch), "deg"
-        # print "Total Distance to object", diagonalDist/1000, "m"
-        #
-
-
 
 def main():
     print('Creating video capture')
-    cap = cv2.VideoCapture(0)
-    cap.set(cv2.cv.CV_CAP_PROP_FPS, 60)
+
+    cap = cv2.VideoCapture(1)
     print "framerate", cap.get(5)
 
     print('Creating pipeline')
@@ -244,9 +160,8 @@ def main():
         have_frame, frame = cap.read()
         if have_frame:
             pipeline.process(frame)
-            #img1 = frame.copy()
-            #CameraClient.sendIMGtoMaster(img1)
-            #cv2.imshow("contours", cv2.drawContours(img1, pipeline.filter_contours_output, -1, (255, 0, 0), 3))
+            img1 = frame.copy()
+            cv2.imshow("contours", cv2.drawContours(img1, pipeline.filter_contours_output, -1, (255, 0, 0), 3))
             center(pipeline)
 
         if cv2.waitKey(1) & 0xFF == ord("q"):
