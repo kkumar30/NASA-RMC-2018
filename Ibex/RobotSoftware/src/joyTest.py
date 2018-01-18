@@ -37,10 +37,9 @@ class JoystickReader:
         #axes
         self.axis_x1 = deadband(self.joystick.get_axis(0))
         self.axis_y1 = deadband(self.joystick.get_axis(1))
-        self.axis_x2 = deadband(self.joystick.get_axis(2))
+        self.axis_x2 = deadband(self.joystick.get_axis(4))
         self.axis_y2 = deadband(self.joystick.get_axis(3))
-        self.axis_lt = deadband(self.joystick.get_axis(4))
-        self.axis_rt = deadband(self.joystick.get_axis(5))
+        self.axis_ltrt = deadband(self.joystick.get_axis(2))
         #buttons
         self.btn_a = self.joystick.get_button(0)
         self.btn_b = self.joystick.get_button(1)
@@ -52,11 +51,11 @@ class JoystickReader:
         self.btn_start = self.joystick.get_button(7)
 
         #dpad
-        # x,y = self.joystick.get_hat(0)
-        # self.dpad_left = (x == -1)
-        # self.dpad_right = (x == 1)
-        # self.dpad_up = (y == 1)
-        # self.dpad_down = (y == -1)
+        x,y = self.joystick.get_hat(0)
+        self.dpad_left = (x == -1)
+        self.dpad_right = (x == 1)
+        self.dpad_up = (y == 1)
+        self.dpad_down = (y == -1)
 
 
     def printAxes(self):
@@ -81,12 +80,12 @@ class JoystickReader:
 if __name__ == "__main__":
     pygame.init()
     pygame.joystick.init()
-    joystick1 = pygame.joystick.Joystick(3)
+    joystick1 = pygame.joystick.Joystick(0)
     joystick1.init()
     jReader = JoystickReader(joystick1)
     while True:
         pygame.event.get()
         jReader.updateValues()
-        # jReader.printDPad()
-        jReader.printAxes()
+        jReader.printDPad()
+        # jReader.printAxes()
         # jReader.printButtons()
