@@ -198,7 +198,7 @@ while robotEnabled:
 	currentState = robotState.getState()
 	lastState = robotState.getLastState()
 
-	winchMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 50)
+	# winchMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 50)
 
 	# +----------------------------------------------+
 	# |                Communication                 |
@@ -323,7 +323,7 @@ while robotEnabled:
 			if(time.time() < stateStartTime + currentMessage.messageData[0]):
 				rotateSpeed  = currentMessage.messageData[1]
 				leftDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, rotateSpeed)
-				rightDriveMotor.setSpeed(MOTOR_MODES.K_PERCENT_VBUS, rotateSpeed)
+				rightDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, rotateSpeed)
 			else:
 				ceaseAllMotorFunctions()
 				outboundMessageQueue.add("Finished\n")
@@ -429,12 +429,12 @@ while robotEnabled:
 
 
 	if CONSTANTS.USING_JOYSTICK:
-		# y1,y2 = jReader.getAxisValues()
+		y1,y2 = jReader.getAxisValues()
 		# leftDriveMotor.setSpeed(y1)
 		# rightDriveMotor.setSpeed(y2)
-		collectorDepthMotor.setSpeed(0)
-		collectorScoopsMotor.setSpeed(0)
-		winchMotor.setSpeed(0)
+		# collectorDepthMotor.setSpeed(0)
+		# collectorScoopsMotor.setSpeed(0)
+		winchMotor.setSpeed(y1)
 
 
 	loopEndTime = time.time()
