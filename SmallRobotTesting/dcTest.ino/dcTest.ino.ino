@@ -25,9 +25,11 @@ Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *leftDrive = AFMS.getMotor(1);
 Adafruit_DCMotor *rightDrive = AFMS.getMotor(2);
 Servo camera;
-int servoPin = 0;
-
-
+int servoPin = 10;
+int angleTurned = 0;
+int pose = 0;
+int data = 0;
+boolean left;
 // You can also make another motor on port M2
 //Adafruit_DCMotor *myOtherMotor = AFMS.getMotor(2);
 
@@ -36,15 +38,14 @@ float ticksPerDeg = 0;
 
 void setup() {
   Serial.begin(9600);           // set up Serial library at 9600 bps
-  Serial.println("Adafruit Motorshield v2 - DC Motor test!");
 
   camera.attach(servoPin);
-  camera.write(0);
+  camera.write(180);
   AFMS.begin();  // create with the default frequency 1.6KHz
   //AFMS.begin(1000);  // OR with a different frequency, say 1KHz
   rightDriveEnc.write(0);
   leftDriveEnc.write(0);
-  Serial.println("stuck1");
+
   // Set the speed to start, from 0 (off) to 255 (max speed)
   leftDrive->setSpeed(150);
   rightDrive->setSpeed(150);
@@ -54,11 +55,18 @@ void setup() {
   // turn on motor
   leftDrive->run(RELEASE);
   rightDrive->run(RELEASE);
+
 }
 
 void loop() {
-  centerWithTarget(sweepForTarget);
-  Serial.println("Done");
+
+  //camera.write(180);
+  //  angleTurned =sweepForTarget();
+  //  delay(10);
+  //  //centerWithTarget(angleTurned);
+  //  Serial.println("Done");
+  centerWithTarget(sweepForTarget());
+
 }
 void centerWithTarget(int cameraAngle) {
   switch (determineOrientation(cameraAngle)) {
@@ -66,9 +74,19 @@ void centerWithTarget(int cameraAngle) {
       break;
   }
 }
-int determineOrientation(int angleWent){
-  int pose = 1;
-  return pose;
+int determineOrientation(int angleWent) {
+  if (Serial.available() > 0) {
+    if (Serial.read() == 4) {
+      left = true;
+      Serial.write("We are on the Left Side! ARDUINO");
+    }
+    if (Serial.read() == 5) {
+      left = false;
+      Serial.write("We are on the Left Side! ARDUINO");
+    }
+    pose = 1;
+    return pose;
+  }
 }
 void turnRight(int degrees) {
   //RESET ENCODERS
@@ -114,12 +132,20 @@ void turnLeft(int degrees) {
 }
 int sweepForTarget() {
   int angleTurned;
-  for (int i; i = 0; i <= 180) {
+  for (int i = 180; i > 0; i--) {
     camera.write(i);
-    if (Serial.read() == "s") {
-      angleTurned = i;
+    delay(50);
+    if (Serial.available() > 0) {
+      if (Serial.read() == 9  ) {
+        angleTurned = i;
+        camera.write(180);
+        Serial.println(angleTurned);
+
+      }
     }
   }
   return angleTurned;
+  ///
 }
+
 
