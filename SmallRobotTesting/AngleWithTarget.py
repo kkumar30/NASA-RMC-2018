@@ -22,7 +22,7 @@ from grip import GripPipeline
 from pipeline_with_angle import Pipeline
 import serial
 
-ser = serial.Serial('/dev/ttyACM0', 9600)
+# ser = serial.Serial('/dev/ttyACM0', 9600)
 
 
 cameraWidth = 640 #px
@@ -77,16 +77,17 @@ def getRobotAngle(heights, widths, minAreaIndex, maxAreaIndex):
         side = '5'
         print "we are on the right"
 
-    ser.write(side)
+    # ser.write(side)
     print "Areas are \n"
     print "Left Area = ", curr_box1, "Right Area= ", curr_box2
-    print "Diff = ", curr_box1 - curr_box2
-    print "Serial read: ",ser.read()
+    print "Camera spun 170 degrees so we are on the left side facing forward"
+    # print "Diff = ", curr_box1 - curr_box2
+    # print "Serial read: ",ser.read()
     print ratio_angle
     try:
         angle = math.degrees(math.asin(ratio_angle))
     except ValueError as e:
-        print 'ValueError'
+        # print 'ValueError'
         # angle = -100
         angle = math.degrees(math.asin(1/float(ratio_angle)))
     print "Angle = ", angle
@@ -131,7 +132,7 @@ def center(pipeline):
     print "Number Contours=", numContours
     if numContours == 2:
         #Determine which target is closer to the robot
-        ser.write('l')
+        # ser.write('l')
         print widths
         print heights
         area = []
@@ -149,24 +150,26 @@ def center(pipeline):
 def main():
     print('Creating video capture')
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
 
     print('Creating pipeline')
     #pipeline = Pipeline()
     pipeline = RedRanger()
     print('Running pipeline')
     time.sleep(1)
-    ser.write('a')
+    # ser.write('a')
     while cap.isOpened():
         have_frame, frame = cap.read()
         if have_frame:
             pipeline.process(frame)
-            cv2.imshow("top kek",frame)
-            print "contours:" + str(len(pipeline.process(frame))
-	    
-#	    if len(pipeline.process(frame)) == 2:
-#		output = pipeline.process(frame)
-#		break
+            cv2.imshow("Contours",frame)
+            print "contours:" + str(len(pipeline.process(frame)))
+
+        if len(pipeline.process(frame)) == 2:
+            cv2.imwrite("contours.jpg", frame)
+            output = pipeline.process(frame)
+            break
+
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
 
