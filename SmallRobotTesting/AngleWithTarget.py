@@ -113,7 +113,7 @@ def center(pipeline):
 
 
     # Find the bounding boxes of the contours to get x, y, width, and height
-    for contour in pipeline.filter_contours_output:
+    for contour in pipeline:
         x, y, w, h = cv2.boundingRect(contour)
         center_x_positions.append(x + w / 2)  # X and Y are coordinates of the top-left corner of the bounding box
         center_y_positions.append(y + h / 2)
@@ -162,14 +162,17 @@ def main():
         if have_frame:
             pipeline.process(frame)
             cv2.imshow("top kek",frame)
-            if len(pipeline.process(frame))==2:
-                break
+            print "contours:" + str(len(pipeline.process(frame))
+	    
+#	    if len(pipeline.process(frame)) == 2:
+#		output = pipeline.process(frame)
+#		break
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
 
     print('Capture closed')
     cap.release()
-    center(pipeline)
+    center(output)
 
 if __name__ == '__main__':
     main()
