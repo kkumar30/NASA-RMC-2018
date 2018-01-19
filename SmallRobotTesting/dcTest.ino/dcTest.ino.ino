@@ -55,6 +55,9 @@ void setup() {
   // turn on motor
   leftDrive->run(RELEASE);
   rightDrive->run(RELEASE);
+  while (!Serial.available()) {
+  }
+
 
 }
 
@@ -65,8 +68,9 @@ void loop() {
   //  delay(10);
   //  //centerWithTarget(angleTurned);
   //  Serial.println("Done");
-  centerWithTarget(sweepForTarget());
-
+  //  /centerWithTarget(sweepForTarget());
+  //Serial.write('k');
+  sweepForTarget();
 }
 void centerWithTarget(int cameraAngle) {
   switch (determineOrientation(cameraAngle)) {
@@ -130,21 +134,19 @@ void turnLeft(int degrees) {
   }
 
 }
-int sweepForTarget() {
+void sweepForTarget() {
   int angleTurned;
   for (int i = 180; i > 0; i--) {
     camera.write(i);
     delay(50);
     if (Serial.available() > 0) {
-      if (Serial.read() == 9  ) {
-        angleTurned = i;
-        camera.write(180);
-        Serial.println(angleTurned);
-
-      }
+      angleTurned = i;
+      camera.write(0);
+      Serial.write('h');
     }
   }
-  return angleTurned;
+
+  //  return angleTurned;
   ///
 }
 

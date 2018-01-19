@@ -66,7 +66,7 @@ def getRobotAngle(heights, widths, minAreaIndex, maxAreaIndex):
     if heights[maxAreaIndex]> widths[maxAreaIndex]:
         widthOfTarget = widthOfTall
         ratio_angle = curr_box2/float(curr_box1)
-        side = 4
+        side = '4'
         print "we are on the left"
 
 
@@ -74,7 +74,7 @@ def getRobotAngle(heights, widths, minAreaIndex, maxAreaIndex):
     elif heights[maxAreaIndex]< widths[maxAreaIndex]:
         widthOfTarget = widthOfWide
         ratio_angle = curr_box1/float(curr_box2)
-        side = 5
+        side = '5'
         print "we are on the right"
 
     ser.write(side)
@@ -131,7 +131,7 @@ def center(pipeline):
     print "Number Contours=", numContours
     if numContours == 2:
         #Determine which target is closer to the robot
-        ser.write('9')
+        ser.write('l')
         print widths
         print heights
         area = []
@@ -155,19 +155,21 @@ def main():
     #pipeline = Pipeline()
     pipeline = RedRanger()
     print('Running pipeline')
+    time.sleep(1)
     ser.write('a')
     while cap.isOpened():
         have_frame, frame = cap.read()
         if have_frame:
             pipeline.process(frame)
             cv2.imshow("top kek",frame)
-            center(pipeline)
-
+            if len(pipeline.process(frame))==2:
+                break
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
 
     print('Capture closed')
     cap.release()
+    center(pipeline)
 
 if __name__ == '__main__':
     main()
