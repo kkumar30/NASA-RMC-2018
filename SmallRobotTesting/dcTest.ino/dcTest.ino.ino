@@ -56,19 +56,14 @@ void setup() {
   // turn on motor
   leftDrive->run(RELEASE);
   rightDrive->run(RELEASE);
-  while (!found) {
-    sweepForTarget();
-
-  }
-  while (found) {
-    Serial.println('h');
-    leftDrive->run(FORWARD);
-    rightDrive->run(FORWARD);
-    delay(700);
-    leftDrive->run(RELEASE);
-    rightDrive->run(RELEASE);
-    found = false;
-  }
+  camera.write(40);
+  delay(1000);
+  leftDrive->run(FORWARD);
+  rightDrive->run(FORWARD);
+  delay(800);
+  leftDrive->run(RELEASE);
+  rightDrive->run(RELEASE);
+  driveToZone();
   //  if(found){
   //    turnLeft(90);
   //  }
