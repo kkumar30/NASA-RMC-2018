@@ -30,11 +30,12 @@ int angleTurned = 0;
 int pose = 0;
 int data = 0;
 boolean left;
+boolean found = false;
 // You can also make another motor on port M2
 //Adafruit_DCMotor *myOtherMotor = AFMS.getMotor(2);
 
 ///CHANGE THIS
-float ticksPerDeg = 0;
+int ticksPerDeg = 14;
 
 void setup() {
   Serial.begin(9600);           // set up Serial library at 9600 bps
@@ -48,16 +49,37 @@ void setup() {
 
   // Set the speed to start, from 0 (off) to 255 (max speed)
   leftDrive->setSpeed(150);
-  rightDrive->setSpeed(150);
+  rightDrive->setSpeed(140);
   leftDrive->run(FORWARD);
   rightDrive->run(FORWARD);
 
   // turn on motor
   leftDrive->run(RELEASE);
   rightDrive->run(RELEASE);
-  while (!Serial.available()) {
-  }
+  while (!found) {
+    sweepForTarget();
 
+  }
+  while (found) {
+    Serial.println('h');
+    leftDrive->run(FORWARD);
+    rightDrive->run(FORWARD);
+    delay(700);
+    leftDrive->run(RELEASE);
+    rightDrive->run(RELEASE);
+    found = false;
+  }
+  //  if(found){
+  //    turnLeft(90);
+  //  }
+
+  //  while (!Serial.available()) {
+  //  }
+  //  turnRight(90);
+  //  /
+  ///turnLeft(130);
+  //turnLeft(90);
+  //  Serial.print(leftDriveEnc.read());
 
 }
 
@@ -70,7 +92,18 @@ void loop() {
   //  Serial.println("Done");
   //  /centerWithTarget(sweepForTarget());
   //Serial.write('k');
-  sweepForTarget();
+  // /
+
+  //  boolean side = determineOrientation(angle);
+  //  if (side) {
+  //    turnRight(30);
+  //    driveToZone();
+  //  }
+  //  else if (!side) {
+  //    turnLeft(120);
+  //    driveToZone();
+
+  //  }
 }
 void centerWithTarget(int cameraAngle) {
   switch (determineOrientation(cameraAngle)) {
@@ -78,20 +111,22 @@ void centerWithTarget(int cameraAngle) {
       break;
   }
 }
-int determineOrientation(int angleWent) {
-  if (Serial.available() > 0) {
-    if (Serial.read() == 4) {
-      left = true;
-      Serial.write("We are on the Left Side! ARDUINO");
-    }
-    if (Serial.read() == 5) {
-      left = false;
-      Serial.write("We are on the Left Side! ARDUINO");
-    }
-    pose = 1;
-    return pose;
-  }
+boolean determineOrientation(int angleWent) {
+  //  while (!Serial.available() > 0) {
+  //  }
+  //  // read the incoming byte:
+  //  char incomingByte = Serial.read();
+  //  if (incomingByte == 'l') {
+  //    left = true;
+  //
+  //  }
+  //  else if (incomingByte == 'r') {
+  //    left = false;
+  //  }
+  left = false;
+  return left;
 }
+
 void turnRight(int degrees) {
   //RESET ENCODERS
   leftDriveEnc.write(0);
@@ -100,17 +135,19 @@ void turnRight(int degrees) {
   //Determine number of ticks needed
   int ticks = ticksPerDeg * degrees;
 
-  leftDrive->run(FORWARD);
-  rightDrive->run(BACKWARD);
+  //  leftDrive->setSpeed(150);
+  //  rightDrive->setSpeed(140);
 
-  while (rightDriveEnc.read() < ticks || leftDriveEnc.read() > (-1 * ticks)) {
-    if (rightDriveEnc.read() > ticks) {
-      rightDrive->run(RELEASE);
-    }
-    if (leftDriveEnc.read() < (-1 * ticks)) {
-      leftDrive->run(RELEASE);
-    }
+  while (leftDriveEnc.read() <  ticks && rightDriveEnc.read() <  ticks) {
+
+    leftDrive->run(BACKWARD);
+    rightDrive->run(BACKWARD);
+
   }
+  //  if (leftDriveEnc.read() < (-1 * ticks) && rightDriveEnc.read() < (-1 * ticks)) {
+
+  leftDrive->run(RELEASE);
+  rightDrive->run(RELEASE);
 
 }
 void turnLeft(int degrees) {
@@ -121,32 +158,63 @@ void turnLeft(int degrees) {
   //Determine number of ticks needed
   int ticks = ticksPerDeg * degrees;
 
-  leftDrive->run(FORWARD);
-  rightDrive->run(BACKWARD);
+  leftDrive->setSpeed(150);
+  rightDrive->setSpeed(140);
 
-  while (leftDriveEnc.read() < ticks || rightDriveEnc.read() > (-1 * ticks)) {
-    if (leftDriveEnc.read() > ticks) {
-      leftDrive->run(RELEASE);
-    }
-    if (rightDriveEnc.read() < (-1 * ticks)) {
-      rightDrive->run(RELEASE);
-    }
+  while (leftDriveEnc.read() > (-1 * ticks) && rightDriveEnc.read() > (-1 * ticks)) {
+
+    leftDrive->run(FORWARD);
+    rightDrive->run(FORWARD);
+
   }
+  //  if (leftDriveEnc.read() < (-1 * ticks) && rightDriveEnc.read() < (-1 * ticks)) {
+  leftDrive->setSpeed(0);
+  rightDrive->setSpeed(0);
+
+  leftDrive->run(RELEASE);
+  rightDrive->run(RELEASE);
+
+
+
+}
+void driveToZone() {
+  //RESET ENCODERS
+  leftDriveEnc.write(0);
+  rightDriveEnc.write(0);
+
+  //Determine number of ticks needed
+
+  //  leftDrive->setSpeed(150);
+  //  rightDrive->setSpeed(140);
+
+  while (leftDriveEnc.read() < 3000 && rightDriveEnc.read() > -3000) {
+
+    leftDrive->run(BACKWARD);
+    rightDrive->run(FORWARD);
+
+  }
+  //  if (leftDriveEnc.read() < (-1 * ticks) && rightDriveEnc.read() < (-1 * ticks)) {
+
+  leftDrive->run(RELEASE);
+  rightDrive->run(RELEASE);
+
 
 }
 void sweepForTarget() {
   int angleTurned;
-  for (int i = 180; i > 0; i--) {
+  found = false;
+  for (int i = 180; i >= 40; i--) {
     camera.write(i);
-    delay(50);
-    if (Serial.available() > 0) {
-      angleTurned = i;
-      camera.write(0);
-      Serial.write('h');
-    }
-  }
+    delay(20);
+    Serial.print(found);
 
-  //  return angleTurned;
+  }
+  camera.write(180);
+  found = true;
+
+  Serial.print(found);
+
+
   ///
 }
 
