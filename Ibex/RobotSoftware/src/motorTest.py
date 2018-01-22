@@ -61,22 +61,16 @@ def sensorCommunicationThread():
 
 def ceaseAllMotorFunctions():
 	#Stop all motors
-	leftDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
-	rightDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
-	collectorDepthMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
-	collectorScoopsMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
-	winchMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
-
+	# leftDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
+	# rightDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
+	# collectorDepthMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
+	# collectorScoopsMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
+	# winchMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
+	testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
 #initialize handlers
 LOGGER.Debug("Initializing handlers...")
 motorHandler = MotorHandler()
-sensorHandler = SensorHandler()
 
-
-if CONSTANTS.USING_SENSOR_BOARD:
-	LOGGER.Debug("Initializing sensor serial handler...")
-	sensorSerialHandler = SerialHandler(CONSTANTS.SENSOR_BOARD_PORT)
-	sensorSerialHandler.initSerial()
 
 if CONSTANTS.USING_MOTOR_BOARD:
 	LOGGER.Debug("Initializing motor serial handler...")
@@ -84,34 +78,26 @@ if CONSTANTS.USING_MOTOR_BOARD:
 	motorSerialHandler.initSerial()
 
 
-#initialize network comms & server thread
-if CONSTANTS.USING_NETWORK_COMM:
-	networkClient = NetworkClient(CONSTANTS.CONTROL_STATION_IP, CONSTANTS.CONTROL_STATION_PORT)
-	inboundMessageQueue = MessageQueue()
-	networkClient.setInboundMessageQueue(inboundMessageQueue)
-	outboundMessageQueue = MessageQueue()
-	lastReceivedMessageNumber = -1
-	currentReceivedMessageNumber = -1
-	stateStartTime = -1
-
 # setup some variables that will be used with each iteration of the loop
 currentMessage = NetworkMessage("")
 
 # initialize motors
 LOGGER.Debug("Initializing motor objects...")
-leftDriveMotor       = Motor("LeftDriveMotor",       CONSTANTS.LEFT_DRIVE_DEVICE_ID,       MOTOR_MODES.K_PERCENT_VBUS)
-rightDriveMotor      = Motor("RightDriveMotor",      CONSTANTS.RIGHT_DRIVE_DEVICE_ID,      MOTOR_MODES.K_PERCENT_VBUS)
-collectorScoopsMotor = Motor("CollectorScoopsMotor", CONSTANTS.COLLECTOR_SCOOPS_DEVICE_ID, MOTOR_MODES.K_PERCENT_VBUS)
-collectorDepthMotor  = Motor("CollectorDepthMotor",  CONSTANTS.COLLECTOR_DEPTH_DEVICE_ID,  MOTOR_MODES.K_PERCENT_VBUS)
-winchMotor           = Motor("WinchMotor",           CONSTANTS.WINCH_DEVICE_ID,            MOTOR_MODES.K_PERCENT_VBUS)
+# leftDriveMotor       = Motor("LeftDriveMotor",       CONSTANTS.LEFT_DRIVE_DEVICE_ID,       MOTOR_MODES.K_PERCENT_VBUS)
+# rightDriveMotor      = Motor("RightDriveMotor",      CONSTANTS.RIGHT_DRIVE_DEVICE_ID,      MOTOR_MODES.K_PERCENT_VBUS)
+# collectorScoopsMotor = Motor("CollectorScoopsMotor", CONSTANTS.COLLECTOR_SCOOPS_DEVICE_ID, MOTOR_MODES.K_PERCENT_VBUS)
+# collectorDepthMotor  = Motor("CollectorDepthMotor",  CONSTANTS.COLLECTOR_DEPTH_DEVICE_ID,  MOTOR_MODES.K_PERCENT_VBUS)
+# winchMotor           = Motor("WinchMotor",           CONSTANTS.WINCH_DEVICE_ID,            MOTOR_MODES.K_PERCENT_VBUS)
+testMotor			 = Motor("TestMotor",			 1,									   MOTOR_MODES.K_PERCENT_VBUS)
 
 # initialize motor handler and add motors
 LOGGER.Debug("Linking motors to motor handler...")
-motorHandler.addMotor(leftDriveMotor)
-motorHandler.addMotor(rightDriveMotor)
-motorHandler.addMotor(collectorScoopsMotor)
-motorHandler.addMotor(collectorDepthMotor)
-motorHandler.addMotor(winchMotor)
+# motorHandler.addMotor(leftDriveMotor)
+# motorHandler.addMotor(rightDriveMotor)
+# motorHandler.addMotor(collectorScoopsMotor)
+# motorHandler.addMotor(collectorDepthMotor)
+# motorHandler.addMotor(winchMotor)
+motorHandler.addMotor(testMotor)
 
 # initialize encoder reset flags
 driveEncoderResetFlag = False
@@ -119,41 +105,8 @@ scoopEncoderResetFlag = False
 depthEncoderResetFlag = False
 winchEncoderResetFlag = False
 
-# initialize sensors
-LOGGER.Debug("Initializing sensor objects...")
-leftDriveCurrentSense = Sensor("LeftDriveCurrentSense")
-rightDriveCurrentSense = Sensor("RightDriveCurrentSense")
-collectorDepthCurrentSense = Sensor("CollectorDepthCurrentSense")
-collectorScoopsCurrentSense = Sensor("CollectorScoopsCurrentSense")
-winchMotorCurrentSense = Sensor("WinchMotorCurrentSense")
-scoopReedSwitch = Sensor("ScoopReedSwitch")
-bucketMaterialDepthSense = Sensor("BucketMaterialDepthSense")
-
-#initialize servos
-ratchetServo = Servo()
-camServo1 = Servo()
-camServo2 = Servo()
-camServo3 = Servo()
-camServo4 = Servo()
-
-# initialize sensor handler and add sensors
-LOGGER.Debug("Linking sensor objects to sensor handler...")
-sensorHandler.addSensor(leftDriveCurrentSense)
-sensorHandler.addSensor(rightDriveCurrentSense)
-sensorHandler.addSensor(collectorDepthCurrentSense)
-sensorHandler.addSensor(collectorScoopsCurrentSense)
-sensorHandler.addSensor(winchMotorCurrentSense)
-sensorHandler.addSensor(scoopReedSwitch)
-sensorHandler.addSensor(bucketMaterialDepthSense)
-
-sensorHandler.addServo(ratchetServo)
-sensorHandler.addServo(camServo1)
-sensorHandler.addServo(camServo2)
-sensorHandler.addServo(camServo3)
-sensorHandler.addServo(camServo4)
-
 # initialize robotState
-LOGGER.Debug("Initializing robot state...")
+# LOGGER.Debug("Initializing robot state...")
 robotState = RobotState()
 
 # initialize joystick, if using joystick
@@ -194,253 +147,24 @@ usingController = False
 while robotEnabled:
 
 	loopStartTime = time.time()
-	#print strftime("%H:%M:%S.", gmtime()) + str(int((time.time()*1000) % 1000)) + ": ",
 
 	currentState = robotState.getState()
 	lastState = robotState.getLastState()
 
-	# winchMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 50)
 
 	# +----------------------------------------------+
 	# |                Communication                 |
 	# +----------------------------------------------+
-    if raw_input == 't':
+
+	if raw_input == 't':
         usingController = True
-    while usingController:
+
+	while usingController:
         y1 = jReader.getAxisValues()
 		testMotor.setSetpoint(CONSTANTS.K_PERCENT_VBUS, y1)
-	if CONSTANTS.USING_NETWORK_COMM:
-		connected = False
-		while(not connected):
-			try:
-				if(outboundMessageQueue.isEmpty()):
-					networkClient.send(motorHandler.getMotorNetworkMessage()+"\n\r")
-				else:
-					networkClient.send(outboundMessageQueue.getNext())
-				connected = True
-			except:
-				LOGGER.Critical("Could not connect to network, attempting to reconnect...")
-				ceaseAllMotorFunctions()
-
-
-	# +----------------------------------------------+
-	# |              Current State Logic             |
-	# +----------------------------------------------+
-	# State machine handles the robot's current states
-	if CONSTANTS.USING_NETWORK_COMM and connected:
-
-		if(not inboundMessageQueue.isEmpty()):
-			currentMessage = inboundMessageQueue.getNext()
-			currentMessage.printMessage()
-			lastReceivedMessageNumber = currentReceivedMessageNumber
-			currentReceivedMessageNumber = currentMessage.messageNumber
-
-		#new message has arrived, process
-		if(lastReceivedMessageNumber != currentReceivedMessageNumber):
-
-			stateStartTime = time.time()
-			robotState.setState(currentMessage.type)
-			print currentMessage.type
-
-			if(currentMessage.type == "MSG_STOP"):
-				LOGGER.Debug("Received a MSG_STOP")
-
-			elif(currentMessage.type == "MSG_DRIVE_TIME"):
-				LOGGER.Debug("Received a MSG_DRIVE_TIME")
-
-			elif(currentMessage.type == "MSG_ROTATE_TIME"):
-				LOGGER.Debug("Received a MSG_ROTATE_TIME")
-
-			elif(currentMessage.type == "MSG_SCOOP_TIME"):
-				LOGGER.Debug("Received a MSG_SCOOP_TIME")
-
-			elif(currentMessage.type == "MSG_DEPTH_TIME"):
-				LOGGER.Debug("Received a MSG_DEPTH_TIME")
-
-			elif(currentMessage.type == "MSG_BUCKET_TIME"):
-				LOGGER.Debug("Received a MSG_BUCKET_TIME")
-
-			elif(currentMessage.type == "MSG_DRIVE_DISTANCE"):
-				LOGGER.Low("Received a MSG_DRIVE_DISTANCE")
-				leftDriveMotor.setMode(MOTOR_MODES.K_POSITION)
-				rightDriveMotor.setMode(MOTOR_MODES.K_POSITION)
-				#before we start executing anything in the message for DriveDistance below
-				#the encoder reset must be sent to the motor board.
-				driveEncoderResetFlag = True
-				LOGGER.Low("About to acquire motor handler lock")
-				motorHandlerLock.acquire()
-				LOGGER.Low("About to send message to Reset Encoders")
-				motorSerialHandler.sendMessage("<ResetDriveEncoders>\n")
-				LOGGER.Low("SENT MESSAGE TO RESET")
-				motorHandlerLock.release()
-
-			elif(currentMessage.type == "MSG_BUCKET_POSITION"):
-				winchMotor.setMode(MOTOR_MODES.K_POSITION)
-				winchEncoderResetFlag = True
-				LOGGER.Low("Acquiring Lock")
-				motorHandlerLock.acquire()
-				motorSerialHandler.sendMessage("<ResetWinchEncoder>\n")
-				motorHandlerLock.release()
-				LOGGER.Low("Releasing Lock")
-
-			elif(currentMessage.type == "MSG_MOTOR_VALUES"):
-				LOGGER.Debug("Received a MSG_MOTOR_VALUES")
-				print "MADE IT 1"
-
-			elif(currentMessage.type == "MSG_RATCHET_POSITION"):
-				LOGGER.Debug("Received a MSG_RATCHET_POSITION")
-
-			else:
-				LOGGER.Moderate("Received an invalid message.")
-
-		#
-		# MSG_STOP:
-		# Stop all motors immediately
-		#
-		if(currentMessage.type == "MSG_STOP"):
+		if raw_input == 'q':
+			usingController = False
 			ceaseAllMotorFunctions()
-			outboundMessageQueue.add("Finished\n")
-
-		#
-		# MSG_DRIVE_TIME:
-		# Drive forward/backward with both motors at the same value
-		# Data 0: The time in seconds the robot should drive
-		# Data 1: The power/speed to drive at
-		#
-		elif(currentMessage.type == "MSG_DRIVE_TIME"):
-			currentMessage.printMessage()
-			if(time.time() < stateStartTime + currentMessage.messageData[0]):
-				driveSpeed = currentMessage.messageData[1]
-				leftDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, driveSpeed)
-				rightDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, -driveSpeed)
-			else:
-				ceaseAllMotorFunctions()
-				outboundMessageQueue.add("Finished\n")
-
-		#
-		# MSG_ROTATE_TIME:
-		# Drive forward/backward with both motors at the same value
-		# Data 0: The time in seconds the robot should drive
-		# Data 1: The power/speed to drive at
-		#
-		elif(currentMessage.type == "MSG_ROTATE_TIME"):
-			currentMessage.printMessage()
-			if(time.time() < stateStartTime + currentMessage.messageData[0]):
-				rotateSpeed  = currentMessage.messageData[1]
-				leftDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, rotateSpeed)
-				rightDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, rotateSpeed)
-			else:
-				ceaseAllMotorFunctions()
-				outboundMessageQueue.add("Finished\n")
-
-
-		#
-		# MSG_SCOOP_TIME:
-		# Drive the scoops for a set time at a specified speed
-		# Data 0: The time in seconds the scoop motor should run
-		# Data 1: The power/speed to run the motor at
-		#
-		elif(currentMessage.type == "MSG_SCOOP_TIME"):
-			currentMessage.printMessage()
-			if(time.time() < stateStartTime + currentMessage.messageData[0]):
-				scoopSpeed = currentMessage.messageData[1]
-				collectorScoopsMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, scoopSpeed)
-			else:
-				ceaseAllMotorFunctions()
-				outboundMessageQueue.add("Finished\n")
-		#
-		# MSG_DEPTH_TIME:
-		# Drive the depth motor for a set time at a specified power/speed
-		# Data 0: The time in seconds the depth motor should run
-		# Data 1: The power/speed to run the motor at
-		#
-		elif(currentMessage.type == "MSG_DEPTH_TIME"):
-			currentMessage.printMessage()
-			if(time.time() < stateStartTime + currentMessage.messageData[0]):
-				depthSpeed = currentMessage.messageData[1]
-				collectorDepthMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, depthSpeed)
-			else:
-				ceaseAllMotorFunctions()
-				outboundMessageQueue.add("Finished\n")
-		#
-		# MSG_BUCKET_TIME:
-		# Drive the bucket for a set time at a specified speed
-		# Data 0: The time in seconds the bucket motor should run
-		# Data 1: The power/speed to run the motor at
-		#
-		elif(currentMessage.type == "MSG_BUCKET_TIME"):
-			currentMessage.printMessage()
-			if(time.time() < stateStartTime + currentMessage.messageData[0]):
-				bucketSpeed = currentMessage.messageData[1]
-				winchMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, bucketSpeed)
-			else:
-				ceaseAllMotorFunctions()
-				outboundMessageQueue.add("Finished\n")
-
-
-		elif(currentMessage.type == "MSG_DRIVE_DISTANCE"):
-			currentMessage.printMessage()
-			positionVal = -currentMessage.messageData[0]
-
-			LOGGER.Low("Check setpoint: " + str(positionVal))
-			LOGGER.Low("Check left enc: " + str(leftDriveMotor.position))
-			LOGGER.Low("Check right enc: " + str(rightDriveMotor.position))
-
-			if(driveEncoderResetFlag):
-				ceaseAllMotorFunctions()
-				if((abs(leftDriveMotor.position) < 1) and (abs(rightDriveMotor.position) < 1)):
-				    LOGGER.Low("Encoders reset.")
-				    driveEncoderResetFlag = False
-				    leftDriveMotor.setSetpoint(MOTOR_MODES.K_POSITION, positionVal)
-    				    rightDriveMotor.setSetpoint(MOTOR_MODES.K_POSITION, -positionVal)
-
-			elif( (abs(leftDriveMotor.position) < abs(0.95 * positionVal)) or
-			      (abs(rightDriveMotor.position) < abs(0.95 * positionVal))):
-				pass
-
-			else:
-				ceaseAllMotorFunctions()
-				outboundMessageQueue.add("Finished\n")
-
-
-		elif(currentMessage.type == "MSG_BUCKET_POSITION"):
-			currentMessage.printMessage()
-			positionVal = currentMessage.messageData[0]
-			LOGGER.Low("Check Setpoint: " + str(positionVal))
-			LOGGER.Low("Check Encoder:  " + str(winchMotor.position))
-			LOGGER.Low("Check Velocity: " + str(winchMotor.speed))
-
-			if(winchEncoderResetFlag):
-				ceaseAllMotorFunctions()
-				if(abs(winchMotor.position) < 1):
-					LOGGER.Low("Winch Encoder Reset.")
-					winchEncoderResetFlag = False
-			elif(not abs(winchMotor.position - positionVal) < 2):
-				winchMotor.setSetpoint(MOTOR_MODES.K_POSITION, positionVal)
-			else:
-				ceaseAllMotorFunctions()
-				outboundMessageQueue.add("Finished\n")
-
-		elif(currentMessage.type == "MSG_MOTOR_VALUES"):
-			leftDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, currentMessage.messageData[0])
-			rightDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS,currentMessage.messageData[1])
-			collectorScoopsMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS,currentMessage.messageData[2])
-			collectorDepthMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS,currentMessage.messageData[3])
-			winchMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS,currentMessage.messageData[4])
-
-		elif(currentMessage.type == "MSG_RATCHET_POSITION"):
-			ratchetServo.setSetpoint(int(currentMessage.messageData[0]))
-			outboundMessageQueue.add("Finished\n")
-
-
-	if CONSTANTS.USING_JOYSTICK:
-		y1,y2 = jReader.getAxisValues()
-		# leftDriveMotor.setSpeed(y1)
-		# rightDriveMotor.setSpeed(y2)
-		# collectorDepthMotor.setSpeed(0)
-		# collectorScoopsMotor.setSpeed(0)
-		winchMotor.setSpeed(y1)
-
 
 	loopEndTime = time.time()
 	loopExecutionTime = loopEndTime - loopStartTime
