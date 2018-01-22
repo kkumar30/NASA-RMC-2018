@@ -36,41 +36,43 @@ namespace Ibex_Motor_Control
         public static void Main()
         {
             //Set up the motors
-            CTRE.TalonSrx leftMotor = new CTRE.TalonSrx(1);
-            CTRE.TalonSrx rightMotor = new CTRE.TalonSrx(2);
+            CTRE.TalonSrx motor = new CTRE.TalonSrx(1);
+
+/*          CTRE.TalonSrx rightMotor = new CTRE.TalonSrx(2);
             CTRE.TalonSrx scoopMotor = new CTRE.TalonSrx(3);
             CTRE.TalonSrx depthMotor = new CTRE.TalonSrx(4);
             CTRE.TalonSrx winchMotor = new CTRE.TalonSrx(5);
-
+*/
             //Set encoders for each motor            
-            leftMotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
+            motor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
+/*            
             rightMotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
             scoopMotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
             depthMotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
             winchMotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
-
+*/
             //Set direction of the encoders            
-            leftMotor.SetSensorDirection(false);
-            rightMotor.SetSensorDirection(true);
+            motor.SetSensorDirection(false);
+/*          rightMotor.SetSensorDirection(true);
             scoopMotor.SetSensorDirection(false);
             depthMotor.SetSensorDirection(false);
             winchMotor.SetSensorDirection(false);
-
+*/
             //Set Ticks per Rev of the encoders
-            leftMotor.ConfigEncoderCodesPerRev(80);
-            rightMotor.ConfigEncoderCodesPerRev(80);
+            motor.ConfigEncoderCodesPerRev(80);
+/*          rightMotor.ConfigEncoderCodesPerRev(80);
             scoopMotor.ConfigEncoderCodesPerRev(80);
             depthMotor.ConfigEncoderCodesPerRev(80);
             winchMotor.ConfigEncoderCodesPerRev(80);
-
+*/
             //Sets PIDF values for each motor//
-            leftMotor.SetP(0, 0.35F);
-            leftMotor.SetI(0, 0.0F);
-            leftMotor.SetD(0, 0.0F);
-            leftMotor.SetF(0, 0.0F);
-            leftMotor.SelectProfileSlot(0);
+            motor.SetP(0, 0.35F);
+            motor.SetI(0, 0.0F);
+            motor.SetD(0, 0.0F);
+            motor.SetF(0, 0.0F);
+            motor.SelectProfileSlot(0);
 
-            rightMotor.SetP(0, 0.35F);
+/*            rightMotor.SetP(0, 0.35F);
             rightMotor.SetI(0, 0.0F);
             rightMotor.SetD(0, 0.0F);
             rightMotor.SetF(0, 0.0F);
@@ -94,75 +96,77 @@ namespace Ibex_Motor_Control
             winchMotor.SetF(0, 0.0F);
             winchMotor.SelectProfileSlot(0);
             //////////////////////////////////
-            
+ */           
             
             //Sets Nominal Output Voltage for each motor
-            leftMotor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
-            rightMotor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
+            motor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
+            /*rightMotor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
             scoopMotor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
             depthMotor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
             winchMotor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
-
+*/
             // Set allowed error for closed loop feedback
-            leftMotor.SetAllowableClosedLoopErr(0, 0);
-            rightMotor.SetAllowableClosedLoopErr(0, 0);
+            motor.SetAllowableClosedLoopErr(0, 0);
+            /*rightMotor.SetAllowableClosedLoopErr(0, 0);
             scoopMotor.SetAllowableClosedLoopErr(0, 0);
             depthMotor.SetAllowableClosedLoopErr(0, 0);
             winchMotor.SetAllowableClosedLoopErr(0, 0);
-
+            */
             //Set Initial position of the motors
-            leftMotor.SetPosition(0);
-            rightMotor.SetPosition(0);
+            motor.SetPosition(0);
+           /* rightMotor.SetPosition(0);
             scoopMotor.SetPosition(0);
             depthMotor.SetPosition(0);
             winchMotor.SetPosition(0);
-
+            */
             //Sets Voltage Ramp rate of each motor
-            leftMotor.SetVoltageRampRate(0);
-            rightMotor.SetVoltageRampRate(0);
+            motor.SetVoltageRampRate(0);
+            /*rightMotor.SetVoltageRampRate(0);
             scoopMotor.SetVoltageRampRate(0);
             depthMotor.SetVoltageRampRate(0);
             winchMotor.SetVoltageRampRate(0);
+            */
+
 
             ArrayList motorSetpointData = new ArrayList();
             ArrayList motorStatusData = new ArrayList();
             ArrayList talons = new ArrayList();
             
             //Add talons to each motor
-            talons.Add(leftMotor);
-            talons.Add(rightMotor);
+            talons.Add(motor);
+            /*talons.Add(rightMotor);
             talons.Add(scoopMotor);
             talons.Add(depthMotor);
             talons.Add(winchMotor);
-
+            */
             //Initializes inbound and outbound message strings to empty            
             String inboundMessageStr = "";
             String outboundMessageStr = "";
  
             //Initializes and adds the SetpointData and the StatusData for each motor (ID, mode, setpoint//
-            SetpointData leftMotorSetpointData = new SetpointData(1, 0, 0.0F);
-            SetpointData rightMotorSetpointData = new SetpointData(2, 0, 0.0F);
+            SetpointData motor = new SetpointData(1, 0, 0.0F);
+            /*SetpointData rightMotorSetpointData = new SetpointData(2, 0, 0.0F);
             SetpointData scoopMotorSetpointData = new SetpointData(3, 0, 0.0F);
             SetpointData depthMotorSetpointData = new SetpointData(4, 0, 0.0F);
             SetpointData winchMotorSetpointData = new SetpointData(5, 0, 0.0F);
-
-            StatusData leftMotorStatusData = new StatusData(1, leftMotor);
-            StatusData rightMotorStatusData = new StatusData(2, rightMotor);
+*/
+            StatusData motor = new StatusData(1, motor);
+            /*StatusData rightMotorStatusData = new StatusData(2, rightMotor);
             StatusData scoopMotorStatusData = new StatusData(3, scoopMotor);
             StatusData depthMotorStatusData = new StatusData(4, depthMotor);
             StatusData winchMotorStatusData = new StatusData(5, winchMotor);
-
-            motorSetpointData.Add(leftMotorSetpointData);
-            motorSetpointData.Add(rightMotorSetpointData);
+*/
+            motorSetpointData.Add(motor);
+            /*motorSetpointData.Add(rightMotorSetpointData);
             motorSetpointData.Add(scoopMotorSetpointData);
             motorSetpointData.Add(depthMotorSetpointData);
             motorSetpointData.Add(winchMotorSetpointData);
-
-            motorStatusData.Add(leftMotorStatusData);
-            motorStatusData.Add(rightMotorStatusData);
+*/
+            motorStatusData.Add(motor);
+            /*motorStatusData.Add(rightMotorStatusData);
             motorStatusData.Add(scoopMotorStatusData);
             motorStatusData.Add(depthMotorStatusData);
-            motorStatusData.Add(winchMotorStatusData);
+            motorStatusData.Add(winchMotorStatusData);*/
             //////////////////////////////////////////
 
             CTRE.Watchdog.Feed();
@@ -179,8 +183,8 @@ namespace Ibex_Motor_Control
                 CTRE.Watchdog.Feed();
 
                 //if any of the talon positions need to be reset, this will reset them
-                resetEncoderPositions(talons);
-                CTRE.Watchdog.Feed();
+                // resetEncoderPositions(talons);
+                // CTRE.Watchdog.Feed();
 
                 //attempt to process whatever was contained in the most recent message
                 processInboundData(motorSetpointData, talons);
