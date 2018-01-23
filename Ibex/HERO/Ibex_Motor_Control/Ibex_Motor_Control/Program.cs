@@ -28,7 +28,7 @@ namespace Ibex_Motor_Control
         private const int DEPTH_ID = 3;
         private const int WINCH_ID = 4;
 
-        static bool [] flags = { false, false, false, false };
+        static bool[] flags = { false, false, false, false };
 
         static System.IO.Ports.SerialPort uart;
         static byte[] rx = new byte[1024];
@@ -36,91 +36,91 @@ namespace Ibex_Motor_Control
         public static void Main()
         {
             //Set up the motors
-            CTRE.TalonSrx motor = new CTRE.TalonSrx(1);
+            CTRE.TalonSrx testmotor = new CTRE.TalonSrx(1);
 
-/*          CTRE.TalonSrx rightMotor = new CTRE.TalonSrx(2);
-            CTRE.TalonSrx scoopMotor = new CTRE.TalonSrx(3);
-            CTRE.TalonSrx depthMotor = new CTRE.TalonSrx(4);
-            CTRE.TalonSrx winchMotor = new CTRE.TalonSrx(5);
-*/
+            /*          CTRE.TalonSrx rightMotor = new CTRE.TalonSrx(2);
+                        CTRE.TalonSrx scoopMotor = new CTRE.TalonSrx(3);
+                        CTRE.TalonSrx depthMotor = new CTRE.TalonSrx(4);
+                        CTRE.TalonSrx winchMotor = new CTRE.TalonSrx(5);
+            */
             //Set encoders for each motor            
-            motor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
-/*            
-            rightMotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
-            scoopMotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
-            depthMotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
-            winchMotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
-*/
+            testmotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
+            /*            
+                        rightMotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
+                        scoopMotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
+                        depthMotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
+                        winchMotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
+            */
             //Set direction of the encoders            
-            motor.SetSensorDirection(false);
-/*          rightMotor.SetSensorDirection(true);
-            scoopMotor.SetSensorDirection(false);
-            depthMotor.SetSensorDirection(false);
-            winchMotor.SetSensorDirection(false);
-*/
+            testmotor.SetSensorDirection(false);
+            /*          rightMotor.SetSensorDirection(true);
+                        scoopMotor.SetSensorDirection(false);
+                        depthMotor.SetSensorDirection(false);
+                        winchMotor.SetSensorDirection(false);
+            */
             //Set Ticks per Rev of the encoders
-            motor.ConfigEncoderCodesPerRev(80);
-/*          rightMotor.ConfigEncoderCodesPerRev(80);
-            scoopMotor.ConfigEncoderCodesPerRev(80);
-            depthMotor.ConfigEncoderCodesPerRev(80);
-            winchMotor.ConfigEncoderCodesPerRev(80);
-*/
+            testmotor.ConfigEncoderCodesPerRev(80);
+            /*          rightMotor.ConfigEncoderCodesPerRev(80);
+                        scoopMotor.ConfigEncoderCodesPerRev(80);
+                        depthMotor.ConfigEncoderCodesPerRev(80);
+                        winchMotor.ConfigEncoderCodesPerRev(80);
+            */
             //Sets PIDF values for each motor//
-            motor.SetP(0, 0.35F);
-            motor.SetI(0, 0.0F);
-            motor.SetD(0, 0.0F);
-            motor.SetF(0, 0.0F);
-            motor.SelectProfileSlot(0);
+            testmotor.SetP(0, 0.35F);
+            testmotor.SetI(0, 0.0F);
+            testmotor.SetD(0, 0.0F);
+            testmotor.SetF(0, 0.0F);
+            testmotor.SelectProfileSlot(0);
 
-/*            rightMotor.SetP(0, 0.35F);
-            rightMotor.SetI(0, 0.0F);
-            rightMotor.SetD(0, 0.0F);
-            rightMotor.SetF(0, 0.0F);
-            rightMotor.SelectProfileSlot(0);
+            /*            rightMotor.SetP(0, 0.35F);
+                        rightMotor.SetI(0, 0.0F);
+                        rightMotor.SetD(0, 0.0F);
+                        rightMotor.SetF(0, 0.0F);
+                        rightMotor.SelectProfileSlot(0);
 
-            scoopMotor.SetP(0, 0.6F);
-            scoopMotor.SetI(0, 0.0F);
-            scoopMotor.SetD(0, 0.0F);
-            scoopMotor.SetF(0, 0.0F);
-            scoopMotor.SelectProfileSlot(0);
+                        scoopMotor.SetP(0, 0.6F);
+                        scoopMotor.SetI(0, 0.0F);
+                        scoopMotor.SetD(0, 0.0F);
+                        scoopMotor.SetF(0, 0.0F);
+                        scoopMotor.SelectProfileSlot(0);
 
-            depthMotor.SetP(0, 0.6F);
-            depthMotor.SetI(0, 0.0F);
-            depthMotor.SetD(0, 0.0F);
-            depthMotor.SetF(0, 0.0F);
-            depthMotor.SelectProfileSlot(0);
+                        depthMotor.SetP(0, 0.6F);
+                        depthMotor.SetI(0, 0.0F);
+                        depthMotor.SetD(0, 0.0F);
+                        depthMotor.SetF(0, 0.0F);
+                        depthMotor.SelectProfileSlot(0);
 
-            winchMotor.SetP(0, 0.6F);
-            winchMotor.SetI(0, 0.0F);
-            winchMotor.SetD(0, 0.0F);
-            winchMotor.SetF(0, 0.0F);
-            winchMotor.SelectProfileSlot(0);
-            //////////////////////////////////
- */           
-            
+                        winchMotor.SetP(0, 0.6F);
+                        winchMotor.SetI(0, 0.0F);
+                        winchMotor.SetD(0, 0.0F);
+                        winchMotor.SetF(0, 0.0F);
+                        winchMotor.SelectProfileSlot(0);
+                        //////////////////////////////////
+             */
+
             //Sets Nominal Output Voltage for each motor
-            motor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
+            testmotor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
             /*rightMotor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
             scoopMotor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
             depthMotor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
             winchMotor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
 */
             // Set allowed error for closed loop feedback
-            motor.SetAllowableClosedLoopErr(0, 0);
+            testmotor.SetAllowableClosedLoopErr(0, 0);
             /*rightMotor.SetAllowableClosedLoopErr(0, 0);
             scoopMotor.SetAllowableClosedLoopErr(0, 0);
             depthMotor.SetAllowableClosedLoopErr(0, 0);
             winchMotor.SetAllowableClosedLoopErr(0, 0);
             */
             //Set Initial position of the motors
-            motor.SetPosition(0);
-           /* rightMotor.SetPosition(0);
-            scoopMotor.SetPosition(0);
-            depthMotor.SetPosition(0);
-            winchMotor.SetPosition(0);
-            */
+            testmotor.SetPosition(0);
+            /* rightMotor.SetPosition(0);
+             scoopMotor.SetPosition(0);
+             depthMotor.SetPosition(0);
+             winchMotor.SetPosition(0);
+             */
             //Sets Voltage Ramp rate of each motor
-            motor.SetVoltageRampRate(0);
+            testmotor.SetVoltageRampRate(0);
             /*rightMotor.SetVoltageRampRate(0);
             scoopMotor.SetVoltageRampRate(0);
             depthMotor.SetVoltageRampRate(0);
@@ -131,9 +131,9 @@ namespace Ibex_Motor_Control
             ArrayList motorSetpointData = new ArrayList();
             ArrayList motorStatusData = new ArrayList();
             ArrayList talons = new ArrayList();
-            
+
             //Add talons to each motor
-            talons.Add(motor);
+            talons.Add(testmotor);
             /*talons.Add(rightMotor);
             talons.Add(scoopMotor);
             talons.Add(depthMotor);
@@ -141,28 +141,28 @@ namespace Ibex_Motor_Control
             */
             //Initializes inbound and outbound message strings to empty            
             String inboundMessageStr = "";
-            String outboundMessageStr = "";
- 
+            //String outboundMessageStr = "";
+
             //Initializes and adds the SetpointData and the StatusData for each motor (ID, mode, setpoint//
-            SetpointData motor = new SetpointData(1, 0, 0.0F);
+            SetpointData testmotorSetpointData = new SetpointData(1, 0, 0.0F);
             /*SetpointData rightMotorSetpointData = new SetpointData(2, 0, 0.0F);
             SetpointData scoopMotorSetpointData = new SetpointData(3, 0, 0.0F);
             SetpointData depthMotorSetpointData = new SetpointData(4, 0, 0.0F);
             SetpointData winchMotorSetpointData = new SetpointData(5, 0, 0.0F);
 */
-            StatusData motor = new StatusData(1, motor);
+            StatusData testmotorStatusData = new StatusData(1, testmotor);
             /*StatusData rightMotorStatusData = new StatusData(2, rightMotor);
             StatusData scoopMotorStatusData = new StatusData(3, scoopMotor);
             StatusData depthMotorStatusData = new StatusData(4, depthMotor);
             StatusData winchMotorStatusData = new StatusData(5, winchMotor);
 */
-            motorSetpointData.Add(motor);
+            motorSetpointData.Add(testmotorSetpointData);
             /*motorSetpointData.Add(rightMotorSetpointData);
             motorSetpointData.Add(scoopMotorSetpointData);
             motorSetpointData.Add(depthMotorSetpointData);
             motorSetpointData.Add(winchMotorSetpointData);
 */
-            motorStatusData.Add(motor);
+            motorStatusData.Add(testmotorStatusData);
             /*motorStatusData.Add(rightMotorStatusData);
             motorStatusData.Add(scoopMotorStatusData);
             motorStatusData.Add(depthMotorStatusData);
@@ -174,7 +174,7 @@ namespace Ibex_Motor_Control
             //Open up UART communication to the linux box
             uart = new System.IO.Ports.SerialPort(CTRE.HERO.IO.Port1.UART, 115200);
             uart.Open();
-            
+
             //The loop
             while (true)
             {
@@ -183,8 +183,8 @@ namespace Ibex_Motor_Control
                 CTRE.Watchdog.Feed();
 
                 //if any of the talon positions need to be reset, this will reset them
-                // resetEncoderPositions(talons);
-                // CTRE.Watchdog.Feed();
+             //   resetEncoderPositions(talons);
+               // CTRE.Watchdog.Feed();
 
                 //attempt to process whatever was contained in the most recent message
                 processInboundData(motorSetpointData, talons);
@@ -194,14 +194,15 @@ namespace Ibex_Motor_Control
                 updateMotorStatusData(motorStatusData);
                 CTRE.Watchdog.Feed();
 
-                //package that motor data into a formatted message
-                outboundMessageStr = makeOutboundMessage(motorStatusData);
-                CTRE.Watchdog.Feed();
+                /*                //package that motor data into a formatted message
+                                outboundMessageStr = makeOutboundMessage(motorStatusData);
+                                CTRE.Watchdog.Feed();
 
-                //send that message back to the main CPU
-                writeUART(outboundMessageStr);
-                CTRE.Watchdog.Feed();
-              
+                                //send that message back to the main CPU
+                                writeUART(outboundMessageStr);
+                                CTRE.Watchdog.Feed();
+                */
+
             }
         }
 
@@ -209,15 +210,20 @@ namespace Ibex_Motor_Control
         {
             ArrayList setpointData = new ArrayList();
             if (uart.BytesToRead > 0)
-            {      
+            {
+                Debug.Print("Here");
                 int readCnt = uart.Read(rx, 0, 1024);
                 for (int i = 0; i < readCnt; ++i)
-                {
+                {   
                     messageStr += (char)rx[i];
                     if ((char)rx[i] == '\n')
                     {
+                        Debug.Print("Here2");
                         checkEncoderResetFlags(messageStr);
                         setpointData = MessageParser.parseMessage(messageStr);
+                        int c = setpointData.Count;
+                        //Console.WriteLine(c);
+                        Debug.Print(c.ToString());
                         messageStr = "";
                     }
                 }
@@ -228,7 +234,7 @@ namespace Ibex_Motor_Control
         private static void resetEncoderPositions(ArrayList talons)
         {
             //If any flags for encoder reset are true, reset the encoder 
-            if(flags[RESET_DRIVE_ENC])
+            if (flags[RESET_DRIVE_ENC])
             {
                 flags[RESET_DRIVE_ENC] = false;
                 ((CTRE.TalonSrx)talons[LDRIVE_ID]).SetPosition(0.0F);
@@ -261,19 +267,19 @@ namespace Ibex_Motor_Control
         {
             //Check the message to see if any encoders need to be reset
 
-            if(msg.Trim().Equals("<ResetDriveEncoders>"))
+            if (msg.Trim().Equals("<ResetDriveEncoders>"))
             {
                 flags[RESET_DRIVE_ENC] = true;
             }
-            if(msg.Trim().Equals("<ResetScoopEncoder>"))
+            if (msg.Trim().Equals("<ResetScoopEncoder>"))
             {
                 flags[RESET_SCOOP_ENC] = true;
             }
-            if(msg.Trim().Equals("<ResetDepthEncoder>"))
+            if (msg.Trim().Equals("<ResetDepthEncoder>"))
             {
                 flags[RESET_DEPTH_ENC] = true;
             }
-            if(msg.Trim().Equals("<ResetWinchEncoder>"))
+            if (msg.Trim().Equals("<ResetWinchEncoder>"))
             {
                 flags[RESET_WINCH_ENC] = true;
             }
@@ -283,14 +289,14 @@ namespace Ibex_Motor_Control
         {
             //create the outbound message as a byte array
             byte[] outboundMessage = MakeByteArrayFromString(messageStr);
-            
+
             //Send message if possible over uart
             if (uart.CanWrite)
             {
                 uart.Write(outboundMessage, 0, outboundMessage.Length);
             }
         }
-    
+
 
         //Creates byte array from string
         private static byte[] MakeByteArrayFromString(String msg)
@@ -304,7 +310,7 @@ namespace Ibex_Motor_Control
         //Takes in an arraylist of statusData and updates each motor's status based on the arraylist        
         private static void updateMotorStatusData(ArrayList statusData)
         {
-            for(int i = 0; i < statusData.Count; i++)
+            for (int i = 0; i < statusData.Count; i++)
             {
                 ((StatusData)statusData[i]).updateStatusData();
             }
@@ -314,7 +320,7 @@ namespace Ibex_Motor_Control
         private static String makeOutboundMessage(ArrayList statusData)
         {
             String outboundMessage = "";
-            for(int i = 0; i < statusData.Count; i++)
+            for (int i = 0; i < statusData.Count; i++)
             {
                 outboundMessage += ((StatusData)statusData[i]).getOutboundMessage();
             }
@@ -326,24 +332,23 @@ namespace Ibex_Motor_Control
         private static void processInboundData(ArrayList setpointDataList, ArrayList talons)
         {
             //For each setpointData, for the talon that matches it set each mode and setpoint based on the list information 
-            for(int i = 0; i < setpointDataList.Count; i++)
+            for (int i = 0; i < setpointDataList.Count; i++)
             {
                 SetpointData setpointData = (SetpointData)setpointDataList[i];
                 float setpointVal = (float)(setpointData.getSetpoint());
                 CTRE.TalonSrx talon = (CTRE.TalonSrx)talons[i];
-                if(talon.GetControlMode() != setpointData.getMode())
+                if (talon.GetControlMode() != setpointData.getMode())
                 {
                     talon.SetControlMode(setpointData.getMode());
                     Debug.Print(setpointData.getMode().ToString());
                 }
-                if(talon.GetSetpoint() != setpointVal)
+                if (talon.GetSetpoint() != setpointVal)
                 {
                     talon.Set(setpointVal);
+                    Debug.Print("Setting it to a value");
                     Debug.Print(setpointVal.ToString());
-                }  
+                }
             }
-            
-
         }
-    }  
+    }
 }

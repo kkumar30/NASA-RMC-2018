@@ -1,0 +1,18 @@
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\bin\Debug\le\HERO Serial Example.exe
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\bin\Debug\be\HERO Serial Example.exe
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\bin\Debug\le\HERO Serial Example.pdb
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\bin\Debug\be\HERO Serial Example.pdb
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\bin\Debug\HERO Serial Example.exe
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\bin\Debug\HERO Serial Example.pdb
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\bin\Debug\le\HERO Serial Example.pe
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\bin\Debug\le\HERO Serial Example.pdbx
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\bin\Debug\be\HERO Serial Example.pe
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\bin\Debug\be\HERO Serial Example.pdbx
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\obj\Debug\Ibex_Motor_Control.csprojResolveAssemblyReference.cache
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\obj\Debug\TinyCLR_DebugReferences.cache
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\obj\Debug\be\HERO Serial Example.pe
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\obj\Debug\be\HERO Serial Example.pdbx
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\obj\Debug\le\HERO Serial Example.pe
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\obj\Debug\le\HERO Serial Example.pdbx
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\obj\Debug\HERO Serial Example.exe
+C:\Users\Kushagra Kumar\Documents\GitHub\NASA-RMC-2018\IBEx\HERO\Ibex_Motor_Control\Ibex_Motor_Control\obj\Debug\HERO Serial Example.pdb

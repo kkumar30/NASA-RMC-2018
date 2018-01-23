@@ -1,6 +1,5 @@
 using System;
 using Microsoft.SPOT;
-using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 
