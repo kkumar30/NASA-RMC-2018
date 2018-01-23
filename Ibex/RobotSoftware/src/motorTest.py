@@ -25,7 +25,6 @@ import BeepCodes as BEEPCODES
 
 from time import gmtime, strftime
 #from main import inboundMessageQueue
-
 LOGGER.Low("Beginning Program Execution")
 
 
@@ -39,38 +38,38 @@ def motorCommunicationThread():
 	while True:
 		motorHandlerLock.acquire()
 		#get the messages of each motor status from the HERO and update our motor values
-		inboundMotorMessage = motorSerialHandler.getMessage()
-		motorHandler.updateMotors(inboundMotorMessage)
+		# inboundMotorMessage = motorSerialHandler.getMessage()
+		# motorHandler.updateMotors(inboundMotorMessage)
 
 		#Get our motor state message and send that to the HERO
-		outboundMotorMessage = motorHandler.getMotorStateMessage()
-		motorSerialHandler.sendMessage(outboundMotorMessage)
+		# outboundMotorMessage = motorHandler.getMotorStateMessage()
+		motorSerialHandler.sendMessage("<1:0:0.3>\n")
 
 		motorHandlerLock.release()
 
-def sensorCommunicationThread():
-	while True:
-		#sensorHandlerLock.acquire()
-		inboundSensorMessage = sensorSerialHandler.getMessage()
-		sensorHandler.updateSensors(inboundSensorMessage)
-
-		outboundSensorMessage = sensorHandler.getServoStateMessage()
-		LOGGER.Debug(outboundSensorMessage)
-		sensorSerialHandler.sendMessage(outboundSensorMessage)
-		#sensorHandlerLock.release()
-
-def ceaseAllMotorFunctions():
-	#Stop all motors
-	# leftDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
-	# rightDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
-	# collectorDepthMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
-	# collectorScoopsMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
-	# winchMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
-	testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
-#initialize handlers
-LOGGER.Debug("Initializing handlers...")
+# def sensorCommunicationThread():
+# 	while True:
+# 		#sensorHandlerLock.acquire()
+# 		inboundSensorMessage = sensorSerialHandler.getMessage()
+# 		sensorHandler.updateSensors(inboundSensorMessage)
+#
+# 		outboundSensorMessage = sensorHandler.getServoStateMessage()
+# 		LOGGER.Debug(outboundSensorMessage)
+# 		sensorSerialHandler.sendMessage(outboundSensorMessage)
+# 		#sensorHandlerLock.release()
+#
+# def ceaseAllMotorFunctions():
+# 	#Stop all motors
+# 	# leftDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
+# 	# rightDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
+# 	# collectorDepthMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
+# 	# collectorScoopsMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
+# 	# winchMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
+# 	testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
+# #initialize handlers
+# LOGGER.Debug("Initializing handlers...")
 motorHandler = MotorHandler()
-
+#
 
 if CONSTANTS.USING_MOTOR_BOARD:
 	LOGGER.Debug("Initializing motor serial handler...")
@@ -79,7 +78,7 @@ if CONSTANTS.USING_MOTOR_BOARD:
 
 
 # setup some variables that will be used with each iteration of the loop
-currentMessage = NetworkMessage("")
+# currentMessage = NetworkMessage("")
 
 # initialize motors
 LOGGER.Debug("Initializing motor objects...")
@@ -118,7 +117,7 @@ if CONSTANTS.USING_JOYSTICK:
 	joystick1.init()
 	jReader = JoystickReader(joystick1)
 
-ceaseAllMotorFunctions()
+# ceaseAllMotorFunctions()
 
 if CONSTANTS.USING_MOTOR_BOARD:
 	LOGGER.Debug("Initializing motor board thread...")
@@ -139,35 +138,40 @@ if CONSTANTS.USING_SENSOR_BOARD:
 robotEnabled = True
 
 
-BEEPCODES.happy1()
-LOGGER.Debug("Initialization complete, entering main loop...")
-
-test_speed_val = -1.0
+# BEEPCODES.happy1()
+# LOGGER.Debug("Initialization complete, entering main loop...")
+#
+# test_speed_val = -1.0
 usingController = False
+
 while robotEnabled:
 
-	loopStartTime = time.time()
-
-	currentState = robotState.getState()
-	lastState = robotState.getLastState()
 
 
-	# +----------------------------------------------+
-	# |                Communication                 |
-	# +----------------------------------------------+
+	#
+	# loopStartTime = time.time()
+	#
+	# currentState = robotState.getState()
+	# lastState = robotState.getLastState()
+	#
+	#
+	# # +----------------------------------------------+
+	# # |                Communication                 |
+	# # +----------------------------------------------+
+	#
+	# if raw_input == 't':
+    #     usingController = True
+	#
 
-	if raw_input == 't':
-        usingController = True
-
-	while usingController:
-        y1 = jReader.getAxisValues()
-		testMotor.setSetpoint(CONSTANTS.K_PERCENT_VBUS, y1)
-		if raw_input == 'q':
-			usingController = False
-			ceaseAllMotorFunctions()
+	# while usingController:
+    #     y1 = jReader.getAxisValues()
+	# 	testMotor.setSetpoint(CONSTANTS.K_PERCENT_VBUS, y1)
+	# 	if raw_input == 'q':
+	# 		usingController = False
+	# 		ceaseAllMotorFunctions()
 
 	loopEndTime = time.time()
-	loopExecutionTime = loopEndTime - loopStartTime
-	sleepTime = CONSTANTS.LOOP_DELAY_TIME - loopExecutionTime
-	if(sleepTime > 0):
-		time.sleep(sleepTime)
+	# loopExecutionTime = loopEndTime - loopStartTime
+	# sleepTime = CONSTANTS.LOOP_DELAY_TIME - loopExecutionTime
+	# if(sleepTime > 0):
+	# 	time.sleep(sleepTime)
