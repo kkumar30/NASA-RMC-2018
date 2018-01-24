@@ -32,18 +32,21 @@ LOGGER.Low("Beginning Program Execution")
 motorHandlerLock = threading.Lock()
 #sensorHandlerLock = threading.Lock()
 #LOGGER.Low("Motor Handler Lock: " + str(motorHandlerLock))
+stopped = True
 
 
 def motorCommunicationThread():
 	while True:
+
 		motorHandlerLock.acquire()
 		#get the messages of each motor status from the HERO and update our motor values
-		# inboundMotorMessage = motorSerialHandler.getMessage()
-		# motorHandler.updateMotors(inboundMotorMessage)
+		inboundMotorMessage = motorSerialHandler.getMessage()
+		motorHandler.updateMotors(inboundMotorMessage)
 
 		#Get our motor state message and send that to the HERO
-		# outboundMotorMessage = motorHandler.getMotorStateMessage()
-		motorSerialHandler.sendMessage("<1:0:0.3>\n")
+		outboundMotorMessage = motorHandler.getMotorStateMessage()
+		motorSerialHandler.sendMessage(outboundMotorMessage)
+
 
 		motorHandlerLock.release()
 
@@ -117,6 +120,7 @@ if CONSTANTS.USING_JOYSTICK:
 	joystick1.init()
 	jReader = JoystickReader(joystick1)
 
+
 # ceaseAllMotorFunctions()
 
 if CONSTANTS.USING_MOTOR_BOARD:
@@ -142,9 +146,9 @@ robotEnabled = True
 # LOGGER.Debug("Initialization complete, entering main loop...")
 #
 # test_speed_val = -1.0
-usingController = False
 
 while robotEnabled:
+	testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS,0.2)
 
 
 
