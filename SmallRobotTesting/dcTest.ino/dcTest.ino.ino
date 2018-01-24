@@ -56,8 +56,9 @@ void setup() {
   // turn on motor
   leftDrive->run(RELEASE);
   rightDrive->run(RELEASE);
-  camera.write(40);
   delay(1000);
+  camera.write(40);
+  //delay(1000);
   leftDrive->run(FORWARD);
   rightDrive->run(FORWARD);
   delay(800);

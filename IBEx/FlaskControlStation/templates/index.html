@@ -1,0 +1,129 @@
+<html>
+	<head>
+		<title>Ibex Control Station</title>
+		<meta charset="utf-8">
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='css/bootstrap.min.css') }}">
+	</head>
+
+	<style>
+
+		#content {
+			margin: 0 auto;
+		}
+
+		#head_text {
+			background: black;
+			color: white;
+		}
+
+		body {
+			width: 98%;
+			background: #373737;
+		}
+
+		button, input{
+			width: 98%;
+			height: 3em;
+		}
+
+		.btn-primary, .btn-danger {
+			width: 49%;
+		}
+
+
+	</style>
+
+	<body>
+
+		{% assets "main_js" %}
+		<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+		{% endassets %}
+		<div id="content">
+			<div class="row">
+				<div id="head_text" class="col-sm-12">
+					<center><h1>Ibex Control Station</h1></center>
+
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-1">
+				</div>
+
+				<div class="col-sm-4 well">
+					<button type="button" class="btn btn-info" onclick="consoleBreak()">Add Console Break</button>
+					
+					<div class="row">
+						<br>
+					</div>
+					
+					<button type="button" class="btn btn-success" onclick="showVideo()">Show Feed</button>
+					<button type="button" class="btn btn-warning" onclick="hideVideo()">Hide Feed</button>
+					
+					<div class="row">
+						<br>			
+					</div>
+					<b>Motor 1</b>
+					<input type="text" class="form-control" id="motor1">
+					<button type="button" class="btn btn-primary" onclick="somefunction()">Drive</button>
+					<button type="button" class="btn btn-danger" onclick="somefunction()">Stop</button>
+
+					<div class="row">
+						<br>			
+					</div>
+					<b>Motor 2</b>
+					<input type="text" class="form-control" id="motor2">
+					<button type="button" class="btn btn-primary" onclick="somefunction()">Drive</button>
+					<button type="button" class="btn btn-danger" onclick="somefunction()">Stop</button>
+
+					<div class="row">
+						<br>			
+					</div>
+					<b>Motor 3</b>
+					<input type="text" class="form-control" id="motor3">
+					<button type="button" class="btn btn-primary" onclick="somefunction()">Drive</button>
+					<button type="button" class="btn btn-danger" onclick="somefunction()">Stop</button>
+
+					<div class="row">
+						<br>			
+					</div>
+					<b>Motor 4</b>
+					<input type="text" class="form-control" id="motor4">
+					<button type="button" class="btn btn-primary" onclick="somefunction()">Drive</button>
+					<button type="button" class="btn btn-danger" onclick="somefunction()">Stop</button>
+
+
+				</div>
+
+				<div class="col-sm-6">
+					<div class="well">
+						<center>
+						<h2>Camera Feed</h2>
+						<img id="vid" src="{{ url_for('video_feed') }}" width="100%">
+						</center>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+
+	<script>
+		function hideVideo(){
+			var feed = document.getElementById("vid");
+			feed.style.display ='none';
+		}
+
+		function showVideo(){
+			var feed = document.getElementById("vid");
+			feed.style.display ='block';
+		}
+
+		function somefunction(){
+			//YOU CAN CREATE SEPERATE JAVASCRIPT FILES IN 'STATIC' FOLDER AND CALL THEM HERE
+			//ADD THOSE JS FILES IN THE BUNDLE ON PYTHON FILE
+		}
+
+	</script>
+
+</html>

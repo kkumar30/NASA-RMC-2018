@@ -1,0 +1,25 @@
+<html>
+	<head>
+		<title>Ibex Control Station</title>
+		<meta charset="utf-8">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+	</head>
+
+	<body>
+		<h1>Ibex Control Station</h1>
+		{% assets "main_js" %}
+		<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+		{% endassets %}
+		
+		<button type="button" class="btn btn-success" onclick="consoleBreak()">Add Console Break</button>
+
+		<h1>Ibex Video Feed</h1>
+		<img src="{{ url_for('video_feed') }}">
+	</body>
+
+	<script>
+
+
+	</script>
+
+</html>
