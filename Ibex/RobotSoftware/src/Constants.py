@@ -1,8 +1,10 @@
 import Logger
 
 SENSOR_BOARD_PORT = "/dev/arduino"
-MOTOR_BOARD_PORT = "/dev/ttyUSB0"
+# MOTOR_BOARD_PORT = "/dev/ttyUSB0"
 # MOTOR_BOARD_PORT = "/dev/ttyACM1"
+MOTOR_BOARD_PORT = "CTRE.HERO.IO.Port1.UART" #For Kushagra's computer aka Windows
+
 
 CONTROL_STATION_IP = "192.168.0.100"
 CONTROL_STATION_PORT = 11000

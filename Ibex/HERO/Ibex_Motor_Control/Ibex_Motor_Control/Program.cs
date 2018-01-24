@@ -141,7 +141,7 @@ namespace Ibex_Motor_Control
             */
             //Initializes inbound and outbound message strings to empty            
             String inboundMessageStr = "";
-            //String outboundMessageStr = "";
+            String outboundMessageStr = "";
 
             //Initializes and adds the SetpointData and the StatusData for each motor (ID, mode, setpoint//
             SetpointData testmotorSetpointData = new SetpointData(1, 0, 0.0F);
@@ -194,14 +194,14 @@ namespace Ibex_Motor_Control
                 updateMotorStatusData(motorStatusData);
                 CTRE.Watchdog.Feed();
 
-                /*                //package that motor data into a formatted message
+                                //package that motor data into a formatted message
                                 outboundMessageStr = makeOutboundMessage(motorStatusData);
                                 CTRE.Watchdog.Feed();
 
                                 //send that message back to the main CPU
                                 writeUART(outboundMessageStr);
                                 CTRE.Watchdog.Feed();
-                */
+                
 
             }
         }
@@ -220,6 +220,7 @@ namespace Ibex_Motor_Control
                     {
                         Debug.Print("Here2");
                         checkEncoderResetFlags(messageStr);
+                        Debug.Print(messageStr);
                         setpointData = MessageParser.parseMessage(messageStr);
                         int c = setpointData.Count;
                         //Console.WriteLine(c);
@@ -228,6 +229,10 @@ namespace Ibex_Motor_Control
                     }
                 }
             }
+            //Debug.Print("Value = ");
+            //Debug.Print("Value = " + setpointData[0]);
+            SetpointData testsetdata = (SetpointData)setpointData[0];
+            Debug.Print("Value = " + testsetdata.getSetpoint());
             return setpointData;
         }
 

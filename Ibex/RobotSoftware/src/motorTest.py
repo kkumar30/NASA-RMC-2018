@@ -77,7 +77,12 @@ motorHandler = MotorHandler()
 if CONSTANTS.USING_MOTOR_BOARD:
 	LOGGER.Debug("Initializing motor serial handler...")
 	motorSerialHandler = SerialHandler(CONSTANTS.MOTOR_BOARD_PORT)
+	# for i in range(10):
+	# 	try:
+	# 		motorSerialHandler = SerialHandler("COM0" + str(i))		
 	motorSerialHandler.initSerial()
+		# except:
+		# 	LOGGER.Debug("Not getting COM" + str(i))
 
 
 # setup some variables that will be used with each iteration of the loop
