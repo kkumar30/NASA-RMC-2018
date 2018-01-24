@@ -17,19 +17,26 @@
 		}
 
 		body {
-			width: 98%;
+			width: 100%;
 			background: #373737;
+			overflow-x: hidden;
 		}
 
-		button, input{
+		button, input {
 			width: 98%;
 			height: 3em;
 		}
 
-		.btn-primary, .btn-danger {
-			width: 49%;
+		#btn-teleop, #btn-auto, #btn-stop {
+			width: 32%;
+			height: 10%;
+			font-size: 2em;
 		}
 
+		#vid {
+			padding-top: 10%
+			border-radius: 15px;
+		}
 
 	</style>
 
@@ -47,60 +54,99 @@
 			</div>
 			
 			<div class="row">
-				<div class="col-sm-1">
-				</div>
-
-				<div class="col-sm-4 well">
+				
+				<div class="col-sm-6 well">
 					<button type="button" class="btn btn-info" onclick="consoleBreak()">Add Console Break</button>
-					
+
+					<span id="driveMode"><h2>Mode: Stopped</h2></span>
+
+					<button id="btn-teleop" type="button" class="btn btn-success" onclick="teleopMode()"><b>Teleoperate</b></button>
+					<button id="btn-auto" type="button" class="btn btn-warning" onclick="autonomousMode()"><b>Autonomous</b></button>
+					<button id="btn-stop" type="button" class="btn btn-danger" onclick="robotStop()"><b>STOP</b></button>
+
 					<div class="row">
 						<br>
 					</div>
-					
-					<button type="button" class="btn btn-success" onclick="showVideo()">Show Feed</button>
-					<button type="button" class="btn btn-warning" onclick="hideVideo()">Hide Feed</button>
-					
-					<div class="row">
-						<br>			
-					</div>
-					<b>Motor 1</b>
-					<input type="text" class="form-control" id="motor1">
-					<button type="button" class="btn btn-primary" onclick="somefunction()">Drive</button>
-					<button type="button" class="btn btn-danger" onclick="somefunction()">Stop</button>
+									
+					<!-- temp (f), current (A), volts (V), speed (RPM), position (ticks)-->
 
-					<div class="row">
-						<br>			
-					</div>
-					<b>Motor 2</b>
-					<input type="text" class="form-control" id="motor2">
-					<button type="button" class="btn btn-primary" onclick="somefunction()">Drive</button>
-					<button type="button" class="btn btn-danger" onclick="somefunction()">Stop</button>
+					<h2>Robot Data:</h2>
 
-					<div class="row">
-						<br>			
-					</div>
-					<b>Motor 3</b>
-					<input type="text" class="form-control" id="motor3">
-					<button type="button" class="btn btn-primary" onclick="somefunction()">Drive</button>
-					<button type="button" class="btn btn-danger" onclick="somefunction()">Stop</button>
-
-					<div class="row">
-						<br>			
-					</div>
-					<b>Motor 4</b>
-					<input type="text" class="form-control" id="motor4">
-					<button type="button" class="btn btn-primary" onclick="somefunction()">Drive</button>
-					<button type="button" class="btn btn-danger" onclick="somefunction()">Stop</button>
-
+					<table class="table table-bordered">
+						<thead>
+					    <tr>
+					      <th scope="col">Motor</th>
+					      <th scope="col">Speed (RPM)</th>
+					      <th scope="col">Current (A)</th>
+					      <th scope="col">Voltage (V)</th>
+					      <th scope="col">Temp. (&deg;F)</th>
+					      <th scope="col">Position (ticks)</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					    <tr>
+					      <th scope="row">Left Drive</th>
+					      <td id="m1_speed"></td>
+					      <td id="m1_curr"></td>
+					      <td id="m1_volt"></td>
+					      <td id="m1_temp"></td>
+					      <td id="m1_pos"></td>
+					    </tr>
+					    <tr>
+					      <th scope="row">Right Drive</th>
+					      <td id="m2_speed"></td>
+					      <td id="m2_curr"></td>
+					      <td id="m2_volt"></td>
+					      <td id="m2_temp"></td>
+					      <td id="m2_pos"></td>
+					    </tr>
+					    <tr>
+					      <th scope="row">Depth</th>
+					      <td id="m3_speed"></td>
+					      <td id="m3_curr"></td>
+					      <td id="m3_volt"></td>
+					      <td id="m3_temp"></td>
+					      <td id="m3_pos"></td>
+					    </tr>
+					    <tr>
+					      <th scope="row">Scoops</th>
+					      <td id="m4_speed"></td>
+					      <td id="m4_curr"></td>
+					      <td id="m4_volt"></td>
+					      <td id="m4_temp"></td>
+					      <td id="m4_pos"></td>
+					    </tr>
+					    <tr>
+					      <th scope="row">Depth</th>
+					      <td id="m5_speed"></td>
+					      <td id="m5_curr"></td>
+					      <td id="m5_volt"></td>
+					      <td id="m5_temp"></td>
+					      <td id="m5_pos"></td>
+					    </tr>
+					  </tbody>
+					</table>
 
 				</div>
 
 				<div class="col-sm-6">
 					<div class="well">
+
 						<center>
+
 						<h2>Camera Feed</h2>
-						<img id="vid" src="{{ url_for('video_feed') }}" width="100%">
+
+						<button type="button" class="btn btn-success" onclick="showVideo()">Show Feed</button>
+						<button type="button" class="btn btn-warning" onclick="hideVideo()">Hide Feed</button>
+						
+						<div class="row">
+							<br>
+						</div>				
+						
+						<img id="vid" src="{{ url_for('video_feed') }}" width="100%" display=none>
+
 						</center>
+
 					</div>
 				</div>
 			</div>
@@ -109,6 +155,23 @@
 	</body>
 
 	<script>
+
+		init();
+
+		var m1_fields = ["m1_speed", "m1_curr", "m1_volt", "m1_temp", "m1_pos"];
+		var m2_fields = ["m2_speed", "m2_curr", "m2_volt", "m2_temp", "m2_pos"];
+		var m3_fields = ["m3_speed", "m3_curr", "m3_volt", "m3_temp", "m3_pos"];
+		var m4_fields = ["m4_speed", "m4_curr", "m4_volt", "m4_temp", "m4_pos"];
+		var m5_fields = ["m5_speed", "m5_curr", "m5_volt", "m5_temp", "m5_pos"];
+
+		var currMode = "<h2>Mode: Stopped</h2>"
+
+		function init(){
+			record();
+			var feed = document.getElementById("vid");
+			feed.style.display ='none';
+		}
+
 		function hideVideo(){
 			var feed = document.getElementById("vid");
 			feed.style.display ='none';
@@ -122,6 +185,59 @@
 		function somefunction(){
 			//YOU CAN CREATE SEPERATE JAVASCRIPT FILES IN 'STATIC' FOLDER AND CALL THEM HERE
 			//ADD THOSE JS FILES IN THE BUNDLE ON PYTHON FILE
+		}
+
+		function fillData(){
+			var data = getMotorData()
+
+			setTimeout(function(){
+				for(var i = 0; i < data.length; i++){
+					for(var j = 0; j < 5; j++){
+
+						if(i == 0){
+							document.getElementById(m1_fields[j]).innerText = data[i][j];
+						}
+
+						else if(i == 1){
+							document.getElementById(m2_fields[j]).innerText = data[i][j];
+						}
+
+						else if(i == 2){
+							document.getElementById(m3_fields[j]).innerText = data[i][j];
+						}
+
+						else if(i == 3){
+							document.getElementById(m4_fields[j]).innerText = data[i][j];
+						}
+
+						else if(i == 4){
+							document.getElementById(m5_fields[j]).innerText = data[i][j];
+						}
+
+					}
+				}
+			}, 500);
+
+		}
+
+		var frameCount = 0;
+		
+		function setup(){
+
+		}
+
+		function draw(){
+			if(frameCount >= 10000){
+				frameCount = 0;
+			}
+
+			if(frameCount % 90 == 0){
+				fillData()								
+			}
+
+			if(frameCount % 10 == 0){
+				document.getElementById("driveMode").innerHTML = currMode;
+			}
 		}
 
 	</script>
