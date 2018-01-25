@@ -1,6 +1,7 @@
 # IDEA workspace xml #
 *.xml
 .idea/workspace.xml
+*.pyc 
 
 
 # Unwanted repo named stuff #
