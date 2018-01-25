@@ -46,6 +46,7 @@ def motorCommunicationThread():
 
 		#Get our motor state message and send that to the HERO
 		outboundMotorMessage = motorHandler.getMotorStateMessage()
+
 		motorSerialHandler.sendMessage(outboundMotorMessage)
 
 
@@ -153,11 +154,11 @@ def tankDrive(joyReads):
 # test_speed_val = -1.0
 
 while robotEnabled:
-	pygame.event.get()
-	jReader.updateValues()
-	tankDrive(jReader.getAxisValues())
-
-
+	# pygame.event.get()
+	# jReader.updateValues()
+	# tankDrive(jReader.getAxisValues())
+	#
+	testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, .3)
 	#
 	# loopStartTime = time.time()
 	#

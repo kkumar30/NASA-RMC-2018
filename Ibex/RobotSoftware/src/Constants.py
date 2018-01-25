@@ -2,7 +2,7 @@ import Logger
 
 SENSOR_BOARD_PORT = "/dev/arduino"
 MOTOR_BOARD_PORT = "/dev/ttyUSB0"
-# MOTOR_BOARD_PORT = "/dev/ttyACM1"
+#MOTOR_BOARD_PORT = "/dev/ttyACM1"
 #MOTOR_BOARD_PORT = "CTRE.HERO.IO.Port1.UART" #For Kushagra's computer aka Windows
 
 
@@ -13,7 +13,7 @@ CAMERA_PORT1 = 11001
 USING_MOTOR_BOARD = True
 USING_SENSOR_BOARD = False
 USING_NETWORK_COMM = False
-USING_JOYSTICK = True
+USING_JOYSTICK = False
 
 MAX_SPEED = 1.0
 MIN_SPEED = -1.0
