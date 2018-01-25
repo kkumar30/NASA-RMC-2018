@@ -77,12 +77,7 @@ motorHandler = MotorHandler()
 if CONSTANTS.USING_MOTOR_BOARD:
 	LOGGER.Debug("Initializing motor serial handler...")
 	motorSerialHandler = SerialHandler(CONSTANTS.MOTOR_BOARD_PORT)
-	# for i in range(10):
-	# 	try:
-	# 		motorSerialHandler = SerialHandler("COM0" + str(i))		
 	motorSerialHandler.initSerial()
-		# except:
-		# 	LOGGER.Debug("Not getting COM" + str(i))
 
 
 # setup some variables that will be used with each iteration of the loop
@@ -121,9 +116,10 @@ if CONSTANTS.USING_JOYSTICK:
 	LOGGER.Debug("Initializing joystick...")
 	pygame.init()
 	pygame.joystick.init()
-	joystick1 = pygame.joystick.Joystick(0)
+	joystick1 = pygame.joystick.Joystick(1)
 	joystick1.init()
 	jReader = JoystickReader(joystick1)
+
 
 
 # ceaseAllMotorFunctions()
@@ -153,8 +149,15 @@ robotEnabled = True
 # test_speed_val = -1.0
 
 while robotEnabled:
-	testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS,0.2)
-
+	pygame.event.get()
+	jReader.updateValues()
+	print jReader.getAxisValues()
+	if jReader.getAxisValues()>0.5:
+		testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS,0.9)
+	elif jReader.getAxisValues()<-0.5:
+		testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS,-.9)
+	else:
+		testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS,0.0)
 
 
 	#

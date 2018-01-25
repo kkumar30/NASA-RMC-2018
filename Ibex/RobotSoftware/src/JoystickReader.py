@@ -78,7 +78,7 @@ class JoystickReader:
 if __name__ == "__main__":
     pygame.init()
     pygame.joystick.init()
-    joystick1 = pygame.joystick.Joystick(0)
+    joystick1 = pygame.joystick.Joystick(1)
     joystick1.init()
     jReader = JoystickReader(joystick1)
     while True:
