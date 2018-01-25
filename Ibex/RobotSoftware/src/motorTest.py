@@ -22,6 +22,7 @@ from NetworkClient import NetworkClient
 from NetworkMessage import NetworkMessage
 from Servo import Servo
 import BeepCodes as BEEPCODES
+from scipy.interpolate import interp1d
 
 from time import gmtime, strftime
 #from main import inboundMessageQueue
@@ -33,7 +34,7 @@ motorHandlerLock = threading.Lock()
 #sensorHandlerLock = threading.Lock()
 #LOGGER.Low("Motor Handler Lock: " + str(motorHandlerLock))
 stopped = True
-
+joyMap= interp1d([-1.0,1.0],[-.5,.5])
 
 def motorCommunicationThread():
 	while True:
@@ -91,7 +92,7 @@ LOGGER.Debug("Initializing motor objects...")
 # collectorDepthMotor  = Motor("CollectorDepthMotor",  CONSTANTS.COLLECTOR_DEPTH_DEVICE_ID,  MOTOR_MODES.K_PERCENT_VBUS)
 # winchMotor           = Motor("WinchMotor",           CONSTANTS.WINCH_DEVICE_ID,            MOTOR_MODES.K_PERCENT_VBUS)
 testMotor			 = Motor("TestMotor",			 1,									   MOTOR_MODES.K_PERCENT_VBUS)
-
+poopMotor 			 = Motor("PoopMotor",			 2,									   MOTOR_MODES.K_PERCENT_VBUS)
 # initialize motor handler and add motors
 LOGGER.Debug("Linking motors to motor handler...")
 # motorHandler.addMotor(leftDriveMotor)
@@ -100,6 +101,7 @@ LOGGER.Debug("Linking motors to motor handler...")
 # motorHandler.addMotor(collectorDepthMotor)
 # motorHandler.addMotor(winchMotor)
 motorHandler.addMotor(testMotor)
+motorHandler.addMotor(poopMotor)
 
 # initialize encoder reset flags
 driveEncoderResetFlag = False
@@ -116,7 +118,7 @@ if CONSTANTS.USING_JOYSTICK:
 	LOGGER.Debug("Initializing joystick...")
 	pygame.init()
 	pygame.joystick.init()
-	joystick1 = pygame.joystick.Joystick(1)
+	joystick1 = pygame.joystick.Joystick(3)
 	joystick1.init()
 	jReader = JoystickReader(joystick1)
 
@@ -142,7 +144,9 @@ if CONSTANTS.USING_SENSOR_BOARD:
 # final line before entering main loop
 robotEnabled = True
 
-
+def tankDrive(joyReads):
+	testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyMap(joyReads[0]))
+	poopMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyMap(joyReads[1]))
 # BEEPCODES.happy1()
 # LOGGER.Debug("Initialization complete, entering main loop...")
 #
@@ -151,13 +155,7 @@ robotEnabled = True
 while robotEnabled:
 	pygame.event.get()
 	jReader.updateValues()
-	print jReader.getAxisValues()
-	if jReader.getAxisValues()>0.5:
-		testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS,0.9)
-	elif jReader.getAxisValues()<-0.5:
-		testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS,-.9)
-	else:
-		testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS,0.0)
+	tankDrive(jReader.getAxisValues())
 
 
 	#
