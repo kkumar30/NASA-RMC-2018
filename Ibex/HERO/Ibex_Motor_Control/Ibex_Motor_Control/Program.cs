@@ -231,8 +231,12 @@ namespace Ibex_Motor_Control
             }
             //Debug.Print("Value = ");
             //Debug.Print("Value = " + setpointData[0]);
-            SetpointData testsetdata = (SetpointData)setpointData[0];
-            Debug.Print("Value = " + testsetdata.getSetpoint());
+
+            if (setpointData.Count > 0)
+            {
+                SetpointData testsetdata = (SetpointData)setpointData[0];
+                Debug.Print("Value = " + testsetdata.getSetpoint());
+            }
             return setpointData;
         }
 
@@ -350,8 +354,8 @@ namespace Ibex_Motor_Control
                 if (talon.GetSetpoint() != setpointVal)
                 {
                     talon.Set(setpointVal);
-                    Debug.Print("Setting it to a value");
-                    Debug.Print(setpointVal.ToString());
+                    Debug.Print("Setting it to value = " + setpointVal.ToString());
+                    //Debug.Print(setpointVal.ToString());
                 }
             }
         }
