@@ -37,6 +37,7 @@ namespace Ibex_Motor_Control
         {
             //Set up the motors
             CTRE.TalonSrx testmotor = new CTRE.TalonSrx(1);
+            CTRE.TalonSrx testmotor1 = new CTRE.TalonSrx(2);
 
             /*          CTRE.TalonSrx rightMotor = new CTRE.TalonSrx(2);
                         CTRE.TalonSrx scoopMotor = new CTRE.TalonSrx(3);
@@ -45,6 +46,7 @@ namespace Ibex_Motor_Control
             */
             //Set encoders for each motor            
             testmotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
+            testmotor1.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
             /*            
                         rightMotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
                         scoopMotor.SetFeedbackDevice(CTRE.TalonSrx.FeedbackDevice.QuadEncoder);
@@ -53,6 +55,7 @@ namespace Ibex_Motor_Control
             */
             //Set direction of the encoders            
             testmotor.SetSensorDirection(false);
+            testmotor1.SetSensorDirection(false);
             /*          rightMotor.SetSensorDirection(true);
                         scoopMotor.SetSensorDirection(false);
                         depthMotor.SetSensorDirection(false);
@@ -60,6 +63,7 @@ namespace Ibex_Motor_Control
             */
             //Set Ticks per Rev of the encoders
             testmotor.ConfigEncoderCodesPerRev(80);
+            testmotor1.ConfigEncoderCodesPerRev(80);
             /*          rightMotor.ConfigEncoderCodesPerRev(80);
                         scoopMotor.ConfigEncoderCodesPerRev(80);
                         depthMotor.ConfigEncoderCodesPerRev(80);
@@ -71,6 +75,12 @@ namespace Ibex_Motor_Control
             testmotor.SetD(0, 0.0F);
             testmotor.SetF(0, 0.0F);
             testmotor.SelectProfileSlot(0);
+
+            testmotor1.SetP(0, 0.35F);
+            testmotor1.SetI(0, 0.0F);
+            testmotor1.SetD(0, 0.0F);
+            testmotor1.SetF(0, 0.0F);
+            testmotor1.SelectProfileSlot(0);
 
             /*            rightMotor.SetP(0, 0.35F);
                         rightMotor.SetI(0, 0.0F);
@@ -100,6 +110,7 @@ namespace Ibex_Motor_Control
 
             //Sets Nominal Output Voltage for each motor
             testmotor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
+            testmotor1.ConfigNominalOutputVoltage(+0.0F, -0.0F);
             /*rightMotor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
             scoopMotor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
             depthMotor.ConfigNominalOutputVoltage(+0.0F, -0.0F);
@@ -107,6 +118,7 @@ namespace Ibex_Motor_Control
 */
             // Set allowed error for closed loop feedback
             testmotor.SetAllowableClosedLoopErr(0, 0);
+            testmotor1.SetAllowableClosedLoopErr(0, 0);
             /*rightMotor.SetAllowableClosedLoopErr(0, 0);
             scoopMotor.SetAllowableClosedLoopErr(0, 0);
             depthMotor.SetAllowableClosedLoopErr(0, 0);
@@ -114,6 +126,7 @@ namespace Ibex_Motor_Control
             */
             //Set Initial position of the motors
             testmotor.SetPosition(0);
+            testmotor1.SetPosition(0);
             /* rightMotor.SetPosition(0);
              scoopMotor.SetPosition(0);
              depthMotor.SetPosition(0);
@@ -121,6 +134,7 @@ namespace Ibex_Motor_Control
              */
             //Sets Voltage Ramp rate of each motor
             testmotor.SetVoltageRampRate(0);
+            testmotor1.SetVoltageRampRate(0);
             /*rightMotor.SetVoltageRampRate(0);
             scoopMotor.SetVoltageRampRate(0);
             depthMotor.SetVoltageRampRate(0);
@@ -134,6 +148,7 @@ namespace Ibex_Motor_Control
 
             //Add talons to each motor
             talons.Add(testmotor);
+            talons.Add(testmotor1);
             /*talons.Add(rightMotor);
             talons.Add(scoopMotor);
             talons.Add(depthMotor);
@@ -145,24 +160,28 @@ namespace Ibex_Motor_Control
 
             //Initializes and adds the SetpointData and the StatusData for each motor (ID, mode, setpoint//
             SetpointData testmotorSetpointData = new SetpointData(1, 0, 0.0F);
+            SetpointData testmotor1SetpointData = new SetpointData(2, 0, 0.0F);
             /*SetpointData rightMotorSetpointData = new SetpointData(2, 0, 0.0F);
             SetpointData scoopMotorSetpointData = new SetpointData(3, 0, 0.0F);
             SetpointData depthMotorSetpointData = new SetpointData(4, 0, 0.0F);
             SetpointData winchMotorSetpointData = new SetpointData(5, 0, 0.0F);
 */
             StatusData testmotorStatusData = new StatusData(1, testmotor);
+            StatusData testmotor1StatusData = new StatusData(2, testmotor);
             /*StatusData rightMotorStatusData = new StatusData(2, rightMotor);
             StatusData scoopMotorStatusData = new StatusData(3, scoopMotor);
             StatusData depthMotorStatusData = new StatusData(4, depthMotor);
             StatusData winchMotorStatusData = new StatusData(5, winchMotor);
 */
             motorSetpointData.Add(testmotorSetpointData);
+            motorSetpointData.Add(testmotor1SetpointData);
             /*motorSetpointData.Add(rightMotorSetpointData);
             motorSetpointData.Add(scoopMotorSetpointData);
             motorSetpointData.Add(depthMotorSetpointData);
             motorSetpointData.Add(winchMotorSetpointData);
 */
             motorStatusData.Add(testmotorStatusData);
+            motorStatusData.Add(testmotor1StatusData);
             /*motorStatusData.Add(rightMotorStatusData);
             motorStatusData.Add(scoopMotorStatusData);
             motorStatusData.Add(depthMotorStatusData);
@@ -194,13 +213,13 @@ namespace Ibex_Motor_Control
                 updateMotorStatusData(motorStatusData);
                 CTRE.Watchdog.Feed();
 
-                                //package that motor data into a formatted message
-                                outboundMessageStr = makeOutboundMessage(motorStatusData);
-                                CTRE.Watchdog.Feed();
+                //package that motor data into a formatted message
+                outboundMessageStr = makeOutboundMessage(motorStatusData);
+                CTRE.Watchdog.Feed();
 
-                                //send that message back to the main CPU
-                                writeUART(outboundMessageStr);
-                                CTRE.Watchdog.Feed();
+                //send that message back to the main CPU
+                writeUART(outboundMessageStr);
+                CTRE.Watchdog.Feed();
                 
 
             }
@@ -211,14 +230,14 @@ namespace Ibex_Motor_Control
             ArrayList setpointData = new ArrayList();
             if (uart.BytesToRead > 0)
             {
-                Debug.Print("Here");
+                //Debug.Print("Here");
                 int readCnt = uart.Read(rx, 0, 1024);
                 for (int i = 0; i < readCnt; ++i)
                 {   
                     messageStr += (char)rx[i];
                     if ((char)rx[i] == '\n')
                     {
-                        Debug.Print("Here2");
+                  //      Debug.Print("Here2");
                         checkEncoderResetFlags(messageStr);
                         Debug.Print(messageStr);
                         setpointData = MessageParser.parseMessage(messageStr);
@@ -232,10 +251,13 @@ namespace Ibex_Motor_Control
             //Debug.Print("Value = ");
             //Debug.Print("Value = " + setpointData[0]);
 
-            if (setpointData.Count > 0)
+            if (setpointData.Count > 1)
             {
+                
                 SetpointData testsetdata = (SetpointData)setpointData[0];
-                Debug.Print("Value = " + testsetdata.getSetpoint());
+                Debug.Print("Value: " + testsetdata.getSetpoint() + " Device ID: " + testsetdata.getDeviceID());
+                SetpointData testsetdata1 = (SetpointData)setpointData[1];
+                Debug.Print("Value: " + testsetdata1.getSetpoint() + " Device ID: " + testsetdata1.getDeviceID());
             }
             return setpointData;
         }
