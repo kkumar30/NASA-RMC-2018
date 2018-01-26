@@ -62,7 +62,7 @@ namespace Ibex_Motor_Control
                         winchMotor.SetSensorDirection(false);
             */
             //Set Ticks per Rev of the encoders
-            testmotor.ConfigEncoderCodesPerRev(80);
+            testmotor.ConfigEncoderCodesPerRev(360);
             testmotor1.ConfigEncoderCodesPerRev(80);
             /*          rightMotor.ConfigEncoderCodesPerRev(80);
                         scoopMotor.ConfigEncoderCodesPerRev(80);
@@ -167,7 +167,7 @@ namespace Ibex_Motor_Control
             SetpointData winchMotorSetpointData = new SetpointData(5, 0, 0.0F);
 */
             StatusData testmotorStatusData = new StatusData(1, testmotor);
-            StatusData testmotor1StatusData = new StatusData(2, testmotor);
+            StatusData testmotor1StatusData = new StatusData(2, testmotor1);
             /*StatusData rightMotorStatusData = new StatusData(2, rightMotor);
             StatusData scoopMotorStatusData = new StatusData(3, scoopMotor);
             StatusData depthMotorStatusData = new StatusData(4, depthMotor);
@@ -215,12 +215,18 @@ namespace Ibex_Motor_Control
 
                 //package that motor data into a formatted message
                 outboundMessageStr = makeOutboundMessage(motorStatusData);
+                Debug.Print(outboundMessageStr);
                 CTRE.Watchdog.Feed();
-
+/*                string[] teststring = outboundMessageStr.Split(':');
+                Debug.Print(teststring[5]);
+                CTRE.Watchdog.Feed();
+*/
                 //send that message back to the main CPU
                 writeUART(outboundMessageStr);
                 CTRE.Watchdog.Feed();
-                
+
+                //Debug.Print(testmotor.GetPosition().ToString());
+                //CTRE.Watchdog.Feed();
 
             }
         }
@@ -239,11 +245,11 @@ namespace Ibex_Motor_Control
                     {
                   //      Debug.Print("Here2");
                         checkEncoderResetFlags(messageStr);
-                        Debug.Print(messageStr);
+                        //Debug.Print(messageStr);
                         setpointData = MessageParser.parseMessage(messageStr);
                         int c = setpointData.Count;
                         //Console.WriteLine(c);
-                        Debug.Print(c.ToString());
+                        //Debug.Print(c.ToString());
                         messageStr = "";
                     }
                 }
@@ -255,7 +261,9 @@ namespace Ibex_Motor_Control
             {
                 
                 SetpointData testsetdata = (SetpointData)setpointData[0];
-                Debug.Print("Value: " + testsetdata.getSetpoint() + " Device ID: " + testsetdata.getDeviceID());
+                Debug.Print("Value: " + testsetdata.getSetpoint() + "ID: " + testsetdata.getDeviceID());
+                //Debug.Print("Value: " + testsetdata.getSetpoint() + " Device ID: " + testsetdata.getDeviceID());
+
                 SetpointData testsetdata1 = (SetpointData)setpointData[1];
                 Debug.Print("Value: " + testsetdata1.getSetpoint() + " Device ID: " + testsetdata1.getDeviceID());
             }
@@ -282,6 +290,13 @@ namespace Ibex_Motor_Control
                 flags[RESET_DEPTH_ENC] = false;
                 ((CTRE.TalonSrx)talons[DEPTH_ID]).SetPosition(0.0F);
             }
+
+            /*if (flags[RESET_TEST_ENC])
+            {
+                flags[RESET_TEST_ENC] = false;
+                ((CTRE.TalonSrx)talons[0]).SetPosition(0.0F);
+            }
+            */
             if (flags[RESET_SCOOP_ENC])
             {
                 flags[RESET_SCOOP_ENC] = false;
@@ -371,7 +386,7 @@ namespace Ibex_Motor_Control
                 if (talon.GetControlMode() != setpointData.getMode())
                 {
                     talon.SetControlMode(setpointData.getMode());
-                    Debug.Print(setpointData.getMode().ToString());
+                    //Debug.Print(setpointData.getMode().ToString());
                 }
                 if (talon.GetSetpoint() != setpointVal)
                 {
