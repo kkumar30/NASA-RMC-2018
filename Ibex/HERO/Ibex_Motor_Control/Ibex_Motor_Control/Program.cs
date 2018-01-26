@@ -62,7 +62,7 @@ namespace Ibex_Motor_Control
                         winchMotor.SetSensorDirection(false);
             */
             //Set Ticks per Rev of the encoders
-            testmotor.ConfigEncoderCodesPerRev(360);
+            testmotor.ConfigEncoderCodesPerRev(80);
             testmotor1.ConfigEncoderCodesPerRev(80);
             /*          rightMotor.ConfigEncoderCodesPerRev(80);
                         scoopMotor.ConfigEncoderCodesPerRev(80);
@@ -217,10 +217,10 @@ namespace Ibex_Motor_Control
                 outboundMessageStr = makeOutboundMessage(motorStatusData);
                 Debug.Print(outboundMessageStr);
                 CTRE.Watchdog.Feed();
-/*                string[] teststring = outboundMessageStr.Split(':');
-                Debug.Print(teststring[5]);
+                string[] teststring = outboundMessageStr.Split(':');
+                Debug.Print("Mode:" + teststring[7] + " Enc:" + teststring[5] + " Set:" + teststring[6]);
                 CTRE.Watchdog.Feed();
-*/
+
                 //send that message back to the main CPU
                 writeUART(outboundMessageStr);
                 CTRE.Watchdog.Feed();
