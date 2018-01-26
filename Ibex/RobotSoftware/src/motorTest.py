@@ -43,6 +43,7 @@ def motorCommunicationThread():
 		inboundMotorMessage = motorSerialHandler.getMessage()
 		motorHandler.updateMotors(inboundMotorMessage)
 
+		#Gets the listed messages
 		flaskupdate(inboundMotorMessage)
 
 		#Get our motor state message and send that to the HERO
@@ -51,9 +52,24 @@ def motorCommunicationThread():
 		motorSerialHandler.sendMessage(outboundMotorMessage)
 		motorHandlerLock.release()
 
+def parsemsgs(test):
+  a = test.split("><")
+  lefttest = [x.replace(">", "") for x in a]
+  righttest = [x.replace("<", "") for x in lefttest]
+  final = [(x.split(":")) for x in righttest]
+  return final
 
-def flaskupdate(message):
-	print message
+def flaskupdate(message=""):
+	listed_message = parsemsgs(message)
+	fh = open("..//..//flask.txt", "w")
+	lines_of_text = [['1', '0', '0', '0', '0'],  ["1", '0', '0', '1.0', '0'], ["1", '0', '0', '0', '0']]
+	for lin in listed_message:
+		for val in lin:
+			fh.write(val + "-")
+		fh.write("\n")
+	fh.close()
+	return listed_message
+
 
 # def sensorCommunicationThread():
 # 	while True:
@@ -84,7 +100,7 @@ if CONSTANTS.USING_MOTOR_BOARD:
 	motorSerialHandler = SerialHandler(CONSTANTS.MOTOR_BOARD_PORT)
 	motorSerialHandler.initSerial()
 
-
+flaskupdate("test")
 # setup some variables that will be used with each iteration of the loop
 # currentMessage = NetworkMessage("")
 
@@ -190,3 +206,7 @@ while robotEnabled:
 	# sleepTime = CONSTANTS.LOOP_DELAY_TIME - loopExecutionTime
 	# if(sleepTime > 0):
 	# 	time.sleep(sleepTime)
+
+# if __name__ == "__main__":
+# 	flaskupdate("test")
+# 	print "Finished"

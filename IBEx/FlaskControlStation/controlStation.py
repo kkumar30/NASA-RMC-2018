@@ -60,8 +60,16 @@ def main():
     global m5
 
     while(1):
-    	m1 = [1,0,0,0,0]
-    	m2 = [0,1,0,0,0]
+        with open("..//flask.txt") as f:
+            content = f.readlines()
+        # you may also want to remove whitespace characters like `\n` at the end of each line
+        content = [x.split("-") for x in content]
+        print content[0]
+
+
+
+        m1 = content[0]
+    	m2 = content[1]
     	m3 = [0,0,1,0,0]
     	m4 = [0,0,0,1,0]
     	m5 = [0,0,0,0,1]
@@ -86,4 +94,4 @@ def modeAuto():
 
 if __name__ == '__main__':
 	#app.run(debug=True, threaded=True) #runs on localhost port 5000
-	app.run(host="130.215.248.136", debug=True, threaded=True)
+	app.run(host="130.215.217.247", debug=True, threaded=True)
