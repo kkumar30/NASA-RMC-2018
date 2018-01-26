@@ -4,7 +4,6 @@ import SocketServer
 import threading
 import pygame
 from threading import Thread
-
 import Constants as CONSTANTS
 from Constants import LOGGER
 import MotorModes as MOTOR_MODES
@@ -44,13 +43,17 @@ def motorCommunicationThread():
 		inboundMotorMessage = motorSerialHandler.getMessage()
 		motorHandler.updateMotors(inboundMotorMessage)
 
+		flaskupdate(inboundMotorMessage)
+
 		#Get our motor state message and send that to the HERO
 		outboundMotorMessage = motorHandler.getMotorStateMessage()
 
 		motorSerialHandler.sendMessage(outboundMotorMessage)
-
-
 		motorHandlerLock.release()
+
+
+def flaskupdate(message):
+	print message
 
 # def sensorCommunicationThread():
 # 	while True:
@@ -159,6 +162,7 @@ while robotEnabled:
 	# tankDrive(jReader.getAxisValues())
 	#
 	testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, .3)
+
 	#
 	# loopStartTime = time.time()
 	#
