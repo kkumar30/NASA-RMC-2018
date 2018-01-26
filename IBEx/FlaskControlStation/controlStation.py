@@ -85,5 +85,5 @@ def modeAuto():
     return Response()
 
 if __name__ == '__main__':
-	app.run(debug=True, threaded=True) #runs on localhost port 5000
-	#app.run(host="130.215.11.31", debug=True)
+	#app.run(debug=True, threaded=True) #runs on localhost port 5000
+	app.run(host="130.215.248.136", debug=True, threaded=True)
