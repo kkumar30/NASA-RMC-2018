@@ -62,7 +62,7 @@ def parsemsgs(test):
 def flaskupdate(message=""):
 	listed_message = parsemsgs(message)
 	fh = open("..//..//flask.txt", "w")
-	lines_of_text = [['1', '0', '0', '0', '0'],  ["1", '0', '0', '1.0', '0'], ["1", '0', '0', '0', '0']]
+	# lines_of_text = [['1', '0', '0', '0', '0'],  ["1", '0', '0', '1.0', '0'], ["1", '0', '0', '0', '0']]
 	for lin in listed_message:
 		for val in lin:
 			fh.write(val + "-")
@@ -112,7 +112,7 @@ LOGGER.Debug("Initializing motor objects...")
 # collectorDepthMotor  = Motor("CollectorDepthMotor",  CONSTANTS.COLLECTOR_DEPTH_DEVICE_ID,  MOTOR_MODES.K_PERCENT_VBUS)
 # winchMotor           = Motor("WinchMotor",           CONSTANTS.WINCH_DEVICE_ID,            MOTOR_MODES.K_PERCENT_VBUS)
 testMotor			 = Motor("TestMotor",			 1,									   MOTOR_MODES.K_PERCENT_VBUS)
-poopMotor 			 = Motor("PoopMotor",			 2,									   MOTOR_MODES.K_PERCENT_VBUS)
+# poopMotor 			 = Motor("PoopMotor",			 2,									   MOTOR_MODES.K_PERCENT_VBUS)
 # initialize motor handler and add motors
 LOGGER.Debug("Linking motors to motor handler...")
 # motorHandler.addMotor(leftDriveMotor)
@@ -121,7 +121,7 @@ LOGGER.Debug("Linking motors to motor handler...")
 # motorHandler.addMotor(collectorDepthMotor)
 # motorHandler.addMotor(winchMotor)
 motorHandler.addMotor(testMotor)
-motorHandler.addMotor(poopMotor)
+# motorHandler.addMotor(poopMotor)
 
 # initialize encoder reset flags
 driveEncoderResetFlag = False
@@ -138,7 +138,7 @@ if CONSTANTS.USING_JOYSTICK:
 	LOGGER.Debug("Initializing joystick...")
 	pygame.init()
 	pygame.joystick.init()
-	joystick1 = pygame.joystick.Joystick(3)
+	joystick1 = pygame.joystick.Joystick(0)
 	joystick1.init()
 	jReader = JoystickReader(joystick1)
 
@@ -165,21 +165,21 @@ if CONSTANTS.USING_SENSOR_BOARD:
 robotEnabled = True
 
 def tankDrive(joyReads):
-	testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyMap(joyReads[0]))
-	poopMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyMap(joyReads[1]))
+	testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyMap(joyReads))
+	# poopMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyMap(joyReads[1]))
 # BEEPCODES.happy1()
 # LOGGER.Debug("Initialization complete, entering main loop...")
 #
 # test_speed_val = -1.0
 
+	#
 while robotEnabled:
-	# pygame.event.get()
-	# jReader.updateValues()
-	# tankDrive(jReader.getAxisValues())
-	#
-	testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, .3)
+	pygame.event.get()
+	jReader.updateValues()
+	tankDrive(jReader.getAxisValues())
+    #
+	# testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, .3)
 
-	#
 	# loopStartTime = time.time()
 	#
 	# currentState = robotState.getState()
