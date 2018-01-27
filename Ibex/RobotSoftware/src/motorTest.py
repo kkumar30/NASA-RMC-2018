@@ -34,41 +34,25 @@ motorHandlerLock = threading.Lock()
 #LOGGER.Low("Motor Handler Lock: " + str(motorHandlerLock))
 stopped = True
 joyMap= interp1d([-1.0,1.0],[-.5,.5])
-
+guiMotorMessage =""
 def motorCommunicationThread():
 	while True:
-
+		global guiMotorMessage
 		motorHandlerLock.acquire()
 		#get the messages of each motor status from the HERO and update our motor values
 		inboundMotorMessage = motorSerialHandler.getMessage()
 		motorHandler.updateMotors(inboundMotorMessage)
 
+		guiMotorMessage= inboundMotorMessage
 		#Gets the listed messages
-		flaskupdate(inboundMotorMessage)
+		# flaskupdate(inboundMotorMessage)
 
 		#Get our motor state message and send that to the HERO
 		outboundMotorMessage = motorHandler.getMotorStateMessage()
-
 		motorSerialHandler.sendMessage(outboundMotorMessage)
 		motorHandlerLock.release()
 
-def parsemsgs(test):
-  a = test.split("><")
-  lefttest = [x.replace(">", "") for x in a]
-  righttest = [x.replace("<", "") for x in lefttest]
-  final = [(x.split(":")) for x in righttest]
-  return final
 
-def flaskupdate(message=""):
-	listed_message = parsemsgs(message)
-	fh = open("..//..//flask.txt", "w")
-	# lines_of_text = [['1', '0', '0', '0', '0'],  ["1", '0', '0', '1.0', '0'], ["1", '0', '0', '0', '0']]
-	for lin in listed_message:
-		for val in lin:
-			fh.write(val + "-")
-		fh.write("\n")
-	fh.close()
-	return listed_message
 
 
 # def sensorCommunicationThread():
@@ -100,7 +84,7 @@ if CONSTANTS.USING_MOTOR_BOARD:
 	motorSerialHandler = SerialHandler(CONSTANTS.MOTOR_BOARD_PORT)
 	motorSerialHandler.initSerial()
 
-flaskupdate("test")
+# flaskupdate("test")
 # setup some variables that will be used with each iteration of the loop
 # currentMessage = NetworkMessage("")
 
@@ -172,40 +156,48 @@ def tankDrive(joyReads):
 #
 # test_speed_val = -1.0
 
-	#
-while robotEnabled:
-	pygame.event.get()
-	jReader.updateValues()
-	tankDrive(jReader.getAxisValues())
-    #
-	# testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, .3)
 
-	# loopStartTime = time.time()
-	#
-	# currentState = robotState.getState()
-	# lastState = robotState.getLastState()
-	#
-	#
-	# # +----------------------------------------------+
-	# # |                Communication                 |
-	# # +----------------------------------------------+
-	#
-	# if raw_input == 't':
-    #     usingController = True
-	#
+def runmotors(threadname):
+	while robotEnabled:
+		# print "in motor thread"
+		pygame.event.get()
+		jReader.updateValues()
+		tankDrive(jReader.getAxisValues())
+		#
+	# testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, .1)
 
-	# while usingController:
-    #     y1 = jReader.getAxisValues()
-	# 	testMotor.setSetpoint(CONSTANTS.K_PERCENT_VBUS, y1)
-	# 	if raw_input == 'q':
-	# 		usingController = False
-	# 		ceaseAllMotorFunctions()
 
-	loopEndTime = time.time()
-	# loopExecutionTime = loopEndTime - loopStartTime
-	# sleepTime = CONSTANTS.LOOP_DELAY_TIME - loopExecutionTime
-	# if(sleepTime > 0):
-	# 	time.sleep(sleepTime)
+# if __name__== "__main__":
+runmotorThread = Thread(target=runmotors, args=("Thread-1", ))
+runmotorThread.start()
+
+
+# loopStartTime = time.time()
+#
+# currentState = robotState.getState()
+# lastState = robotState.getLastState()
+#
+#
+# # +----------------------------------------------+
+# # |                Communication                 |
+# # +----------------------------------------------+
+#
+# if raw_input == 't':
+#     usingController = True
+#
+
+# while usingController:
+#     y1 = jReader.getAxisValues()
+# 	testMotor.setSetpoint(CONSTANTS.K_PERCENT_VBUS, y1)
+# 	if raw_input == 'q':
+# 		usingController = False
+# 		ceaseAllMotorFunctions()
+
+# loopEndTime = time.time()
+# loopExecutionTime = loopEndTime - loopStartTime
+# sleepTime = CONSTANTS.LOOP_DELAY_TIME - loopExecutionTime
+# if(sleepTime > 0):
+# 	time.sleep(sleepTime)
 
 # if __name__ == "__main__":
 # 	flaskupdate("test")
