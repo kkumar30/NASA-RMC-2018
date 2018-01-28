@@ -4,7 +4,6 @@ from camera import VideoCamera
 import json, math
 import sys
 from threading import Thread
-sys.path.insert(0,"C:\Users\Rayyan\Documents\GitHub\NASA-RMC-2018\IBEx\RobotSoftware\src")
 # import motorTest
 
 print "Printing GUI Motor Message:"
@@ -26,19 +25,21 @@ m5 = []
 
 
 def printmsgsthread(threadname):
+    sys.path.insert(0, "C:\Users\Rayyan\Documents\GitHub\NASA-RMC-2018\IBEx\RobotSoftware\src")
     import motorTest
     global msgs
     while True:
         # print "Messages are:"
         # print motorTest.guiMotorMessage
         msgs = parsemsgs(motorTest.guiMotorMessage)
-        print "printing parsed message: ", msgs
+        # print "printing parsed message: ", msgs
 
 def parsemsgs(test):
   a = test.split("><")
   lefttest = [x.replace(">", "") for x in a]
   righttest = [x.replace("<", "") for x in lefttest]
   final = [(x.split(":")) for x in righttest]
+  # print "Final parsed", final
   return final
 
 # def flaskupdate(message=""):
@@ -69,10 +70,12 @@ def gen(camera):
 
 @app.route("/getServerData")
 def send():
-    global msgs
+    # global msgs
     arr = msgs
+    #print msgs
+    values = ""
     values = json.dumps(arr)
-    #print(values)
+    print(values)
     return values
 
 @app.route("/getOpMode")
@@ -83,14 +86,20 @@ def sendMode():
 
 @app.route('/receiver', methods = ['POST'])
 def main():
-    global msgs
-    while(1):
-        with open("..//flask.txt") as f:
-            content = f.readlines()
-        f.close()
-        # you may also want to remove whitespace characters like `\n` at the end of each line
-        content = msgs
-        print content[0]
+    # global msgs
+    runmotorThread = Thread(target=printmsgsthread, args=("Thread-2",))
+
+    runmotorThread.start()
+    # while(1):
+        # print "*********************************************************************"
+        # print msgs
+        # print "*********************************************************************"
+
+        # with open("..//flask.txt") as f:
+        #     content = f.readlines()
+        # f.close()
+        # # you may also want to remove whitespace characters like \n at the end of each line
+        # content = msgs
 
 
         # if len(content)>0:
@@ -120,6 +129,5 @@ def modeAuto():
     return Response()
 
 if __name__ == '__main__':
-    runmotorThread = Thread(target=printmsgsthread, args=("Thread-2",))
-    runmotorThread.start()
+
     app.run(host="130.215.211.230", debug=True, threaded=True)

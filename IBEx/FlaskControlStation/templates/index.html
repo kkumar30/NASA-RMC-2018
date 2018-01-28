@@ -38,6 +38,10 @@
 			border-radius: 15px;
 		}
 
+		td, th {
+			font-size: 0.9em;
+		}
+
 	</style>
 
 	<body>
@@ -75,54 +79,54 @@
 					<table class="table table-bordered">
 						<thead>
 					    <tr>
-					      <th scope="col">Motor</th>
-					      <th scope="col">Speed (RPM)</th>
+					      <th scope="col">ID</th>
 					      <th scope="col">Current (A)</th>
-					      <th scope="col">Voltage (V)</th>
 					      <th scope="col">Temp. (&deg;F)</th>
+					      <th scope="col">Speed (RPM)</th>
 					      <th scope="col">Position (ticks)</th>
+					      <th scope="col">Setpoint</th>
 					    </tr>
 					  </thead>
 					  <tbody>
 					    <tr>
-					      <th scope="row">Left Drive</th>
-					      <td id="m1_speed"></td>
+					      <th scope="row" id="m1_id"></th>
 					      <td id="m1_curr"></td>
-					      <td id="m1_volt"></td>
 					      <td id="m1_temp"></td>
+					      <td id="m1_speed"></td>
 					      <td id="m1_pos"></td>
+					      <td id="m1_setp"></td>
 					    </tr>
 					    <tr>
-					      <th scope="row">Right Drive</th>
-					      <td id="m2_speed"></td>
+					      <th scope="row" id="m2_id"></th>
 					      <td id="m2_curr"></td>
-					      <td id="m2_volt"></td>
 					      <td id="m2_temp"></td>
+					      <td id="m2_speed"></td>
 					      <td id="m2_pos"></td>
+					      <td id="m2_setp"></td>
 					    </tr>
 					    <tr>
-					      <th scope="row">Depth</th>
-					      <td id="m3_speed"></td>
+					      <th scope="row" id="m3_id"></th>
 					      <td id="m3_curr"></td>
-					      <td id="m3_volt"></td>
 					      <td id="m3_temp"></td>
+					      <td id="m3_speed"></td>
 					      <td id="m3_pos"></td>
+					      <td id="m3_setp"></td>
 					    </tr>
 					    <tr>
-					      <th scope="row">Scoops</th>
-					      <td id="m4_speed"></td>
+					      <th scope="row" id="m4_id"></th>
 					      <td id="m4_curr"></td>
-					      <td id="m4_volt"></td>
 					      <td id="m4_temp"></td>
+					      <td id="m4_speed"></td>
 					      <td id="m4_pos"></td>
+					      <td id="m4_setp"></td>
 					    </tr>
 					    <tr>
-					      <th scope="row">Depth</th>
-					      <td id="m5_speed"></td>
+					      <th scope="row" id="m5_id"></th>
 					      <td id="m5_curr"></td>
-					      <td id="m5_volt"></td>
 					      <td id="m5_temp"></td>
+					      <td id="m5_speed"></td>
 					      <td id="m5_pos"></td>
+					      <td id="m5_setp"></td>
 					    </tr>
 					  </tbody>
 					</table>
@@ -158,11 +162,11 @@
 
 		init();
 
-		var m1_fields = ["m1_speed", "m1_curr", "m1_volt", "m1_temp", "m1_pos"];
-		var m2_fields = ["m2_speed", "m2_curr", "m2_volt", "m2_temp", "m2_pos"];
-		var m3_fields = ["m3_speed", "m3_curr", "m3_volt", "m3_temp", "m3_pos"];
-		var m4_fields = ["m4_speed", "m4_curr", "m4_volt", "m4_temp", "m4_pos"];
-		var m5_fields = ["m5_speed", "m5_curr", "m5_volt", "m5_temp", "m5_pos"];
+		var m1_fields = ["m1_id", "m1_curr", "m1_temp", "m1_speed", "m1_pos", "m1_setp"];
+		var m2_fields = ["m2_id", "m2_curr", "m2_temp", "m2_speed", "m2_pos", "m2_setp"];
+		var m3_fields = ["m3_id", "m3_curr", "m3_temp", "m3_speed", "m3_pos", "m3_setp"];
+		var m4_fields = ["m4_id", "m4_curr", "m4_temp", "m4_speed", "m4_pos", "m4_setp"];
+		var m5_fields = ["m5_id", "m5_curr", "m5_temp", "m5_speed", "m5_pos", "m5_setp"];
 
 		var currMode = "<h2>Mode: Stopped</h2>"
 
@@ -191,31 +195,42 @@
 			var data = getMotorData()
 
 			setTimeout(function(){
-				for(var i = 0; i < data.length; i++){
-					for(var j = 0; j < 5; j++){
 
-						if(i == 0){
-							document.getElementById(m1_fields[j]).innerText = data[i][j];
-						}
+				document.getElementById(m1_fields[0]).innerText = data[0][0];
+				document.getElementById(m1_fields[1]).innerText = data[0][1];
+				document.getElementById(m1_fields[2]).innerText = data[0][2];
+				document.getElementById(m1_fields[3]).innerText = data[0][4];
+				document.getElementById(m1_fields[4]).innerText = data[0][5];
+				document.getElementById(m1_fields[5]).innerText = data[0][6];
 
-						else if(i == 1){
-							document.getElementById(m2_fields[j]).innerText = data[i][j];
-						}
+				document.getElementById(m2_fields[0]).innerText = data[1][0];
+				document.getElementById(m2_fields[1]).innerText = data[1][1];
+				document.getElementById(m2_fields[2]).innerText = data[1][2];
+				document.getElementById(m2_fields[3]).innerText = data[1][4];
+				document.getElementById(m2_fields[4]).innerText = data[1][5];
+				document.getElementById(m2_fields[5]).innerText = data[1][6];
 
-						else if(i == 2){
-							document.getElementById(m3_fields[j]).innerText = data[i][j];
-						}
+				document.getElementById(m3_fields[0]).innerText = data[2][0];
+				document.getElementById(m3_fields[1]).innerText = data[2][1];
+				document.getElementById(m3_fields[2]).innerText = data[2][2];
+				document.getElementById(m3_fields[3]).innerText = data[2][4];
+				document.getElementById(m3_fields[4]).innerText = data[2][5];
+				document.getElementById(m3_fields[5]).innerText = data[2][6];
 
-						else if(i == 3){
-							document.getElementById(m4_fields[j]).innerText = data[i][j];
-						}
+				document.getElementById(m4_fields[0]).innerText = data[3][0];
+				document.getElementById(m4_fields[1]).innerText = data[3][1];
+				document.getElementById(m4_fields[2]).innerText = data[3][2];
+				document.getElementById(m4_fields[3]).innerText = data[3][4];
+				document.getElementById(m4_fields[4]).innerText = data[3][5];
+				document.getElementById(m4_fields[5]).innerText = data[3][6];
 
-						else if(i == 4){
-							document.getElementById(m5_fields[j]).innerText = data[i][j];
-						}
+				document.getElementById(m5_fields[0]).innerText = data[4][0];
+				document.getElementById(m5_fields[1]).innerText = data[4][1];
+				document.getElementById(m5_fields[2]).innerText = data[4][2];
+				document.getElementById(m5_fields[3]).innerText = data[4][4];
+				document.getElementById(m5_fields[4]).innerText = data[4][5];
+				document.getElementById(m5_fields[5]).innerText = data[4][6];
 
-					}
-				}
 			}, 500);
 
 		}
@@ -231,7 +246,7 @@
 				frameCount = 0;
 			}
 
-			if(frameCount % 90 == 0){
+			if(frameCount % 600 == 0){
 				fillData()								
 			}
 
