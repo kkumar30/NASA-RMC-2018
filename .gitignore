@@ -2,6 +2,7 @@
 *.xml
 .idea/workspace.xml
 *.pyc 
+*.exe
 
 
 # Unwanted repo named stuff #
