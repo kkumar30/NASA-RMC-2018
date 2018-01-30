@@ -30,19 +30,19 @@ LOGGER.Low("Beginning Program Execution")
 
 #Threading stuff... i still don't know this
 motorHandlerLock = threading.Lock()
-#sensorHandlerLock = threading.Lock()
+sensorHandlerLock = threading.Lock()
 #LOGGER.Low("Motor Handler Lock: " + str(motorHandlerLock))
 stopped = True
 joyMap= interp1d([-1.0,1.0],[-.5,.5])
 guiMotorMessage =""
 def motorCommunicationThread():
+	global guiMotorMessage
 	while True:
-		global guiMotorMessage
+
 		motorHandlerLock.acquire()
 		#get the messages of each motor status from the HERO and update our motor values
 		inboundMotorMessage = motorSerialHandler.getMessage()
 		motorHandler.updateMotors(inboundMotorMessage)
-
 		guiMotorMessage= inboundMotorMessage
 		#Gets the listed messages
 		# flaskupdate(inboundMotorMessage)
@@ -55,17 +55,19 @@ def motorCommunicationThread():
 
 
 
-# def sensorCommunicationThread():
-# 	while True:
-# 		#sensorHandlerLock.acquire()
-# 		inboundSensorMessage = sensorSerialHandler.getMessage()
-# 		sensorHandler.updateSensors(inboundSensorMessage)
-#
-# 		outboundSensorMessage = sensorHandler.getServoStateMessage()
-# 		LOGGER.Debug(outboundSensorMessage)
-# 		sensorSerialHandler.sendMessage(outboundSensorMessage)
-# 		#sensorHandlerLock.release()
-#
+def sensorCommunicationThread():
+	# time.sleep(0.5)
+	while True:
+		# LOGGER.Debug("Here")
+		sensorHandlerLock.acquire()
+		inboundSensorMessage = sensorSerialHandler.getMessage()
+		sensorHandler.updateSensors(inboundSensorMessage)
+
+		# outboundSensorMessage = sensorHandler.getServoStateMessage()
+		LOGGER.Debug(inboundSensorMessage)
+		# sensorSerialHandler.sendMessage(outboundSensorMessage)
+		sensorHandlerLock.release()
+
 # def ceaseAllMotorFunctions():
 # 	#Stop all motors
 # 	# leftDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
@@ -77,7 +79,20 @@ def motorCommunicationThread():
 # #initialize handlers
 # LOGGER.Debug("Initializing handlers...")
 motorHandler = MotorHandler()
+sensorHandler = SensorHandler()
 #
+lswitch = Sensor("LimitSwitch")
+sensorHandler.addSensor(lswitch)
+IRSensor = Sensor("IRSensor")
+sensorHandler.addSensor(IRSensor)
+
+if CONSTANTS.USING_SENSOR_BOARD:
+	LOGGER.Debug("Initializing sensor serial handler...")
+	sensorSerialHandler = SerialHandler(CONSTANTS.SENSOR_BOARD_PORT)
+	sensorSerialHandler.initSerial()
+	# val = ""
+	val = sensorHandler.getSensorValues()
+	LOGGER.Debug(val)
 
 if CONSTANTS.USING_MOTOR_BOARD:
 	LOGGER.Debug("Initializing motor serial handler...")
@@ -99,6 +114,7 @@ testMotor			 = Motor("TestMotor",			 1,									   MOTOR_MODES.K_PERCENT_VBUS)
 # poopMotor 			 = Motor("PoopMotor",			 2,									   MOTOR_MODES.K_PERCENT_VBUS)
 # initialize motor handler and add motors
 LOGGER.Debug("Linking motors to motor handler...")
+# limitSwitch = r("")
 # motorHandler.addMotor(leftDriveMotor)
 # motorHandler.addMotor(rightDriveMotor)
 # motorHandler.addMotor(collectorScoopsMotor)
@@ -141,10 +157,12 @@ if CONSTANTS.USING_SENSOR_BOARD:
 	LOGGER.Debug("Initializing sensor board thread...")
 	#sets up an isr essentially using the sensorCommunicationThread
 	sensorCommThread = Thread(target=sensorCommunicationThread)
-	sensorCommThread.daemon = True
+	sensorCommThread.daemon = False
 	sensorCommThread.start()
 
 
+# while True:
+#     a = 69
 # final line before entering main loop
 robotEnabled = True
 
@@ -157,19 +175,19 @@ def tankDrive(joyReads):
 # test_speed_val = -1.0
 
 
-def runmotors(threadname):
-	while robotEnabled:
+# def runmotors(threadname):
+	# while robotEnabled:
 		# print "in motor thread"
-		pygame.event.get()
-		jReader.updateValues()
-		tankDrive(jReader.getAxisValues())
+		# pygame.event.get()
+		# jReader.updateValues()
+		# tankDrive(jReader.getAxisValues())
 		#
 	# testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, .1)
 
 
-# if __name__== "__main__":
-runmotorThread = Thread(target=runmotors, args=("Thread-1", ))
-runmotorThread.start()
+# # if _name__== "__main_":
+# runmotorThread = Thread(target=runmotors, args=("Thread-1", ))
+# runmotorThread.start()
 
 
 # loopStartTime = time.time()
@@ -199,6 +217,6 @@ runmotorThread.start()
 # if(sleepTime > 0):
 # 	time.sleep(sleepTime)
 
-# if __name__ == "__main__":
+# if _name_ == "_main_":
 # 	flaskupdate("test")
 # 	print "Finished"
