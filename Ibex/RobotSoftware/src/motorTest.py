@@ -56,9 +56,8 @@ def motorCommunicationThread():
 
 
 def sensorCommunicationThread():
-	# time.sleep(0.5)
 	while True:
-		# LOGGER.Debug("Here")
+		LOGGER.Debug("Here")
 		sensorHandlerLock.acquire()
 		inboundSensorMessage = sensorSerialHandler.getMessage()
 		sensorHandler.updateSensors(inboundSensorMessage)
@@ -83,14 +82,12 @@ sensorHandler = SensorHandler()
 #
 lswitch = Sensor("LimitSwitch")
 sensorHandler.addSensor(lswitch)
-IRSensor = Sensor("IRSensor")
-sensorHandler.addSensor(IRSensor)
 
 if CONSTANTS.USING_SENSOR_BOARD:
 	LOGGER.Debug("Initializing sensor serial handler...")
 	sensorSerialHandler = SerialHandler(CONSTANTS.SENSOR_BOARD_PORT)
 	sensorSerialHandler.initSerial()
-	# val = ""
+	val = ""
 	val = sensorHandler.getSensorValues()
 	LOGGER.Debug(val)
 
@@ -98,6 +95,15 @@ if CONSTANTS.USING_MOTOR_BOARD:
 	LOGGER.Debug("Initializing motor serial handler...")
 	motorSerialHandler = SerialHandler(CONSTANTS.MOTOR_BOARD_PORT)
 	motorSerialHandler.initSerial()
+
+if CONSTANTS.USING_NETWORK_COMM:
+	networkClient = NetworkClient(CONSTANTS.CONTROL_STATION_IP, CONSTANTS.CONTROL_STATION_PORT)
+	inboundMessageQueue = MessageQueue()
+	networkClient.setInboundMessageQueue(inboundMessageQueue)
+	outboundMessageQueue = MessageQueue()
+	lastReceivedMessageNumber = -1
+	currentReceivedMessageNumber = -1
+	stateStartTime = -1
 
 # flaskupdate("test")
 # setup some variables that will be used with each iteration of the loop
@@ -157,25 +163,55 @@ if CONSTANTS.USING_SENSOR_BOARD:
 	LOGGER.Debug("Initializing sensor board thread...")
 	#sets up an isr essentially using the sensorCommunicationThread
 	sensorCommThread = Thread(target=sensorCommunicationThread)
-	sensorCommThread.daemon = False
+	sensorCommThread.daemon = True
 	sensorCommThread.start()
 
 
-# while True:
-#     a = 69
+
 # final line before entering main loop
 robotEnabled = True
 
 def tankDrive(joyReads):
-	testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyMap(joyReads))
+			testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyMap(joyReads))
+	#testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyReads)
 	# poopMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyMap(joyReads[1]))
 # BEEPCODES.happy1()
 # LOGGER.Debug("Initialization complete, entering main loop...")
 #
 # test_speed_val = -1.0
+while robotEnabled:
+	# testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.3)
+	if CONSTANTS.USING_NETWORK_COMM:
+		connected = False
+		while(not connected):
+			try:
+				if(outboundMessageQueue.isEmpty()):
+					networkClient.send(motorHandler.getMotorNetworkMessage()+"\n\r")
+				else:
+					networkClient.send(outboundMessageQueue.getNext())
+				connected = True
+			except:
+				LOGGER.Critical("Could not connect to network, attempting to reconnect...")
+				# ceaseAllMotorFunctions()
 
 
-# def runmotors(threadname):
+	# +----------------------------------------------+
+	# |              Current State Logic             |
+	# +----------------------------------------------+
+	# State machine handles the robot's current states
+	if CONSTANTS.USING_NETWORK_COMM and connected:
+
+		if(not inboundMessageQueue.isEmpty()):
+			currentMessage = inboundMessageQueue.getNext()
+			# currentMessage.printMessage()
+			lastReceivedMessageNumber = currentReceivedMessageNumber
+			currentReceivedMessageNumber = currentMessage.messageNumber
+
+		#new message has arrived, process
+		if(currentMessage.type == "MSG_MOTOR_VALUES"):
+				LOGGER.Debug("HERE"+str(currentMessage.messageData[0]))
+				tankDrive(currentMessage.messageData[0])
+# # def runmotors(threadname):
 	# while robotEnabled:
 		# print "in motor thread"
 		# pygame.event.get()
@@ -185,7 +221,7 @@ def tankDrive(joyReads):
 	# testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, .1)
 
 
-# # if _name__== "__main_":
+# # if __name__== "__main__":
 # runmotorThread = Thread(target=runmotors, args=("Thread-1", ))
 # runmotorThread.start()
 
@@ -217,6 +253,6 @@ def tankDrive(joyReads):
 # if(sleepTime > 0):
 # 	time.sleep(sleepTime)
 
-# if _name_ == "_main_":
+# if __name__ == "__main__":
 # 	flaskupdate("test")
 # 	print "Finished"
