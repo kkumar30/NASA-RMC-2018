@@ -44,7 +44,7 @@ public class Motor
 	public MotorMode getMode() {return mode;}
 	public Boolean getForwardLimit() {return forward_limit;}
 	public Boolean getReverseLimit() {return reverse_limit;}
-	
+
 	public void updateMotorData(String motorData)
 	{
 		final String patternStr = "(\\d+):(\\-?\\d+\\.\\d+):(\\-?\\d+\\.\\d+):(\\-?\\d+\\.\\d+):(\\-?\\d+\\.\\d+):(\\-?\\d+\\.\\d+):(\\-?\\d+\\.\\d+):(\\d+):([01]):([01])";

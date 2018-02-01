@@ -31,22 +31,23 @@ public class RobotData
 	
 	public void updateRobotData(String message)
 	{
-		final String patternStr = "<(.+)><(.+)><(.+)><(.+)><(.+)>";
+//		final String patternStr = "<(.+)><(.+)><(.+)><(.+)><(.+)>";
+		final String patternStr = "<(.+)>";
 		Pattern pattern = Pattern.compile(patternStr);
 		Matcher m = pattern.matcher(message);
 		if(m.matches())
 		{
 			String leftMotorData = m.group(1);
-			String rightMotorData = m.group(2);
-			String scoopMotorData = m.group(3);
-			String depthMotorData = m.group(4);
-			String winchMotorData = m.group(5);
+//			String rightMotorData = m.group(2);
+//			String scoopMotorData = m.group(3);
+//			String depthMotorData = m.group(4);
+//			String winchMotorData = m.group(5);
 			
 			leftMotor.updateMotorData(leftMotorData);
-			rightMotor.updateMotorData(rightMotorData);
-			scoopMotor.updateMotorData(scoopMotorData);
-			depthMotor.updateMotorData(depthMotorData);
-			winchMotor.updateMotorData(winchMotorData);
+//			rightMotor.updateMotorData(rightMotorData);
+//			scoopMotor.updateMotorData(scoopMotorData);
+//			depthMotor.updateMotorData(depthMotorData);
+//			winchMotor.updateMotorData(winchMotorData);
 		}
 	}
 	
