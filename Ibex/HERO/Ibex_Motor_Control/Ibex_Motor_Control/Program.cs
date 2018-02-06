@@ -218,7 +218,7 @@ namespace Ibex_Motor_Control
                 Debug.Print(outboundMessageStr);
                 CTRE.Watchdog.Feed();
                 string[] teststring = outboundMessageStr.Split(':');
-                Debug.Print("Mode:" + teststring[7] + " Enc:" + teststring[5] + " Set:" + teststring[6]);
+                Debug.Print(" Enc:" + teststring[5] + " Enc2:"+ teststring[14]);
                 CTRE.Watchdog.Feed();
 
                 //send that message back to the main CPU

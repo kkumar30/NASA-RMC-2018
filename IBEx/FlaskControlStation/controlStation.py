@@ -3,6 +3,9 @@ from flask_assets import Bundle, Environment		#pip install flask_assets
 from camera import VideoCamera
 import json, math
 import sys
+import io
+from PIL import Image
+from array import array
 from threading import Thread
 # import motorTest
 
@@ -55,7 +58,7 @@ def parsemsgs(test):
 
 @app.route('/')
 def index():
-	return render_template('index.html')
+	return render_template('video_feed.html')
 
 @app.route('/video_feed')
 def video_feed():
@@ -64,7 +67,10 @@ def video_feed():
 def gen(camera):
     while True:
         frame = camera.get_frame()
-
+        # print type(frame), len(frame)
+        image = Image.open(io.BytesIO(frame))
+        # print type(image)
+        # print type(b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
@@ -84,12 +90,12 @@ def sendMode():
     value = json.dumps([opMode])
     return value
 
-@app.route('/receiver', methods = ['POST'])
-def main():
+# @app.route('/receiver', methods = ['POST'])
+# def main():
     # global msgs
-    runmotorThread = Thread(target=printmsgsthread, args=("Thread-2",))
+    # runmotorThread = Thread(target=printmsgsthread, args=("Thread-2",))
 
-    runmotorThread.start()
+    # runmotorThread.start()
     # while(1):
         # print "*********************************************************************"
         # print msgs
@@ -130,4 +136,4 @@ def modeAuto():
 
 if __name__ == '__main__':
 
-    app.run(host="130.215.211.230", debug=True, threaded=True)
+    app.run(host="130.215.10.71", debug=True, threaded=True)

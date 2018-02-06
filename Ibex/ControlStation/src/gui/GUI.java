@@ -1,27 +1,15 @@
 package gui;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagLayout;
-import javax.swing.JPanel;
 import java.awt.Point;
-import javax.swing.SpringLayout;
-import javax.swing.JTabbedPane;
-import javax.swing.DefaultListModel;
-import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JButton;
-import javax.swing.JList;
 import java.awt.Color;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 import java.awt.Font;
 import java.awt.List;
-import javax.swing.SwingConstants;
 
 import common.Message;
 import common.MessageFactory;

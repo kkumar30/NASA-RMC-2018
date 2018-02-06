@@ -16,7 +16,7 @@ public class CameraServer implements Runnable
 {
 	public ServerSocket server;
 	private ImagePanel ipanel;
-	
+
 	public CameraServer(ImagePanel ipanel)
 	{
 		this.ipanel = ipanel;
@@ -37,7 +37,7 @@ public class CameraServer implements Runnable
 		{
 			System.out.println("GotSomething!");
 			Socket sock;
-			try 
+			try
 			{
 				sock = this.server.accept();
 				InputStream in = sock.getInputStream();
@@ -50,13 +50,13 @@ public class CameraServer implements Runnable
 				BufferedImage jpg = ImageIO.read(new ByteArrayInputStream(buffer));
 				//ImageIO.write(jpg, "JPG", new File("robot.jpg"));
 				ipanel.setNewImage(jpg);
-			} 
-			catch (IOException e) 
+			}
+			catch (IOException e)
 			{
 				e.printStackTrace();
 			}
-			
-			
+
+
 		}
 	}
 }
