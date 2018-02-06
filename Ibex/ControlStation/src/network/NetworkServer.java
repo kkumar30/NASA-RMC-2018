@@ -2,6 +2,7 @@ package network;
 
 import java.io.*;
 import java.net.*;
+import java.util.logging.Logger;
 
 import common.Gamepad;
 import common.MessageQueue;
@@ -54,26 +55,27 @@ public class NetworkServer extends Thread
 	@Override
 	public void run()
 	{
-		System.out.println("HERE! - NetworkServer.java");
+//		System.out.println("HERE! - NetworkServer.java");
 		while(running)
 		{
-			System.out.println("HERE! - NetworkServer.java - In While");
+//			System.out.println("HERE! - NetworkServer.java - In While");
 			try
 			{
-				System.out.println("HERE! - NetworkServer.java - In Try");
+//				System.out.println("HERE! - NetworkServer.java - In Try");
 				Socket socket = serverSocket.accept();
+//				System.out.println(socket.isConnected());
 				RequestHandler requestHandler = new RequestHandler(socket, queue, robotData);
 				requestHandler.start();
 				
 			}
 			catch(IOException e)
 			{
-				System.out.println("HERE! - NetworkServer.java - Caught Exception");
+//				System.out.println("HERE! - NetworkServer.java - Caught Exception");
 				e.printStackTrace();
 			}
-			System.out.println("HERE! - NetworkServer.java - In While Not Trying");
+//			System.out.println("HERE! - NetworkServer.java - In While Not Trying");
 		}
-		System.out.println("HERE! - NetworkServer.java - Out of While");
+//		System.out.println("HERE! - NetworkServer.java - Out of While");
 	}
 
 }

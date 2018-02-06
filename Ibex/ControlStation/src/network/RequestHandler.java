@@ -20,9 +20,9 @@ class RequestHandler extends Thread {
 
 	@Override
 	public void run() {
-		System.out.println("HERE! - RequestHandler.java");
+//		System.out.println("HERE! - RequestHandler.java");
 		try {
-			System.out.println("HERE! - RequestHandler.java - In Try 1");
+//			System.out.println("HERE! - RequestHandler.java - In Try 1");
 			// Get input and output streams
 			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			PrintWriter out = new PrintWriter(socket.getOutputStream());
@@ -31,12 +31,12 @@ class RequestHandler extends Thread {
 			String inboundMessageStr;
 
 			try {
-				System.out.println("HERE! - RequestHandler.java - In Try 2");
+//				System.out.println("HERE! - RequestHandler.java - In Try 2");
 				inboundMessageStr = inFromClient.readLine();
 				if (inboundMessageStr != null && inboundMessageStr.replace("\n\t ", "").equals("Finished")) {
 					if (!queue.isEmpty()) {
 						queue.pop();
-						System.out.println("Next action in Queue!");
+//						System.out.println("Next action in Queue!");
 					}
 				}
 			} catch (Exception e) {

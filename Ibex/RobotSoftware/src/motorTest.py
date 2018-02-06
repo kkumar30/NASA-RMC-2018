@@ -116,8 +116,8 @@ LOGGER.Debug("Initializing motor objects...")
 # collectorScoopsMotor = Motor("CollectorScoopsMotor", CONSTANTS.COLLECTOR_SCOOPS_DEVICE_ID, MOTOR_MODES.K_PERCENT_VBUS)
 # collectorDepthMotor  = Motor("CollectorDepthMotor",  CONSTANTS.COLLECTOR_DEPTH_DEVICE_ID,  MOTOR_MODES.K_PERCENT_VBUS)
 # winchMotor           = Motor("WinchMotor",           CONSTANTS.WINCH_DEVICE_ID,            MOTOR_MODES.K_PERCENT_VBUS)
-testMotor			 = Motor("TestMotor",			 1,									   MOTOR_MODES.K_PERCENT_VBUS)
-# poopMotor 			 = Motor("PoopMotor",			 2,									   MOTOR_MODES.K_PERCENT_VBUS)
+testMotor= Motor("TestMotor",1, MOTOR_MODES.K_PERCENT_VBUS)
+poopMotor= Motor("PoopMotor",2, MOTOR_MODES.K_PERCENT_VBUS)
 # initialize motor handler and add motors
 LOGGER.Debug("Linking motors to motor handler...")
 # limitSwitch = r("")
@@ -127,7 +127,7 @@ LOGGER.Debug("Linking motors to motor handler...")
 # motorHandler.addMotor(collectorDepthMotor)
 # motorHandler.addMotor(winchMotor)
 motorHandler.addMotor(testMotor)
-# motorHandler.addMotor(poopMotor)
+motorHandler.addMotor(poopMotor)
 
 # initialize encoder reset flags
 driveEncoderResetFlag = False
@@ -171,88 +171,50 @@ if CONSTANTS.USING_SENSOR_BOARD:
 # final line before entering main loop
 robotEnabled = True
 
-def tankDrive(joyReads):
-			testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyMap(joyReads))
-	#testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyReads)
-	# poopMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyMap(joyReads[1]))
-# BEEPCODES.happy1()
+def tankDrive(joyRead1,joyRead2):
+	testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyRead1)
+	poopMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyRead2)
+
+BEEPCODES.happy1()
 # LOGGER.Debug("Initialization complete, entering main loop...")
 #
 # test_speed_val = -1.0
 while robotEnabled:
-	# testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.3)
-	if CONSTANTS.USING_NETWORK_COMM:
-		connected = False
-		while(not connected):
-			try:
-				if(outboundMessageQueue.isEmpty()):
-					networkClient.send(motorHandler.getMotorNetworkMessage()+"\n\r")
-				else:
-					networkClient.send(outboundMessageQueue.getNext())
-				connected = True
-			except:
-				LOGGER.Critical("Could not connect to network, attempting to reconnect...")
-				# ceaseAllMotorFunctions()
+    if CONSTANTS.USING_NETWORK_COMM:
+	connected = False
+	while(not connected):
+		try:
+			if(outboundMessageQueue.isEmpty()):
+				networkClient.send(motorHandler.getMotorNetworkMessage()+"\n\r")
+			else:
+				networkClient.send(outboundMessageQueue.getNext())
+			connected = True
+		except:
+			LOGGER.Critical("Could not connect to network, attempting to reconnect...")
+			# ceaseAllMotorFunctions()
 
 
 	# +----------------------------------------------+
 	# |              Current State Logic             |
 	# +----------------------------------------------+
 	# State machine handles the robot's current states
-	if CONSTANTS.USING_NETWORK_COMM and connected:
-
-		if(not inboundMessageQueue.isEmpty()):
-			currentMessage = inboundMessageQueue.getNext()
-			# currentMessage.printMessage()
-			lastReceivedMessageNumber = currentReceivedMessageNumber
-			currentReceivedMessageNumber = currentMessage.messageNumber
+    if CONSTANTS.USING_NETWORK_COMM and connected:
+	if(not inboundMessageQueue.isEmpty()):
+		currentMessage = inboundMessageQueue.getNext()
+		# currentMessage.printMessage()
+		lastReceivedMessageNumber = currentReceivedMessageNumber
+		currentReceivedMessageNumber = currentMessage.messageNumber
 
 		#new message has arrived, process
-		if(currentMessage.type == "MSG_MOTOR_VALUES"):
-				LOGGER.Debug("HERE"+str(currentMessage.messageData[0]))
-				tankDrive(currentMessage.messageData[0])
+	if(currentMessage.type == "MSG_MOTOR_VALUES"):
+		tankDrive(currentMessage.messageData[0], currentMessage.messageData[1])
+    #testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, -0.3)
+    #poopMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.3)
 # # def runmotors(threadname):
 	# while robotEnabled:
 		# print "in motor thread"
-		# pygame.event.get()
-		# jReader.updateValues()
-		# tankDrive(jReader.getAxisValues())
+    #pygame.event.get()
+    #jReader.updateValues()
+    #tankDrive(jReader.getAxisValues())
 		#
 	# testMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, .1)
-
-
-# # if __name__== "__main__":
-# runmotorThread = Thread(target=runmotors, args=("Thread-1", ))
-# runmotorThread.start()
-
-
-# loopStartTime = time.time()
-#
-# currentState = robotState.getState()
-# lastState = robotState.getLastState()
-#
-#
-# # +----------------------------------------------+
-# # |                Communication                 |
-# # +----------------------------------------------+
-#
-# if raw_input == 't':
-#     usingController = True
-#
-
-# while usingController:
-#     y1 = jReader.getAxisValues()
-# 	testMotor.setSetpoint(CONSTANTS.K_PERCENT_VBUS, y1)
-# 	if raw_input == 'q':
-# 		usingController = False
-# 		ceaseAllMotorFunctions()
-
-# loopEndTime = time.time()
-# loopExecutionTime = loopEndTime - loopStartTime
-# sleepTime = CONSTANTS.LOOP_DELAY_TIME - loopExecutionTime
-# if(sleepTime > 0):
-# 	time.sleep(sleepTime)
-
-# if __name__ == "__main__":
-# 	flaskupdate("test")
-# 	print "Finished"
