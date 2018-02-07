@@ -140,11 +140,11 @@ public class GUI extends JFrame {
 		this.messageQueue = messageQueue;
 
 		frame = new JFrame();
-		frame.setBounds(0, 0, 1600, 900);
+		frame.setBounds(0, 0, 1000, 700); //1600,900
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		setTitle("Markhor.exe");
-		setSize(new Dimension(1600, 900));
+		setTitle("IBEX Control Station");
+		setSize(new Dimension(1000, 700));
 		setResizable(false);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -506,11 +506,15 @@ public class GUI extends JFrame {
 		JLabel lbl_rightMotorID = new JLabel("Device ID:");
 		lbl_rightMotorID.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_rightMotorID.setBounds(10, 48, 88, 14);
+//		lbl_rightMotorID.setBackground(Color.ORANGE);
+//		lbl_rightMotorID.setOpaque(true);
 		panel_rightMotorData.add(lbl_rightMotorID);
 
 		tbox_rightMotorID = new JTextField();
 		tbox_rightMotorID.setColumns(10);
 		tbox_rightMotorID.setBounds(108, 48, 86, 20);
+//		tbox_rightMotorID.setBackground(Color.ORANGE);
+//		tbox_rightMotorID.setOpaque(true);
 		panel_rightMotorData.add(tbox_rightMotorID);
 
 		JLabel lbl_rightMotorCurrent = new JLabel("Current (A):");
@@ -561,11 +565,13 @@ public class GUI extends JFrame {
 		tbox_rightMotorSetpoint = new JTextField();
 		tbox_rightMotorSetpoint.setColumns(10);
 		tbox_rightMotorSetpoint.setBounds(261, 101, 86, 20);
+		tbox_rightMotorSetpoint.setBackground(Color.ORANGE);
 		panel_rightMotorData.add(tbox_rightMotorSetpoint);
 
 		tbox_rightMotorPosition = new JTextField();
 		tbox_rightMotorPosition.setColumns(10);
 		tbox_rightMotorPosition.setBounds(261, 73, 86, 20);
+		tbox_rightMotorPosition.setBackground(Color.GREEN);
 		panel_rightMotorData.add(tbox_rightMotorPosition);
 
 		JLabel lbl_rightMotorPosition = new JLabel("Position:");
@@ -1126,6 +1132,15 @@ public class GUI extends JFrame {
 		tbox_leftMotorMode.setText((robotData.getLeftMotor().getMode().toString()));
 		tbox_leftMotorSetpoint.setText((robotData.getLeftMotor().getSetpoint().toString()));
 		tbox_leftMotorPosition.setText((robotData.getLeftMotor().getPosition().toString()));
+		if (robotData.getLeftMotor().getPosition()>10 || robotData.getLeftMotor().getPosition()<-10){
+			tbox_leftMotorPosition.setBackground(Color.RED);
+		}
+		else if (robotData.getLeftMotor().getPosition() == 0){
+			tbox_leftMotorPosition.setBackground(Color.GREEN);
+		}
+		else {
+			tbox_leftMotorPosition.setBackground(Color.ORANGE);
+		}
 		tbox_leftMotorSpeed.setText((robotData.getLeftMotor().getSpeed().toString()));
 		tbox_leftMotorFLimit.setText((robotData.getLeftMotor().getForwardLimit().toString()));
 		tbox_leftMotorRLimit.setText((robotData.getLeftMotor().getReverseLimit().toString()));
@@ -1137,6 +1152,17 @@ public class GUI extends JFrame {
 		tbox_rightMotorMode.setText((robotData.getRightMotor().getMode().toString()));
 		tbox_rightMotorSetpoint.setText((robotData.getRightMotor().getSetpoint().toString()));
 		tbox_rightMotorPosition.setText((robotData.getRightMotor().getPosition().toString()));
+		if (robotData.getRightMotor().getPosition()>10  || robotData.getRightMotor().getPosition()<-10)
+		{
+			tbox_rightMotorPosition.setBackground(Color.RED);
+		}
+
+		else if (robotData.getRightMotor().getPosition() == 0){
+			tbox_rightMotorPosition.setBackground(Color.GREEN);
+		}
+		else{
+			tbox_rightMotorPosition.setBackground(Color.ORANGE);
+		}
 		tbox_rightMotorSpeed.setText((robotData.getRightMotor().getSpeed().toString()));
 		tbox_rightMotorFLimit.setText((robotData.getRightMotor().getForwardLimit().toString()));
 		tbox_rightMotorRLimit.setText((robotData.getRightMotor().getReverseLimit().toString()));

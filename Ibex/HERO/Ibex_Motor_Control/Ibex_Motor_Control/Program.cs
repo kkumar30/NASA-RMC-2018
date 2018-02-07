@@ -202,8 +202,8 @@ namespace Ibex_Motor_Control
                 CTRE.Watchdog.Feed();
 
                 //if any of the talon positions need to be reset, this will reset them
-             //   resetEncoderPositions(talons);
-               // CTRE.Watchdog.Feed();
+                resetEncoderPositions(talons);
+                CTRE.Watchdog.Feed();
 
                 //attempt to process whatever was contained in the most recent message
                 processInboundData(motorSetpointData, talons);
