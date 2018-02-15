@@ -192,7 +192,9 @@ namespace Ibex_Motor_Control
 
             //Open up UART communication to the linux box
             uart = new System.IO.Ports.SerialPort(CTRE.HERO.IO.Port1.UART, 115200);
+            //uart.DiscardInBuffer();
             uart.Open();
+            //uart.DiscardInBuffer();
 
             //The loop
             while (true)
@@ -201,28 +203,35 @@ namespace Ibex_Motor_Control
                 motorSetpointData = readUART(ref inboundMessageStr);
                 CTRE.Watchdog.Feed();
 
-                //if any of the talon positions need to be reset, this will reset them
-                resetEncoderPositions(talons);
-                CTRE.Watchdog.Feed();
+                if (motorSetpointData.Count > 0)
+                {
+                    //if any of the talon positions need to be reset, this will reset them
+                    //resetEncoderPositions(talons);
+                    //CTRE.Watchdog.Feed();
 
-                //attempt to process whatever was contained in the most recent message
-                processInboundData(motorSetpointData, talons);
-                CTRE.Watchdog.Feed();
+                    //attempt to process whatever was contained in the most recent message
+                    processInboundData(motorSetpointData, talons);
+                    CTRE.Watchdog.Feed();
 
-                //get a bunch of data from the motors in their current states
-                updateMotorStatusData(motorStatusData);
-                CTRE.Watchdog.Feed();
-
+                    //get a bunch of data from the motors in their current states
+                    updateMotorStatusData(motorStatusData);
+                    CTRE.Watchdog.Feed();
+                }
                 //package that motor data into a formatted message
                 outboundMessageStr = makeOutboundMessage(motorStatusData);
                 Debug.Print(outboundMessageStr);
                 CTRE.Watchdog.Feed();
-                string[] teststring = outboundMessageStr.Split(':');
+
+                /*string[] teststring = outboundMessageStr.Split(':');
                 Debug.Print(" Enc:" + teststring[5] + " Enc2:"+ teststring[14]);
-                CTRE.Watchdog.Feed();
+                CTRE.Watchdog.Feed();*/
 
                 //send that message back to the main CPU
+                Debug.Print(outboundMessageStr);
+                //if (uart.IsOpen) { 
                 writeUART(outboundMessageStr);
+                CTRE.Watchdog.Feed();
+            //}
                 CTRE.Watchdog.Feed();
 
                 //Debug.Print(testmotor.GetPosition().ToString());
@@ -245,8 +254,9 @@ namespace Ibex_Motor_Control
                     {
                   //      Debug.Print("Here2");
                         checkEncoderResetFlags(messageStr);
-                        //Debug.Print(messageStr);
+                        Debug.Print("Inbound Message String: " + messageStr);
                         setpointData = MessageParser.parseMessage(messageStr);
+                        // Debug.Print("Setpoint Data: " + setpointData);
                         int c = setpointData.Count;
                         //Console.WriteLine(c);
                         //Debug.Print(c.ToString());
@@ -261,11 +271,11 @@ namespace Ibex_Motor_Control
             {
                 
                 SetpointData testsetdata = (SetpointData)setpointData[0];
-                Debug.Print("Value: " + testsetdata.getSetpoint() + "ID: " + testsetdata.getDeviceID());
+                //Debug.Print("Value: " + testsetdata.getSetpoint() + "ID: " + testsetdata.getDeviceID());
                 //Debug.Print("Value: " + testsetdata.getSetpoint() + " Device ID: " + testsetdata.getDeviceID());
 
                 SetpointData testsetdata1 = (SetpointData)setpointData[1];
-                Debug.Print("Value: " + testsetdata1.getSetpoint() + " Device ID: " + testsetdata1.getDeviceID());
+                //Debug.Print("Value: " + testsetdata1.getSetpoint() + " Device ID: " + testsetdata1.getDeviceID());
             }
             return setpointData;
         }
@@ -334,12 +344,14 @@ namespace Ibex_Motor_Control
         private static void writeUART(String messageStr)
         {
             //create the outbound message as a byte array
+            //messageStr += '\n';
             byte[] outboundMessage = MakeByteArrayFromString(messageStr);
-
+            //Debug.Print("SENDING THIS OVER UART: " + outboundMessage[0]+ " "+ outboundMessage.Length);
             //Send message if possible over uart
             if (uart.CanWrite)
             {
                 uart.Write(outboundMessage, 0, outboundMessage.Length);
+                Debug.Print("Wrote to UART");
             }
         }
 
@@ -370,7 +382,7 @@ namespace Ibex_Motor_Control
             {
                 outboundMessage += ((StatusData)statusData[i]).getOutboundMessage();
             }
-            outboundMessage += "\n\r";
+            outboundMessage += "\r";
             return outboundMessage;
         }
 

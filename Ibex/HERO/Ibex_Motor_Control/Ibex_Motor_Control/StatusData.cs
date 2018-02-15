@@ -1,4 +1,7 @@
 using System;
+using Microsoft.SPOT;
+using System.Collections;
+
 
 namespace Ibex_Motor_Control
 {
@@ -59,6 +62,8 @@ namespace Ibex_Motor_Control
             outboundMessage += talonReverseLimitReached.ToString();         //9
 
             outboundMessage += ">";
+            int len = outboundMessage.Length;
+            Debug.Print("LEN===" + len.ToString());
             return outboundMessage;
         }
 

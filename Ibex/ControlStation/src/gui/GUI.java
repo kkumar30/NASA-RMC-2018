@@ -30,6 +30,8 @@ import java.sql.Time;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static java.lang.Math.abs;
+
 public class GUI extends JFrame {
 
 	/*
@@ -1132,7 +1134,8 @@ public class GUI extends JFrame {
 		tbox_leftMotorMode.setText((robotData.getLeftMotor().getMode().toString()));
 		tbox_leftMotorSetpoint.setText((robotData.getLeftMotor().getSetpoint().toString()));
 		tbox_leftMotorPosition.setText((robotData.getLeftMotor().getPosition().toString()));
-		if (robotData.getLeftMotor().getPosition()>10 || robotData.getLeftMotor().getPosition()<-10){
+
+		if (abs(robotData.getLeftMotor().getPosition())>10){
 			tbox_leftMotorPosition.setBackground(Color.RED);
 		}
 		else if (robotData.getLeftMotor().getPosition() == 0){
@@ -1163,7 +1166,18 @@ public class GUI extends JFrame {
 		else{
 			tbox_rightMotorPosition.setBackground(Color.ORANGE);
 		}
+
 		tbox_rightMotorSpeed.setText((robotData.getRightMotor().getSpeed().toString()));
+
+		if (abs(robotData.getRightMotor().getSpeed())>0.9)
+		{
+			tbox_rightMotorSpeed.setBackground(Color.RED);
+		}
+
+		else if (robotData.getRightMotor().getPosition() == 0){
+			tbox_rightMotorSpeed.setBackground(Color.GREEN);
+		}
+
 		tbox_rightMotorFLimit.setText((robotData.getRightMotor().getForwardLimit().toString()));
 		tbox_rightMotorRLimit.setText((robotData.getRightMotor().getReverseLimit().toString()));
 
@@ -1204,4 +1218,6 @@ public class GUI extends JFrame {
 	public GUI(MessageQueue messageQueue) {
 		initialize(messageQueue);
 	}
+
+//	private void updateDataBoxes()
 }
