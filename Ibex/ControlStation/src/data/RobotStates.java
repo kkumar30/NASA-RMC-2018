@@ -1,13 +1,14 @@
-package common;
+package data;
 
-public enum MotorMode 
+public enum RobotStates
 {
-	K_PERCENT_VBUS,
-	K_CURRENT,
-	K_SPEED,
-	K_POSITION,
-	K_VOLTAGE,
-	K_FOLLOWER,
-	K_MOTION_PROFILE,
-	K_MOTION_MAGIC;
+    IdentifyTarget,
+    GoToObstacleArea,
+    DriveToExcavationZone,
+    StartDigging,
+    DigAndDrive,
+    RetractDigger,
+    GoToDump,
+    Dump,
+    Done;
 }

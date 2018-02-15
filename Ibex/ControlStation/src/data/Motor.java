@@ -67,12 +67,12 @@ public class Motor
 			}
 			catch(Exception e)
 			{
-				System.out.println("Update failed due to malformed message");
+				System.out.println("Update Motors failed due to malformed message");
 			}
 		}
 		else
 		{
-			System.out.println("Update Actuals Failed!");
+			System.out.println("Update Motor Actuals Failed!");
 		}
 		
 		

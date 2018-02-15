@@ -13,6 +13,9 @@ public class RobotData
 	private Motor scoopMotor;
 	private Motor depthMotor;
 	private Motor winchMotor;
+
+	private Sensor imu;
+
 	
 	public RobotData()
 	{
@@ -21,6 +24,8 @@ public class RobotData
 		scoopMotor = new Motor();
 		depthMotor = new Motor();
 		winchMotor = new Motor();
+
+		imu = new Sensor();
 	}
 	
 	public Motor getLeftMotor() {return leftMotor;}
@@ -28,17 +33,22 @@ public class RobotData
 	public Motor getScoopMotor() {return scoopMotor;}
 	public Motor getDepthMotor() {return depthMotor;}
 	public Motor getWinchMotor() {return winchMotor;}
-	
-	public void updateRobotData(String message)
+
+	public Sensor getImu() {return imu;}
+	public void updateRobotData(String motorMessage, String sensorMessage)
 	{
 //		final String patternStr = "<(.+)><(.+)><(.+)><(.+)><(.+)>";
 		final String patternStr = "<(.+)><(.+)>";
+
 		Pattern pattern = Pattern.compile(patternStr);
-		Matcher m = pattern.matcher(message);
-		if(m.matches())
+
+		Matcher motorMatch = pattern.matcher(motorMessage);
+
+		Matcher sensorMatch = pattern.matcher(sensorMessage);
+		if(motorMatch.matches())
 		{
-			String leftMotorData = m.group(1);
-			String rightMotorData = m.group(2);
+			String leftMotorData = motorMatch.group(1);
+			String rightMotorData = motorMatch.group(2);
 //			String scoopMotorData = m.group(3);
 //			String depthMotorData = m.group(4);
 //			String winchMotorData = m.group(5);
@@ -49,6 +59,14 @@ public class RobotData
 //			depthMotor.updateMotorData(depthMotorData);
 //			winchMotor.updateMotorData(winchMotorData);
 		}
+
+		if(sensorMatch.matches())
+		{
+			String imuData = sensorMatch.group(1);
+
+			imu.updateSensorData(imuData);
+		}
+
 	}
 	
 	

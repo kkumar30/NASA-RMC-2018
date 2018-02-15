@@ -28,12 +28,16 @@ class RequestHandler extends Thread {
 			PrintWriter out = new PrintWriter(socket.getOutputStream());
 
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			String inboundMessageStr;
+			String inboundMotorMessageStr;
+			String inboundSensorMessageStr;
+
 
 			try {
 //				System.out.println("HERE! - RequestHandler.java - In Try 2");
-				inboundMessageStr = inFromClient.readLine();
-				if (inboundMessageStr != null && inboundMessageStr.replace("\n\t ", "").equals("Finished")) {
+				inboundMotorMessageStr = inFromClient.readLine();
+				inboundSensorMessageStr = inFromClient.readline();
+
+				if (inboundSensorMessageStr != null && inboundSensorMessageStr.replace("\n\t ", "").equals("Finished")) {
 					if (!queue.isEmpty()) {
 						queue.pop();
 //						System.out.println("Next action in Queue!");
@@ -44,8 +48,9 @@ class RequestHandler extends Thread {
 				inboundMessageStr = "Errors";
 			}
 
-			System.out.println("Received: " + inboundMessageStr);
-			robotData.updateRobotData(inboundMessageStr);
+			System.out.println("Received Motors: " + inboundMotorMessageStr);
+			System.out.prinln("Recieved Sensors: "+ inboundSensorMessageStr);
+			robotData.updateRobotData(inboundMotorMessageStr, inboundSensorMessageStr);
 
 			if (!queue.isEmpty()) {
 				queue.peek();
@@ -56,7 +61,6 @@ class RequestHandler extends Thread {
 				out.println("<0|-1>");
 				out.flush();
 			}
-
 			// Close our connection
 			in.close();
 			out.close();
