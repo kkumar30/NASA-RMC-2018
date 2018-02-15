@@ -32,5 +32,9 @@ class Sensor:
 						self.value = msg_sensor_value
 				except:
 					print "ERROR: Unable to parse one or more of the message components. Device ID: " + str(self.sensor_name)
-		
 
+	def getNetworkMessage(self):
+		msg = "<"
+		msg += self.sensor_name + ":"
+		msg += str(self.value) + ">"
+		return msg

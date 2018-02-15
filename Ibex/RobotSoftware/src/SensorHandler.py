@@ -16,7 +16,7 @@ class SensorHandler:
 
 	def printSensorValues(self):
 		print self.getSensorValues()
-	
+
 	def getServoStateMessage(self):
 		message = "<"
 		for i in range(len(self.servos)):
@@ -31,3 +31,10 @@ class SensorHandler:
 		for sensor in self.sensors:
 			sensorMsg += str(sensor.getValue()) + '|';
 		return sensorMsg
+
+
+	def getSensorNetworkMessage(self):
+		msg = ""
+		for sensor in self.sensors:
+			msg += sensor.getNetworkMessage()
+		return msg

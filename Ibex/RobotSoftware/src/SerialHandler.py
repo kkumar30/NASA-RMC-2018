@@ -33,7 +33,7 @@ class SerialHandler():
 
 	def sendMessage(self, msg):
 		self.ser.write(msg.encode())
-		#LOGGER.Debug("Sent:" + msg)
+		LOGGER.Debug("Sent:" + msg)
 
 	def _readline(self):
 		eol = b'\r'
@@ -43,6 +43,7 @@ class SerialHandler():
 			c = self.ser.read(1)
 			if c:
 				line += c
+#				LOGGER.Debug(str(line))
 				if line[-leneol:] == eol:
 					break
 			else:

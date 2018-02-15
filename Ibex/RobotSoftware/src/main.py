@@ -210,6 +210,7 @@ while robotEnabled:
 			try:
 				if(outboundMessageQueue.isEmpty()):
 					networkClient.send(motorHandler.getMotorNetworkMessage()+"\n\r")
+					networkClient.send(sensorHandler.getSensorNetworkMessage()+"\n\r")
 				else:
 					networkClient.send(outboundMessageQueue.getNext())
 				connected = True
