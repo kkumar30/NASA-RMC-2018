@@ -20,10 +20,10 @@ class SerialHandler():
 			try:
 				self.ser.open()
 				print "SUCCESS: Serial port opened on port: " + ser_port_str
-				return;
+				return
 			except:
 				print "FAILED: Open serial on port: " + ser_port_str
-				if(i != 2):
+				if i != 2:
 					print "Retry in 5 seconds"
 				time.sleep(5)
 
@@ -33,6 +33,7 @@ class SerialHandler():
 
 	def sendMessage(self, msg):
 		self.ser.write(msg.encode())
+
 		LOGGER.Debug("Sent:" + msg)
 
 	def _readline(self):

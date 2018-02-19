@@ -18,16 +18,21 @@ namespace Ibex_Motor_Control
             ArrayList controlData = new ArrayList();
             String pattern = @"<([0-9]+):([0-9]+):([-0-9]+\.[0-9]+)>";
             MatchCollection mc = Regex.Matches(msg, pattern);
-
-            foreach(Match m in mc)
+            try
             {
-                String data = m.Value;
-                data = data.Substring(1, data.Length - 2);
-                String[] subparts = data.Split(':');
-                int deviceID = Int32.Parse(subparts[0]);
-                int mode = Int32.Parse(subparts[1]);
-                Double setpoint = Double.Parse(subparts[2]);
-                controlData.Add(new SetpointData(deviceID, mode, setpoint));
+                foreach (Match m in mc)
+                {
+                    String data = m.Value;
+                    data = data.Substring(1, data.Length - 2);
+                    String[] subparts = data.Split(':');
+                    int deviceID = Int32.Parse(subparts[0]);
+                    int mode = Int32.Parse(subparts[1]);
+                    Double setpoint = Double.Parse(subparts[2]);
+                    controlData.Add(new SetpointData(deviceID, mode, setpoint));
+                }
+            }
+            catch(ArgumentOutOfRangeException ex) {
+                Debug.Print(ex.ToString());
             }
 
             return controlData;

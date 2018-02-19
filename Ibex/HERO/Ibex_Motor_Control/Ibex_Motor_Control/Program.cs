@@ -231,7 +231,7 @@ namespace Ibex_Motor_Control
                 //if (uart.IsOpen) { 
                 writeUART(outboundMessageStr);
                 CTRE.Watchdog.Feed();
-            //}
+                //}
                 CTRE.Watchdog.Feed();
 
                 //Debug.Print(testmotor.GetPosition().ToString());
@@ -239,7 +239,7 @@ namespace Ibex_Motor_Control
 
             }
         }
-
+        
         private static ArrayList readUART(ref String messageStr)
         {
             ArrayList setpointData = new ArrayList();
@@ -257,11 +257,12 @@ namespace Ibex_Motor_Control
                         Debug.Print("Inbound Message String: " + messageStr);
                         setpointData = MessageParser.parseMessage(messageStr);
                         // Debug.Print("Setpoint Data: " + setpointData);
-                        int c = setpointData.Count;
+                     // int c = setpointData.Count;
                         //Console.WriteLine(c);
                         //Debug.Print(c.ToString());
                         messageStr = "";
                     }
+                    CTRE.Watchdog.Feed();
                 }
             }
             //Debug.Print("Value = ");
@@ -276,6 +277,7 @@ namespace Ibex_Motor_Control
 
                 SetpointData testsetdata1 = (SetpointData)setpointData[1];
                 //Debug.Print("Value: " + testsetdata1.getSetpoint() + " Device ID: " + testsetdata1.getDeviceID());
+                CTRE.Watchdog.Feed();
             }
             return setpointData;
         }
@@ -353,6 +355,7 @@ namespace Ibex_Motor_Control
                 uart.Write(outboundMessage, 0, outboundMessage.Length);
                 Debug.Print("Wrote to UART");
             }
+            CTRE.Watchdog.Feed();
         }
 
 
@@ -362,6 +365,7 @@ namespace Ibex_Motor_Control
             byte[] retval = new byte[msg.Length];
             for (int i = 0; i < msg.Length; ++i)
                 retval[i] = (byte)msg[i];
+            CTRE.Watchdog.Feed();
             return retval;
         }
 
@@ -370,6 +374,7 @@ namespace Ibex_Motor_Control
         {
             for (int i = 0; i < statusData.Count; i++)
             {
+                CTRE.Watchdog.Feed();
                 ((StatusData)statusData[i]).updateStatusData();
             }
         }
@@ -381,6 +386,7 @@ namespace Ibex_Motor_Control
             for (int i = 0; i < statusData.Count; i++)
             {
                 outboundMessage += ((StatusData)statusData[i]).getOutboundMessage();
+                CTRE.Watchdog.Feed();
             }
             outboundMessage += "\r";
             return outboundMessage;
@@ -392,19 +398,26 @@ namespace Ibex_Motor_Control
             //For each setpointData, for the talon that matches it set each mode and setpoint based on the list information 
             for (int i = 0; i < setpointDataList.Count; i++)
             {
+                try
+                {
                 SetpointData setpointData = (SetpointData)setpointDataList[i];
                 float setpointVal = (float)(setpointData.getSetpoint());
-                CTRE.TalonSrx talon = (CTRE.TalonSrx)talons[i];
-                if (talon.GetControlMode() != setpointData.getMode())
-                {
-                    talon.SetControlMode(setpointData.getMode());
-                    //Debug.Print(setpointData.getMode().ToString());
+                
+                    CTRE.TalonSrx talon = (CTRE.TalonSrx)talons[i];
+                    if (talon.GetControlMode() != setpointData.getMode())
+                    {
+                        talon.SetControlMode(setpointData.getMode());
+                        //Debug.Print(setpointData.getMode().ToString());
+                    }
+                    if (talon.GetSetpoint() != setpointVal)
+                    {
+                        talon.Set(setpointVal);
+                        Debug.Print("Setting it to value = " + setpointVal.ToString());
+                        //Debug.Print(setpointVal.ToString());
+                    }
                 }
-                if (talon.GetSetpoint() != setpointVal)
-                {
-                    talon.Set(setpointVal);
-                    Debug.Print("Setting it to value = " + setpointVal.ToString());
-                    //Debug.Print(setpointVal.ToString());
+                catch(ArgumentOutOfRangeException ex) {
+                    Debug.Print(ex.ToString());
                 }
             }
         }
