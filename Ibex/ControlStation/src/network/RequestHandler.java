@@ -36,7 +36,7 @@ class RequestHandler extends Thread {
 
 			try {
 //				System.out.println("HERE! - RequestHandler.java - In Try 2");
-				inboundSensorMessageStr = "None";
+//				inboundSensorMessageStr = "None";
 				inboundMotorMessageStr = "None";
 
 				entireMessageStr= inFromClient.readLine();
@@ -49,7 +49,8 @@ class RequestHandler extends Thread {
 				}
 //				inboundSensorMessageStr = inFromClient.readLine();
 
-				if (inboundSensorMessageStr != null && inboundSensorMessageStr.replace("\n\t ", "").equals("Finished")) {
+				//if (inboundSensorMessageStr != null && inboundSensorMessageStr.replace("\n\t ", "").equals("Finished")) {
+				if (entireMessageStr != null && entireMessageStr.replace("\n\t ", "").equals("Finished")) {
 					if (!queue.isEmpty()) {
 						queue.pop();
 						System.out.println("Next action in Queue!");

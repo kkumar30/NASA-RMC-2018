@@ -43,6 +43,7 @@ public class GUI extends JFrame {
 
 		public void run() {
 			updateRobotDataBoxes();
+
 		}
 	}
 
@@ -128,7 +129,7 @@ public class GUI extends JFrame {
 			public void run() {
 				try {
 					//******************CALL THE FUNCTION BELOW FOR YOUR OWN STATE MACHINE*********************//
-					//updateAutonomyQueue(messageQueue);
+					updateAutonomyQueue(messageQueue);
 					//*****************************************************************************************//
 					Timer simpleTimer = new Timer();
 					Thread cameraServerThread = new Thread(new CameraServer(panel));
@@ -214,6 +215,7 @@ public class GUI extends JFrame {
 
 		JPanel panel_2 = new JPanel();
 		tabbedPane.addTab("Main", null, panel_2, null);
+		updateMessageQueueList(messageList);
 
 		JButton btnRemoveSelected = new JButton("Remove");
 		btnRemoveSelected.addMouseListener(new MouseAdapter() {
@@ -1228,20 +1230,30 @@ public class GUI extends JFrame {
 	public static void updateAutonomyQueue(MessageQueue q){
 		MessageType stopMessageType = MessageType.MSG_STOP;
 		Message stopMessage = new MsgStop();
-		
+
 		Message driveDist = new MsgDriveDistance();
-		driveDist.setDataByIndex(0,10.0);//Setting Distance
-		driveDist.setDataByIndex(1,0.6);
+		driveDist.setDataByIndex(0,5.0);//Setting Distance
+		driveDist.setDataByIndex(1,0.6); //Distance, Speed
+
+		Message driveTime = new MsgDriveTime();
+		driveTime.setDataByIndex(0,5.0);//Setting Time
+		driveTime.setDataByIndex(1,0.6); //Setting Speed
+
+		Message driveTimeBack = new MsgDriveTime();
+		driveTimeBack.setDataByIndex(0,5.0);//Setting Time
+		driveTimeBack.setDataByIndex(1,-0.6); //Setting Speed
 
 
 
 
-
+		q.addAtBack(driveTime);
+//		q.pop();
+		q.addAtBack(driveTimeBack);
+//		q.pop();
 		q.addAtBack(stopMessage);
-		q.addAtBack(driveDist);
 //		updateMessageQueueList(messageList);
-		System.out.println(q.getSize());
-		System.out.println(q.peek());
+//		System.out.println(q.getSize());
+//		System.out.println(q.peek());
 //		selectedMessage = MessageFactory.makeMessage(selectedMessageType);
 
 //		q.addAtBack();
