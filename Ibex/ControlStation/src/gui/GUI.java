@@ -48,6 +48,8 @@ public class GUI extends JFrame {
 
 	private static RobotData robotData = new RobotData();
 	private static MessageQueue messageQueue = new MessageQueue();
+//	MessageQueue.
+
 	private NetworkServer server = new NetworkServer(11000, messageQueue, robotData);
 	private boolean runServer = false;
 
@@ -125,6 +127,9 @@ public class GUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					//******************CALL THE FUNCTION BELOW FOR YOUR OWN STATE MACHINE*********************//
+					//updateAutonomyQueue(messageQueue);
+					//*****************************************************************************************//
 					Timer simpleTimer = new Timer();
 					Thread cameraServerThread = new Thread(new CameraServer(panel));
 					cameraServerThread.start();
@@ -1220,4 +1225,25 @@ public class GUI extends JFrame {
 	}
 
 //	private void updateDataBoxes()
+	public static void updateAutonomyQueue(MessageQueue q){
+		MessageType stopMessageType = MessageType.MSG_STOP;
+		Message stopMessage = new MsgStop();
+		
+		Message driveDist = new MsgDriveDistance();
+		driveDist.setDataByIndex(0,10.0);//Setting Distance
+		driveDist.setDataByIndex(1,0.6);
+
+
+
+
+
+		q.addAtBack(stopMessage);
+		q.addAtBack(driveDist);
+//		updateMessageQueueList(messageList);
+		System.out.println(q.getSize());
+		System.out.println(q.peek());
+//		selectedMessage = MessageFactory.makeMessage(selectedMessageType);
+
+//		q.addAtBack();
+	}
 }
