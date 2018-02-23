@@ -129,7 +129,7 @@ public class GUI extends JFrame {
 			public void run() {
 				try {
 					//******************CALL THE FUNCTION BELOW FOR YOUR OWN STATE MACHINE*********************//
-					updateAutonomyQueue(messageQueue);
+					//updateAutonomyQueue(messageQueue);
 					//*****************************************************************************************//
 					Timer simpleTimer = new Timer();
 					Thread cameraServerThread = new Thread(new CameraServer(panel));

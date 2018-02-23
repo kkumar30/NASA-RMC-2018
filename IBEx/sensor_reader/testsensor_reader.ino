@@ -12,7 +12,8 @@ const unsigned int CAM_SERVO_2_PIN = 4;
 const unsigned int CAM_SERVO_3_PIN = 5;
 const unsigned int CAM_SERVO_4_PIN = 6;
 const unsigned int TEST_IR = 2;//For the IR Sensor
-unsigned int testcamservoSetpoint;
+int testcamservoSetpoint;
+int prevSetpoint;
 
 unsigned int ratchetMotorSetpoint;
 unsigned int camServo1Setpoint;
@@ -33,14 +34,14 @@ String inboundMessage = "";
 void setup()
 {
   testCameraServo.attach(RATCHET_PIN);
-  camServo1.attach(CAM_SERVO_1_PIN);
-  camServo2.attach(CAM_SERVO_2_PIN);
-  camServo3.attach(CAM_SERVO_3_PIN);
-  camServo4.attach(CAM_SERVO_4_PIN);
+  //  camServo1.attach(CAM_SERVO_1_PIN);
+  //  camServo2.attach(CAM_SERVO_2_PIN);
+  //  camServo3.attach(CAM_SERVO_3_PIN);
+  //  camServo4.attach(CAM_SERVO_4_PIN);
   pinMode(8, INPUT);
   digitalWrite(8, HIGH);       // turn on pullup resistors
   Serial.begin(115200);
-//  Serial3.begin(115200);
+  Serial1.begin(115200);
 
   Wire.begin();
   if (!gyro.init())
@@ -48,9 +49,9 @@ void setup()
     Serial.println("Failed to autodetect gyro type!");
     while (1);
   }
-
+  testCameraServo.write(90);
+  prevSetpoint = 90;
   gyro.enableDefault();
-
 }
 
 void loop()
@@ -76,18 +77,13 @@ void loop()
     if (outboundMessage.length() > 0) {
       outboundMessage += "\r";
     }
-    //    Serial.println(outboundMessage);
-    //    delay(100);
-    for (int i = 0; i <= outboundMessage.length(); i++) {
-      Serial.write(outboundMessage[i]);
-      //      delay(100);
-    }
 
-    delay(10);
+    //    Serial.flush();
+    //    Serial.println((Serial.available()));
     //*****************************READ THE SERVO DATA AND WRITE SERVO*****************************************//
     if (Serial.available() > 0) {
       char data = Serial.read();
-//      Serial3.print(data);
+      //      Serial1.println(data);
       if (data == '<') {
       }
 
@@ -96,22 +92,27 @@ void loop()
           msg = msg.charAt(msg.length() - 1);
         }
         testcamservoSetpoint = msg.toInt();
+        writeMotorValues();
+
+        //**************************SENDING IMU MESSAGE HERE*******************************************
+        for (int i = 0; i <= outboundMessage.length(); i++) {
+          Serial.write(outboundMessage[i]);
+        }
+        outboundMessage = "";
+        //********************************************************************************************
+
         msg = "";
       }
 
       else {
         msg += data - 48;
       }
+    }
 
-    }
-    writeMotorValues();
-    analogWrite(A2, 255);
-    if (testcamservoSetpoint == 40){
-      analogWrite(A3, 255);
-    }
-    //********************************************************************************************************//
   }
 }
+
+
 void parseInboundMessage(String message)
 {
   const int openIndex = message.indexOf('<');
@@ -146,7 +147,7 @@ void parseInboundMessage(String message)
   //  Serial.println("[" + val5 + "]");
 
   testcamservoSetpoint = val1.toInt();
-//    Serial3.println("P = " +   testcamservoSetpoint);
+  //    Serial3.println("P = " +   testcamservoSetpoint);
 
   //  ratchetMotorSetpoint = val1.toInt();
   //  camServo1Setpoint = val2.toInt();
@@ -187,9 +188,11 @@ String makeMessageString(String sensorName, float sensorValue)
 
 void writeMotorValues()
 {
+  //    Serial1.print("Wrote:");
+  Serial1.print(testcamservoSetpoint);
   testCameraServo.write(testcamservoSetpoint);
-//  camServo1.write(camServo1Setpoint);
-//  camServo2.write(camServo2Setpoint);
-//  camServo3.write(camServo3Setpoint);
-//  camServo4.write(camServo4Setpoint);
+  //  camServo1.write(camServo1Setpoint);
+  //  camServo2.write(camServo2Setpoint);
+  //  camServo3.write(camServo3Setpoint);
+  //  camServo4.write(camServo4Setpoint);
 }
