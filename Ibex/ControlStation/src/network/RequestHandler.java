@@ -30,6 +30,7 @@ class RequestHandler extends Thread {
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			String inboundMotorMessageStr = "";
 			String inboundSensorMessageStr = "";
+			String inboundCameraMessageStr = "";
 			String entireMessageStr = "";
 			String[] MotorAndSensorStr;
 
@@ -47,6 +48,9 @@ class RequestHandler extends Thread {
 				if (MotorAndSensorStr.length> 1) {
 					inboundSensorMessageStr = MotorAndSensorStr[1];
 				}
+//				if (MotorAndSensorStr.length> 2) {
+//					inboundCameraMessageStr = MotorAndSensorStr[2];
+//				}
 //				inboundSensorMessageStr = inFromClient.readLine();
 
 				//if (inboundSensorMessageStr != null && inboundSensorMessageStr.replace("\n\t ", "").equals("Finished")) {
@@ -63,6 +67,7 @@ class RequestHandler extends Thread {
 
 			System.out.println("Received Motors: " + inboundMotorMessageStr);
 			System.out.println("Received Sensors: "+ inboundSensorMessageStr);
+//			System.out.println("Camera Servo Pos: "+ inboundCameraMessageStr);
 			robotData.updateRobotData(inboundMotorMessageStr, inboundSensorMessageStr);
 
 			if (!queue.isEmpty()) {

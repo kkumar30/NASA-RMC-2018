@@ -16,7 +16,8 @@ public class Sensor
 
     public void updateSensorData(String sensorData)
     {
-        final String patternStr = "(\\w+):(\\-?\\d+)";
+//        final String patternStr = "(\\w+):(\\-?\\d+)";
+        final String patternStr = "(\\w+):(\\-?\\d+\\.\\d+)";
         Pattern pattern = Pattern.compile(patternStr);
         Matcher m = pattern.matcher(sensorData);
 

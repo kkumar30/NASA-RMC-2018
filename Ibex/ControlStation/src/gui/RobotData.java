@@ -16,7 +16,7 @@ public class RobotData
 	private Motor winchMotor;
 
 	private Sensor imu;
-
+	private Sensor camServo;
 	
 	public RobotData()
 	{
@@ -27,6 +27,7 @@ public class RobotData
 		winchMotor = new Motor();
 
 		imu = new Sensor();
+		camServo = new Sensor();
 	}
 	
 	public Motor getLeftMotor() {return leftMotor;}
@@ -34,8 +35,10 @@ public class RobotData
 	public Motor getScoopMotor() {return scoopMotor;}
 	public Motor getDepthMotor() {return depthMotor;}
 	public Motor getWinchMotor() {return winchMotor;}
-
 	public Sensor getImu() {return imu;}
+	public Sensor getCamServo() {return camServo;}
+
+
 	public void updateRobotData(String motorMessage, String sensorMessage)
 	{
 //		final String patternStr = "<(.+)><(.+)><(.+)><(.+)><(.+)>";
@@ -64,8 +67,10 @@ public class RobotData
 		if(sensorMatch.matches())
 		{
 			String imuData = sensorMatch.group(1);
+			String camServoData = sensorMatch.group(2);
 
 			imu.updateSensorData(imuData);
+			camServo.updateSensorData(camServoData);
 		}
 
 	}

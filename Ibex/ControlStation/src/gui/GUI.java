@@ -31,6 +31,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static java.lang.Math.abs;
+import java.awt.Label;
 
 public class GUI extends JFrame {
 
@@ -122,6 +123,11 @@ public class GUI extends JFrame {
 	private static JTextField tbox_winchMotorFLimit;
 	private static JTextField tbox_winchMotorRLimit;
 
+
+	private static JTextField tbox_imuData;
+	private static JTextField tbox_cameraAngleData;
+
+
 	public static void main(String[] args) {
 		// MessageQueue messageQueue = new MessageQueue();
 
@@ -129,7 +135,7 @@ public class GUI extends JFrame {
 			public void run() {
 				try {
 					//******************CALL THE FUNCTION BELOW FOR YOUR OWN STATE MACHINE*********************//
-					//updateAutonomyQueue(messageQueue);
+					updateAutonomyQueue(messageQueue);
 					//*****************************************************************************************//
 					Timer simpleTimer = new Timer();
 					Thread cameraServerThread = new Thread(new CameraServer(panel));
@@ -237,12 +243,15 @@ public class GUI extends JFrame {
 		btnRemoveSelected.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnRemoveSelected.setPreferredSize(new Dimension(100, 100));
 
-		JButton btnClearAll = new JButton("Clear All");
+		JButton btnClearAll = new JButton("Teleop");//"Clear all"
 		btnClearAll.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				messageQueue.clear();
+				Message msg_teleop = new MsgMotorValues();
+				messageQueue.addAtBack(msg_teleop);
 				updateMessageQueueList(messageList);
+
 			}
 		});
 		btnClearAll.setBackground(new Color(0, 0, 128));
@@ -946,42 +955,89 @@ public class GUI extends JFrame {
 		lbl_winchMotor.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbl_winchMotor.setBounds(10, 11, 337, 26);
 		panel_winchMotorData.add(lbl_winchMotor);
+
+		JPanel panel_SensorData = new JPanel();
+		panel_SensorData.setLayout(null);
+
+
+		/*************************************************************************/
+		JLabel lbl_imu = new JLabel("IMU:");
+		lbl_imu.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbl_imu.setBounds(400, 11, 337, 26);
+		panel_SensorData.add(lbl_imu);
+
+//		tbox_sensorData = new JTextField();
+//		tbox_sensorData.setColumns(10);
+//		tbox_sensorData.setBounds(108, 48, 86, 20);
+//		panel_depthMotorData.add(tbox_sensorData);
+		
+		JPanel panel_4 = new JPanel();
+		panel_4.setLayout(null);
+		
+		JLabel lblImuReadings = new JLabel("IMU Readings:");
+		lblImuReadings.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblImuReadings.setBounds(10, 48, 88, 14);
+		panel_4.add(lblImuReadings);
+		
+		tbox_imuData = new JTextField();
+		tbox_imuData.setColumns(10);
+		tbox_imuData.setBounds(108, 48, 86, 20);
+		panel_4.add(tbox_imuData);
+		
+		JLabel lblCameraAngle = new JLabel("Camera Angle:");
+		lblCameraAngle.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblCameraAngle.setBounds(10, 76, 88, 14);
+		panel_4.add(lblCameraAngle);
+		
+		tbox_cameraAngleData = new JTextField();
+		tbox_cameraAngleData.setColumns(10);
+		tbox_cameraAngleData.setBounds(108, 73, 86, 20);
+		panel_4.add(tbox_cameraAngleData);
+		
+		JLabel lblSensordata = new JLabel("SensorData");
+		lblSensordata.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblSensordata.setBounds(10, 11, 337, 26);
+		panel_4.add(lblSensordata);
+
 		GroupLayout gl_panel_robotData = new GroupLayout(panel_robotData);
-		gl_panel_robotData.setHorizontalGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_robotData.createSequentialGroup().addContainerGap()
-						.addGroup(gl_panel_robotData
-								.createParallelGroup(Alignment.LEADING).addGroup(
-										gl_panel_robotData.createSequentialGroup()
-												.addComponent(panel_leftMotorData, GroupLayout.PREFERRED_SIZE, 360,
-														GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(panel_rightMotorData, GroupLayout.PREFERRED_SIZE, 360,
-														GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_panel_robotData.createSequentialGroup()
-										.addComponent(panel_scoopMotorData, GroupLayout.PREFERRED_SIZE, 360,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(panel_depthMotorData,
-												GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE))
-								.addComponent(panel_winchMotorData, GroupLayout.PREFERRED_SIZE, 360,
-										GroupLayout.PREFERRED_SIZE))
-						.addContainerGap(46, Short.MAX_VALUE)));
-		gl_panel_robotData.setVerticalGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_robotData.createSequentialGroup().addContainerGap()
-						.addGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
-								.addComponent(panel_rightMotorData, GroupLayout.PREFERRED_SIZE, 182,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(panel_leftMotorData, GroupLayout.PREFERRED_SIZE, 182,
-										GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
-								.addComponent(panel_scoopMotorData, GroupLayout.PREFERRED_SIZE, 182,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(panel_depthMotorData, GroupLayout.PREFERRED_SIZE, 182,
-										GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(panel_winchMotorData, GroupLayout.PREFERRED_SIZE, 182,
-								GroupLayout.PREFERRED_SIZE)));
+		gl_panel_robotData.setHorizontalGroup(
+			gl_panel_robotData.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_robotData.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_robotData.createSequentialGroup()
+							.addComponent(panel_leftMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(panel_rightMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_robotData.createSequentialGroup()
+							.addComponent(panel_scoopMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(panel_depthMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_robotData.createSequentialGroup()
+							.addComponent(panel_winchMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(44, Short.MAX_VALUE))
+		);
+		gl_panel_robotData.setVerticalGroup(
+			gl_panel_robotData.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_robotData.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_rightMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_leftMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_scoopMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_depthMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_winchMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
+		);
 		panel_leftMotorData.setLayout(null);
+
 
 		JLabel lbl_leftMotorID = new JLabel("Device ID:");
 		lbl_leftMotorID.setHorizontalAlignment(SwingConstants.TRAILING);
@@ -1220,6 +1276,9 @@ public class GUI extends JFrame {
 		tbox_winchMotorSpeed.setText((robotData.getWinchMotor().getSpeed().toString()));
 		tbox_winchMotorFLimit.setText((robotData.getWinchMotor().getForwardLimit().toString()));
 		tbox_winchMotorRLimit.setText((robotData.getWinchMotor().getReverseLimit().toString()));
+
+		tbox_imuData.setText((robotData.getImu().getValue().toString()));
+		tbox_cameraAngleData.setText((robotData.getCamServo().getValue().toString()));
 	}
 
 	public GUI(MessageQueue messageQueue) {
@@ -1231,9 +1290,9 @@ public class GUI extends JFrame {
 		MessageType stopMessageType = MessageType.MSG_STOP;
 		Message stopMessage = new MsgStop();
 
-		Message driveDist = new MsgDriveDistance();
-		driveDist.setDataByIndex(0,5.0);//Setting Distance
-		driveDist.setDataByIndex(1,0.6); //Distance, Speed
+//		Message driveDist = new MsgDriveDistance();
+//		driveDist.setDataByIndex(0,5.0);//Setting Distance
+//		driveDist.setDataByIndex(1,0.6); //Distance, Speed
 
 		Message driveTime = new MsgDriveTime();
 		driveTime.setDataByIndex(0,5.0);//Setting Time
@@ -1243,19 +1302,34 @@ public class GUI extends JFrame {
 		driveTimeBack.setDataByIndex(0,5.0);//Setting Time
 		driveTimeBack.setDataByIndex(1,-0.6); //Setting Speed
 
+		Message findTarget = new MsgBucketPosition();
+		Message alignWithBorder = new MsgBucketTime();
+
+		Message driveToBorder = new MsgDriveTime(4.0, -1.0);
+		Message rotateToStraight = new MsgRatchetPosition();
+
+		double camServoData = robotData.getCamServo().getValue();
+//		System.out.println("Can set camera Servo Data in the queue");
+//		System.out.println(camServoData);
 
 
-
-		q.addAtBack(driveTime);
-//		q.pop();
-		q.addAtBack(driveTimeBack);
-//		q.pop();
+		/**********Stage 1**************/
+		q.addAtBack(findTarget);
+		q.addAtBack(alignWithBorder);
+		q.addAtBack(driveToBorder);
+		q.addAtBack(rotateToStraight);
 		q.addAtBack(stopMessage);
+		/*******************************/
+//
+
 //		updateMessageQueueList(messageList);
 //		System.out.println(q.getSize());
 //		System.out.println(q.peek());
 //		selectedMessage = MessageFactory.makeMessage(selectedMessageType);
 
 //		q.addAtBack();
+
+		/*Stage 2*/
+
 	}
 }

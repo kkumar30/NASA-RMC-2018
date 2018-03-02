@@ -34,6 +34,11 @@ namespace Ibex_Motor_Control
             catch(ArgumentOutOfRangeException ex) {
                 Debug.Print(ex.ToString());
             }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.ToString());
+            }
+
 
             return controlData;
         }
