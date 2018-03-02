@@ -249,8 +249,9 @@ public class GUI extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				messageQueue.clear();
 				Message msg_teleop = new MsgMotorValues();
-				messageQueue.addAtBack(msg_teleop);
+				messageQueue.addAtFront(msg_teleop);
 				updateMessageQueueList(messageList);
+				selectedMessage = MessageFactory.makeMessage(selectedMessageType);
 
 			}
 		});
