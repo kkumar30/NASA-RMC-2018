@@ -4,11 +4,20 @@ import javax.swing.*;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Point;
+import java.awt.Shape;
+
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.border.AbstractBorder;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.List;
 
 import common.Message;
@@ -25,6 +34,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 import java.sql.Time;
 import java.util.Timer;
@@ -32,9 +42,13 @@ import java.util.TimerTask;
 
 import static java.lang.Math.abs;
 import java.awt.Label;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.EtchedBorder;
+
+
 
 public class GUI extends JFrame {
-
+	
 	/*
 	 * Small class to handle constantly updating the robot data boxes
 	 */
@@ -48,6 +62,30 @@ public class GUI extends JFrame {
 		}
 	}
 
+	@SuppressWarnings("serial")
+	public class RoundJTextField extends JTextField {
+	    private Shape shape;
+	    public RoundJTextField(int size) {
+	        super(size);
+	        setOpaque(false); // As suggested by @AVD in comment.
+	    }
+	    protected void paintComponent(Graphics g) {
+	         g.setColor(getBackground());
+	         g.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, 5, 5);
+	         super.paintComponent(g);
+	    }
+	    protected void paintBorder(Graphics g) {
+	         g.setColor(getForeground());
+	         g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 5, 5);
+	    }
+	    public boolean contains(int x, int y) {
+	         if (shape == null || !shape.getBounds().equals(getBounds())) {
+	             shape = new RoundRectangle2D.Float(0, 0, getWidth()-1, getHeight()-1, 5, 5);
+	         }
+	         return shape.contains(x, y);
+	    }
+	}
+	
 	private static RobotData robotData = new RobotData();
 	private static MessageQueue messageQueue = new MessageQueue();
 //	MessageQueue.
@@ -62,7 +100,6 @@ public class GUI extends JFrame {
 	private JLabel[] messageLabels = new JLabel[8];
 
 	private JFrame frame;
-	private static ImagePanel panel = new ImagePanel();
 	private JTextField tbox_messageAddPosition;
 	private JTextField tbox_data0;
 	private JTextField tbox_data1;
@@ -138,8 +175,6 @@ public class GUI extends JFrame {
 					updateAutonomyQueue(messageQueue);
 					//*****************************************************************************************//
 					Timer simpleTimer = new Timer();
-					Thread cameraServerThread = new Thread(new CameraServer(panel));
-					cameraServerThread.start();
 					GUI window = new GUI(messageQueue);
 					simpleTimer.scheduleAtFixedRate(new RobotDataUpdateTask(), 1000, 500);
 					window.setVisible(true);
@@ -151,6 +186,7 @@ public class GUI extends JFrame {
 	}
 
 	private void initialize(MessageQueue messageQueue) {
+		    
 		this.messageQueue = messageQueue;
 
 		frame = new JFrame();
@@ -158,72 +194,69 @@ public class GUI extends JFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		setTitle("IBEX Control Station");
-		setSize(new Dimension(1000, 700));
+		setSize(new Dimension(815, 822));
 		setResizable(false);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBorder(null);
 		tabbedPane.setMaximumSize(new Dimension(785, 32767));
 
-		panel.setBackground(Color.LIGHT_GRAY);
-
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(Color.DARK_GRAY);
 		JLabel lblStatus = new JLabel("Status:");
-		JLabel lblResolution = new JLabel("Resolution");
-
-		JComboBox<String> comboBox = new JComboBox<String>();
-
-		JRadioButton rdbtnEnabled = new JRadioButton("Enabled");
+		lblStatus.setForeground(Color.WHITE);
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.TRAILING).addGroup(groupLayout
-				.createSequentialGroup().addContainerGap()
-				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 787, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addGroup(groupLayout.createSequentialGroup().addComponent(lblResolution)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 117,
-														GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.UNRELATED)
-												.addComponent(rdbtnEnabled)
-												.addPreferredGap(ComponentPlacement.RELATED, 501, Short.MAX_VALUE))
-										.addComponent(panel, GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)))
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 787, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 1037, Short.MAX_VALUE)
 						.addComponent(lblStatus))
-				.addContainerGap()));
-		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout
-				.createSequentialGroup().addContainerGap()
-				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-								.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-										.addComponent(lblResolution)
-										.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(rdbtnEnabled)))
-						.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 594, GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(ComponentPlacement.RELATED, 15, Short.MAX_VALUE).addComponent(lblStatus)
-				.addPreferredGap(ComponentPlacement.RELATED)
-				.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE).addContainerGap()));
+					.addContainerGap())
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(lblStatus)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
 
 		JList<String> list_1 = new JList<String>();
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
-		gl_panel_1.setHorizontalGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_1.createSequentialGroup().addContainerGap()
-						.addComponent(list_1, GroupLayout.DEFAULT_SIZE, 1362, Short.MAX_VALUE).addGap(37)));
+		gl_panel_1.setHorizontalGroup(
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(list_1, GroupLayout.DEFAULT_SIZE, 769, Short.MAX_VALUE)
+					.addContainerGap())
+		);
 		gl_panel_1.setVerticalGroup(
-				gl_panel_1.createParallelGroup(Alignment.TRAILING).addGroup(gl_panel_1.createSequentialGroup()
-						.addContainerGap().addComponent(list_1, GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)));
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(list_1, GroupLayout.PREFERRED_SIZE, 113, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(96, Short.MAX_VALUE))
+		);
 		panel_1.setLayout(gl_panel_1);
 
 		JPanel panel_2 = new JPanel();
+		panel_2.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel_2.setBackground(Color.DARK_GRAY);
 		tabbedPane.addTab("Main", null, panel_2, null);
 		updateMessageQueueList(messageList);
 
 		JButton btnRemoveSelected = new JButton("Remove");
+		btnRemoveSelected.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnRemoveSelected.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -238,12 +271,16 @@ public class GUI extends JFrame {
 
 			}
 		});
-		btnRemoveSelected.setBackground(new Color(0, 0, 128));
+		btnRemoveSelected.setBackground(new Color(30, 144, 255));
 		btnRemoveSelected.setForeground(new Color(255, 255, 255));
-		btnRemoveSelected.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnRemoveSelected.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnRemoveSelected.setPreferredSize(new Dimension(100, 100));
 
 		JButton btnClearAll = new JButton("Teleop");//"Clear all"
+		btnClearAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		btnClearAll.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -255,11 +292,15 @@ public class GUI extends JFrame {
 
 			}
 		});
-		btnClearAll.setBackground(new Color(0, 0, 128));
+		btnClearAll.setBackground(new Color(255, 165, 0));
 		btnClearAll.setForeground(new Color(255, 255, 255));
-		btnClearAll.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnClearAll.setFont(new Font("Tahoma", Font.BOLD, 20));
 
 		JButton btnStop = new JButton("STOP");
+		btnStop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnStop.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -273,9 +314,9 @@ public class GUI extends JFrame {
 				runServer = false;
 			}
 		});
-		btnStop.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnStop.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnStop.setForeground(new Color(255, 255, 255));
-		btnStop.setBackground(new Color(255, 0, 0));
+		btnStop.setBackground(new Color(205, 92, 92));
 
 		JButton btnStartQueue = new JButton("START");
 		btnStartQueue.addMouseListener(new MouseAdapter() {
@@ -287,41 +328,49 @@ public class GUI extends JFrame {
 				runServer = true;
 			}
 		});
-		btnStartQueue.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnStartQueue.setBackground(new Color(0, 128, 0));
+		btnStartQueue.setFont(new Font("Tahoma", Font.BOLD, 20));
+		btnStartQueue.setBackground(new Color(154, 205, 50));
 		btnStartQueue.setForeground(new Color(255, 255, 255));
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
-		gl_panel_2.setHorizontalGroup(gl_panel_2.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_2
-				.createSequentialGroup().addContainerGap()
-				.addComponent(messageList, GroupLayout.PREFERRED_SIZE, 616, GroupLayout.PREFERRED_SIZE).addGap(18)
-				.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnStop, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
-						.addComponent(btnStartQueue, GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
-						.addComponent(btnClearAll, GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
-						.addComponent(btnRemoveSelected, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE))
-				.addContainerGap()));
-		gl_panel_2.setVerticalGroup(gl_panel_2.createParallelGroup(Alignment.LEADING).addGroup(gl_panel_2
-				.createSequentialGroup().addContainerGap()
-				.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-						.addComponent(messageList, GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
+		gl_panel_2.setHorizontalGroup(
+			gl_panel_2.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_2.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(messageList, GroupLayout.PREFERRED_SIZE, 616, GroupLayout.PREFERRED_SIZE)
+					.addGap(13)
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
+						.addComponent(btnStop, GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+						.addComponent(btnStartQueue, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+						.addComponent(btnClearAll, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+						.addComponent(btnRemoveSelected, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
+		);
+		gl_panel_2.setVerticalGroup(
+			gl_panel_2.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_2.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_2.createSequentialGroup()
-								.addComponent(btnRemoveSelected, GroupLayout.PREFERRED_SIZE, 125,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(btnClearAll, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(btnStop, GroupLayout.PREFERRED_SIZE, 114, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(btnStartQueue, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)))
-				.addContainerGap()));
+							.addComponent(btnRemoveSelected, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnClearAll, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnStop, GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnStartQueue, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE))
+						.addComponent(messageList, GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE))
+					.addContainerGap())
+		);
 		panel_2.setLayout(gl_panel_2);
 
 		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(Color.DARK_GRAY);
 		tabbedPane.addTab("Commands", null, panel_3, null);
 		panel_3.setLayout(null);
 
 		JPanel panel_5 = new JPanel();
-		panel_5.setBounds(10, 11, 395, 515);
+		panel_5.setBackground(new Color(255, 222, 173));
+		panel_5.setBounds(10, 11, 762, 558);
 		panel_5.setLayout(null);
 
 		JLabel lblCommandType = new JLabel("Command Type");
@@ -515,16 +564,20 @@ public class GUI extends JFrame {
 		tbox_messageAddPosition.setColumns(10);
 
 		JPanel panel_robotData = new JPanel();
+		panel_robotData.setBackground(Color.DARK_GRAY);
 		tabbedPane.addTab("Robot Data", null, panel_robotData, null);
 
 		JPanel panel_leftMotorData = new JPanel();
+		panel_leftMotorData.setBackground(new Color(205, 92, 92));
 
 		JPanel panel_rightMotorData = new JPanel();
+		panel_rightMotorData.setBackground(new Color(205, 92, 92));
 		panel_rightMotorData.setLayout(null);
 
 		JLabel lbl_rightMotorID = new JLabel("Device ID:");
+		lbl_rightMotorID.setForeground(Color.WHITE);
 		lbl_rightMotorID.setHorizontalAlignment(SwingConstants.TRAILING);
-		lbl_rightMotorID.setBounds(10, 48, 88, 14);
+		lbl_rightMotorID.setBounds(10, 51, 88, 14);
 //		lbl_rightMotorID.setBackground(Color.ORANGE);
 //		lbl_rightMotorID.setOpaque(true);
 		panel_rightMotorData.add(lbl_rightMotorID);
@@ -537,6 +590,7 @@ public class GUI extends JFrame {
 		panel_rightMotorData.add(tbox_rightMotorID);
 
 		JLabel lbl_rightMotorCurrent = new JLabel("Current (A):");
+		lbl_rightMotorCurrent.setForeground(Color.WHITE);
 		lbl_rightMotorCurrent.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_rightMotorCurrent.setBounds(10, 76, 88, 14);
 		panel_rightMotorData.add(lbl_rightMotorCurrent);
@@ -552,11 +606,13 @@ public class GUI extends JFrame {
 		panel_rightMotorData.add(tbox_rightMotorVoltage);
 
 		JLabel lbl_rightMotorVoltage = new JLabel("Voltage (V):");
+		lbl_rightMotorVoltage.setForeground(Color.WHITE);
 		lbl_rightMotorVoltage.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_rightMotorVoltage.setBounds(10, 126, 88, 14);
 		panel_rightMotorData.add(lbl_rightMotorVoltage);
 
-		JLabel lbl_rightMotorTemperature = new JLabel("Temperature (C):");
+		JLabel lbl_rightMotorTemperature = new JLabel("Temp. (C):");
+		lbl_rightMotorTemperature.setForeground(Color.WHITE);
 		lbl_rightMotorTemperature.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_rightMotorTemperature.setBounds(0, 101, 98, 14);
 		panel_rightMotorData.add(lbl_rightMotorTemperature);
@@ -572,11 +628,13 @@ public class GUI extends JFrame {
 		panel_rightMotorData.add(tbox_rightMotorMode);
 
 		JLabel lbl_rightMotorMode = new JLabel("Mode:");
+		lbl_rightMotorMode.setForeground(Color.WHITE);
 		lbl_rightMotorMode.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_rightMotorMode.setBounds(179, 126, 72, 14);
 		panel_rightMotorData.add(lbl_rightMotorMode);
 
 		JLabel lbl_rightMotorSetpoint = new JLabel("Setpoint:");
+		lbl_rightMotorSetpoint.setForeground(Color.WHITE);
 		lbl_rightMotorSetpoint.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_rightMotorSetpoint.setBounds(179, 101, 72, 14);
 		panel_rightMotorData.add(lbl_rightMotorSetpoint);
@@ -584,23 +642,23 @@ public class GUI extends JFrame {
 		tbox_rightMotorSetpoint = new JTextField();
 		tbox_rightMotorSetpoint.setColumns(10);
 		tbox_rightMotorSetpoint.setBounds(261, 101, 86, 20);
-		tbox_rightMotorSetpoint.setBackground(Color.ORANGE);
 		panel_rightMotorData.add(tbox_rightMotorSetpoint);
 
 		tbox_rightMotorPosition = new JTextField();
 		tbox_rightMotorPosition.setColumns(10);
 		tbox_rightMotorPosition.setBounds(261, 73, 86, 20);
-		tbox_rightMotorPosition.setBackground(Color.GREEN);
 		panel_rightMotorData.add(tbox_rightMotorPosition);
 
 		JLabel lbl_rightMotorPosition = new JLabel("Position:");
+		lbl_rightMotorPosition.setForeground(Color.WHITE);
 		lbl_rightMotorPosition.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_rightMotorPosition.setBounds(179, 76, 72, 14);
 		panel_rightMotorData.add(lbl_rightMotorPosition);
 
 		JLabel lbl_rightMotorSpeed = new JLabel("Speed:");
+		lbl_rightMotorSpeed.setForeground(Color.WHITE);
 		lbl_rightMotorSpeed.setHorizontalAlignment(SwingConstants.TRAILING);
-		lbl_rightMotorSpeed.setBounds(179, 48, 72, 14);
+		lbl_rightMotorSpeed.setBounds(179, 51, 72, 14);
 		panel_rightMotorData.add(lbl_rightMotorSpeed);
 
 		tbox_rightMotorSpeed = new JTextField();
@@ -609,6 +667,7 @@ public class GUI extends JFrame {
 		panel_rightMotorData.add(tbox_rightMotorSpeed);
 
 		JLabel lbl_rightMotorFLimit = new JLabel("F. Limit?:");
+		lbl_rightMotorFLimit.setForeground(Color.WHITE);
 		lbl_rightMotorFLimit.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_rightMotorFLimit.setBounds(10, 151, 88, 14);
 		panel_rightMotorData.add(lbl_rightMotorFLimit);
@@ -619,6 +678,7 @@ public class GUI extends JFrame {
 		panel_rightMotorData.add(tbox_rightMotorFLimit);
 
 		JLabel lbl_rightMotorRLimit = new JLabel("R. Limit?:");
+		lbl_rightMotorRLimit.setForeground(Color.WHITE);
 		lbl_rightMotorRLimit.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_rightMotorRLimit.setBounds(179, 151, 72, 14);
 		panel_rightMotorData.add(lbl_rightMotorRLimit);
@@ -629,16 +689,19 @@ public class GUI extends JFrame {
 		panel_rightMotorData.add(tbox_rightMotorRLimit);
 
 		JLabel lbl_rightDriveMotor = new JLabel("Right Drive Motor");
-		lbl_rightDriveMotor.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_rightDriveMotor.setForeground(Color.WHITE);
+		lbl_rightDriveMotor.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lbl_rightDriveMotor.setBounds(10, 11, 337, 26);
 		panel_rightMotorData.add(lbl_rightDriveMotor);
 
 		JPanel panel_scoopMotorData = new JPanel();
+		panel_scoopMotorData.setBackground(new Color(205, 133, 63));
 		panel_scoopMotorData.setLayout(null);
 
 		JLabel lbl_scoopMotorID = new JLabel("Device ID:");
+		lbl_scoopMotorID.setForeground(Color.WHITE);
 		lbl_scoopMotorID.setHorizontalAlignment(SwingConstants.TRAILING);
-		lbl_scoopMotorID.setBounds(10, 48, 88, 14);
+		lbl_scoopMotorID.setBounds(10, 51, 88, 14);
 		panel_scoopMotorData.add(lbl_scoopMotorID);
 
 		tbox_scoopMotorID = new JTextField();
@@ -647,6 +710,7 @@ public class GUI extends JFrame {
 		panel_scoopMotorData.add(tbox_scoopMotorID);
 
 		JLabel lbl_scoopMotorCurrent = new JLabel("Current (A):");
+		lbl_scoopMotorCurrent.setForeground(Color.WHITE);
 		lbl_scoopMotorCurrent.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_scoopMotorCurrent.setBounds(10, 76, 88, 14);
 		panel_scoopMotorData.add(lbl_scoopMotorCurrent);
@@ -662,11 +726,13 @@ public class GUI extends JFrame {
 		panel_scoopMotorData.add(tbox_scoopMotorVoltage);
 
 		JLabel lbl_scoopMotorVoltage = new JLabel("Voltage (V):");
+		lbl_scoopMotorVoltage.setForeground(Color.WHITE);
 		lbl_scoopMotorVoltage.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_scoopMotorVoltage.setBounds(10, 126, 88, 14);
 		panel_scoopMotorData.add(lbl_scoopMotorVoltage);
 
-		JLabel lbl_scoopMotorTemperature = new JLabel("Temperature (C):");
+		JLabel lbl_scoopMotorTemperature = new JLabel("Temp. (C):");
+		lbl_scoopMotorTemperature.setForeground(Color.WHITE);
 		lbl_scoopMotorTemperature.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_scoopMotorTemperature.setBounds(-17, 101, 115, 14);
 		panel_scoopMotorData.add(lbl_scoopMotorTemperature);
@@ -682,11 +748,13 @@ public class GUI extends JFrame {
 		panel_scoopMotorData.add(tbox_scoopMotorMode);
 
 		JLabel lbl_scoopMotorMode = new JLabel("Mode:");
+		lbl_scoopMotorMode.setForeground(Color.WHITE);
 		lbl_scoopMotorMode.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_scoopMotorMode.setBounds(179, 126, 72, 14);
 		panel_scoopMotorData.add(lbl_scoopMotorMode);
 
 		JLabel lbl_scoopMotorSetpoint = new JLabel("Setpoint:");
+		lbl_scoopMotorSetpoint.setForeground(Color.WHITE);
 		lbl_scoopMotorSetpoint.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_scoopMotorSetpoint.setBounds(179, 101, 72, 14);
 		panel_scoopMotorData.add(lbl_scoopMotorSetpoint);
@@ -702,13 +770,15 @@ public class GUI extends JFrame {
 		panel_scoopMotorData.add(tbox_scoopMotorPosition);
 
 		JLabel lbl_scoopMotorPosition = new JLabel("Position:");
+		lbl_scoopMotorPosition.setForeground(Color.WHITE);
 		lbl_scoopMotorPosition.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_scoopMotorPosition.setBounds(179, 76, 72, 14);
 		panel_scoopMotorData.add(lbl_scoopMotorPosition);
 
 		JLabel lbl_scoopMotorSpeed = new JLabel("Speed:");
+		lbl_scoopMotorSpeed.setForeground(Color.WHITE);
 		lbl_scoopMotorSpeed.setHorizontalAlignment(SwingConstants.TRAILING);
-		lbl_scoopMotorSpeed.setBounds(179, 48, 72, 14);
+		lbl_scoopMotorSpeed.setBounds(179, 51, 72, 14);
 		panel_scoopMotorData.add(lbl_scoopMotorSpeed);
 
 		tbox_scoopMotorSpeed = new JTextField();
@@ -717,6 +787,7 @@ public class GUI extends JFrame {
 		panel_scoopMotorData.add(tbox_scoopMotorSpeed);
 
 		JLabel lbl_scoopMotorFLimit = new JLabel("F. Limit?:");
+		lbl_scoopMotorFLimit.setForeground(Color.WHITE);
 		lbl_scoopMotorFLimit.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_scoopMotorFLimit.setBounds(10, 151, 88, 14);
 		panel_scoopMotorData.add(lbl_scoopMotorFLimit);
@@ -727,6 +798,7 @@ public class GUI extends JFrame {
 		panel_scoopMotorData.add(tbox_scoopMotorFLimit);
 
 		JLabel lbl_scoopMotorRLimit = new JLabel("R. Limit?:");
+		lbl_scoopMotorRLimit.setForeground(Color.WHITE);
 		lbl_scoopMotorRLimit.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_scoopMotorRLimit.setBounds(179, 151, 72, 14);
 		panel_scoopMotorData.add(lbl_scoopMotorRLimit);
@@ -737,16 +809,19 @@ public class GUI extends JFrame {
 		panel_scoopMotorData.add(tbox_scoopMotorRLimit);
 
 		JLabel lbl_scoopMotor = new JLabel("Scoop Motor");
-		lbl_scoopMotor.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_scoopMotor.setForeground(Color.WHITE);
+		lbl_scoopMotor.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lbl_scoopMotor.setBounds(10, 11, 337, 26);
 		panel_scoopMotorData.add(lbl_scoopMotor);
 
 		JPanel panel_depthMotorData = new JPanel();
+		panel_depthMotorData.setBackground(new Color(205, 133, 63));
 		panel_depthMotorData.setLayout(null);
 
 		JLabel lbl_depthMotorID = new JLabel("Device ID:");
+		lbl_depthMotorID.setForeground(Color.WHITE);
 		lbl_depthMotorID.setHorizontalAlignment(SwingConstants.TRAILING);
-		lbl_depthMotorID.setBounds(10, 48, 88, 14);
+		lbl_depthMotorID.setBounds(10, 51, 88, 14);
 		panel_depthMotorData.add(lbl_depthMotorID);
 
 		tbox_depthMotorID = new JTextField();
@@ -755,6 +830,7 @@ public class GUI extends JFrame {
 		panel_depthMotorData.add(tbox_depthMotorID);
 
 		JLabel lbl_depthMotorCurrent = new JLabel("Current (A):");
+		lbl_depthMotorCurrent.setForeground(Color.WHITE);
 		lbl_depthMotorCurrent.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_depthMotorCurrent.setBounds(10, 76, 88, 14);
 		panel_depthMotorData.add(lbl_depthMotorCurrent);
@@ -770,11 +846,13 @@ public class GUI extends JFrame {
 		panel_depthMotorData.add(tbox_depthMotorVoltage);
 
 		JLabel lbl_depthMotorVoltage = new JLabel("Voltage (V):");
+		lbl_depthMotorVoltage.setForeground(Color.WHITE);
 		lbl_depthMotorVoltage.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_depthMotorVoltage.setBounds(10, 126, 88, 14);
 		panel_depthMotorData.add(lbl_depthMotorVoltage);
 
-		JLabel lbl_depthMotorTemperature = new JLabel("Temperature (C):");
+		JLabel lbl_depthMotorTemperature = new JLabel("Temp. (C):");
+		lbl_depthMotorTemperature.setForeground(Color.WHITE);
 		lbl_depthMotorTemperature.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_depthMotorTemperature.setBounds(0, 101, 98, 14);
 		panel_depthMotorData.add(lbl_depthMotorTemperature);
@@ -790,11 +868,13 @@ public class GUI extends JFrame {
 		panel_depthMotorData.add(tbox_depthMotorMode);
 
 		JLabel lbl_depthMotorMode = new JLabel("Mode:");
+		lbl_depthMotorMode.setForeground(Color.WHITE);
 		lbl_depthMotorMode.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_depthMotorMode.setBounds(179, 126, 72, 14);
 		panel_depthMotorData.add(lbl_depthMotorMode);
 
 		JLabel lbl_depthMotorSetpoint = new JLabel("Setpoint:");
+		lbl_depthMotorSetpoint.setForeground(Color.WHITE);
 		lbl_depthMotorSetpoint.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_depthMotorSetpoint.setBounds(179, 101, 72, 14);
 		panel_depthMotorData.add(lbl_depthMotorSetpoint);
@@ -810,13 +890,15 @@ public class GUI extends JFrame {
 		panel_depthMotorData.add(tbox_depthMotorPosition);
 
 		JLabel lbl_depthMotorPosition = new JLabel("Position:");
+		lbl_depthMotorPosition.setForeground(Color.WHITE);
 		lbl_depthMotorPosition.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_depthMotorPosition.setBounds(179, 76, 72, 14);
 		panel_depthMotorData.add(lbl_depthMotorPosition);
 
 		JLabel lbl_depthMotorSpeed = new JLabel("Speed:");
+		lbl_depthMotorSpeed.setForeground(Color.WHITE);
 		lbl_depthMotorSpeed.setHorizontalAlignment(SwingConstants.TRAILING);
-		lbl_depthMotorSpeed.setBounds(179, 48, 72, 14);
+		lbl_depthMotorSpeed.setBounds(179, 51, 72, 14);
 		panel_depthMotorData.add(lbl_depthMotorSpeed);
 
 		tbox_depthMotorSpeed = new JTextField();
@@ -825,6 +907,7 @@ public class GUI extends JFrame {
 		panel_depthMotorData.add(tbox_depthMotorSpeed);
 
 		JLabel lbl_depthMotorFLimit = new JLabel("F. Limit?:");
+		lbl_depthMotorFLimit.setForeground(Color.WHITE);
 		lbl_depthMotorFLimit.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_depthMotorFLimit.setBounds(10, 151, 88, 14);
 		panel_depthMotorData.add(lbl_depthMotorFLimit);
@@ -835,6 +918,7 @@ public class GUI extends JFrame {
 		panel_depthMotorData.add(tbox_depthMotorFLimit);
 
 		JLabel lbl_depthMotorRLimit = new JLabel("R. Limit?:");
+		lbl_depthMotorRLimit.setForeground(Color.WHITE);
 		lbl_depthMotorRLimit.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_depthMotorRLimit.setBounds(179, 151, 72, 14);
 		panel_depthMotorData.add(lbl_depthMotorRLimit);
@@ -845,16 +929,19 @@ public class GUI extends JFrame {
 		panel_depthMotorData.add(tbox_depthMotorRLimit);
 
 		JLabel lbl_depthMotor = new JLabel("Depth Motor");
-		lbl_depthMotor.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_depthMotor.setForeground(Color.WHITE);
+		lbl_depthMotor.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lbl_depthMotor.setBounds(10, 11, 337, 26);
 		panel_depthMotorData.add(lbl_depthMotor);
 
 		JPanel panel_winchMotorData = new JPanel();
+		panel_winchMotorData.setBackground(new Color(205, 133, 63));
 		panel_winchMotorData.setLayout(null);
 
 		JLabel lbl_winchMotorID = new JLabel("Device ID:");
+		lbl_winchMotorID.setForeground(Color.WHITE);
 		lbl_winchMotorID.setHorizontalAlignment(SwingConstants.TRAILING);
-		lbl_winchMotorID.setBounds(10, 48, 88, 14);
+		lbl_winchMotorID.setBounds(10, 51, 88, 14);
 		panel_winchMotorData.add(lbl_winchMotorID);
 
 		tbox_winchMotorID = new JTextField();
@@ -863,6 +950,7 @@ public class GUI extends JFrame {
 		panel_winchMotorData.add(tbox_winchMotorID);
 
 		JLabel lbl_winchMotorCurrent = new JLabel("Current (A):");
+		lbl_winchMotorCurrent.setForeground(Color.WHITE);
 		lbl_winchMotorCurrent.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_winchMotorCurrent.setBounds(10, 76, 88, 14);
 		panel_winchMotorData.add(lbl_winchMotorCurrent);
@@ -878,11 +966,13 @@ public class GUI extends JFrame {
 		panel_winchMotorData.add(tbox_winchMotorVoltage);
 
 		JLabel lbl_winchMotorVoltage = new JLabel("Voltage (V):");
+		lbl_winchMotorVoltage.setForeground(Color.WHITE);
 		lbl_winchMotorVoltage.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_winchMotorVoltage.setBounds(10, 126, 88, 14);
 		panel_winchMotorData.add(lbl_winchMotorVoltage);
 
-		JLabel lbl_winchMotorTemperature = new JLabel("Temperature (C):");
+		JLabel lbl_winchMotorTemperature = new JLabel("Temp. (C):");
+		lbl_winchMotorTemperature.setForeground(Color.WHITE);
 		lbl_winchMotorTemperature.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_winchMotorTemperature.setBounds(0, 101, 98, 14);
 		panel_winchMotorData.add(lbl_winchMotorTemperature);
@@ -898,11 +988,13 @@ public class GUI extends JFrame {
 		panel_winchMotorData.add(tbox_winchMotorMode);
 
 		JLabel lbl_winchMotorMode = new JLabel("Mode:");
+		lbl_winchMotorMode.setForeground(Color.WHITE);
 		lbl_winchMotorMode.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_winchMotorMode.setBounds(179, 126, 72, 14);
 		panel_winchMotorData.add(lbl_winchMotorMode);
 
 		JLabel lbl_winchMotorSetpoint = new JLabel("Setpoint:");
+		lbl_winchMotorSetpoint.setForeground(Color.WHITE);
 		lbl_winchMotorSetpoint.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_winchMotorSetpoint.setBounds(179, 101, 72, 14);
 		panel_winchMotorData.add(lbl_winchMotorSetpoint);
@@ -918,13 +1010,15 @@ public class GUI extends JFrame {
 		panel_winchMotorData.add(tbox_winchMotorPosition);
 
 		JLabel lbl_winchMotorPosition = new JLabel("Position:");
+		lbl_winchMotorPosition.setForeground(Color.WHITE);
 		lbl_winchMotorPosition.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_winchMotorPosition.setBounds(179, 76, 72, 14);
 		panel_winchMotorData.add(lbl_winchMotorPosition);
 
 		JLabel lbl_winchMotorSpeed = new JLabel("Speed:");
+		lbl_winchMotorSpeed.setForeground(Color.WHITE);
 		lbl_winchMotorSpeed.setHorizontalAlignment(SwingConstants.TRAILING);
-		lbl_winchMotorSpeed.setBounds(179, 48, 72, 14);
+		lbl_winchMotorSpeed.setBounds(179, 51, 72, 14);
 		panel_winchMotorData.add(lbl_winchMotorSpeed);
 
 		tbox_winchMotorSpeed = new JTextField();
@@ -933,6 +1027,7 @@ public class GUI extends JFrame {
 		panel_winchMotorData.add(tbox_winchMotorSpeed);
 
 		JLabel lbl_winchMotorFLimit = new JLabel("F. Limit?:");
+		lbl_winchMotorFLimit.setForeground(Color.WHITE);
 		lbl_winchMotorFLimit.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_winchMotorFLimit.setBounds(10, 151, 88, 14);
 		panel_winchMotorData.add(lbl_winchMotorFLimit);
@@ -943,6 +1038,7 @@ public class GUI extends JFrame {
 		panel_winchMotorData.add(tbox_winchMotorFLimit);
 
 		JLabel lbl_winchMotorRLimit = new JLabel("R. Limit?:");
+		lbl_winchMotorRLimit.setForeground(Color.WHITE);
 		lbl_winchMotorRLimit.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_winchMotorRLimit.setBounds(179, 151, 72, 14);
 		panel_winchMotorData.add(lbl_winchMotorRLimit);
@@ -952,8 +1048,9 @@ public class GUI extends JFrame {
 		tbox_winchMotorRLimit.setBounds(261, 151, 86, 20);
 		panel_winchMotorData.add(tbox_winchMotorRLimit);
 
-		JLabel lbl_winchMotor = new JLabel("Winch Motor");
-		lbl_winchMotor.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		JLabel lbl_winchMotor = new JLabel("Dump Motor");
+		lbl_winchMotor.setForeground(Color.WHITE);
+		lbl_winchMotor.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lbl_winchMotor.setBounds(10, 11, 337, 26);
 		panel_winchMotorData.add(lbl_winchMotor);
 
@@ -973,11 +1070,13 @@ public class GUI extends JFrame {
 //		panel_depthMotorData.add(tbox_sensorData);
 		
 		JPanel panel_4 = new JPanel();
+		panel_4.setBackground(new Color(70, 130, 180));
 		panel_4.setLayout(null);
 		
 		JLabel lblImuReadings = new JLabel("IMU Readings:");
+		lblImuReadings.setForeground(Color.WHITE);
 		lblImuReadings.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblImuReadings.setBounds(10, 48, 88, 14);
+		lblImuReadings.setBounds(10, 51, 88, 14);
 		panel_4.add(lblImuReadings);
 		
 		tbox_imuData = new JTextField();
@@ -986,6 +1085,7 @@ public class GUI extends JFrame {
 		panel_4.add(tbox_imuData);
 		
 		JLabel lblCameraAngle = new JLabel("Camera Angle:");
+		lblCameraAngle.setForeground(Color.WHITE);
 		lblCameraAngle.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblCameraAngle.setBounds(10, 76, 88, 14);
 		panel_4.add(lblCameraAngle);
@@ -995,8 +1095,9 @@ public class GUI extends JFrame {
 		tbox_cameraAngleData.setBounds(108, 73, 86, 20);
 		panel_4.add(tbox_cameraAngleData);
 		
-		JLabel lblSensordata = new JLabel("SensorData");
-		lblSensordata.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		JLabel lblSensordata = new JLabel("Sensor Data");
+		lblSensordata.setForeground(Color.WHITE);
+		lblSensordata.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblSensordata.setBounds(10, 11, 337, 26);
 		panel_4.add(lblSensordata);
 
@@ -1004,45 +1105,44 @@ public class GUI extends JFrame {
 		gl_panel_robotData.setHorizontalGroup(
 			gl_panel_robotData.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_robotData.createSequentialGroup()
-					.addContainerGap()
+					.addGap(26)
 					.addGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_robotData.createSequentialGroup()
-							.addComponent(panel_leftMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_rightMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panel_robotData.createSequentialGroup()
-							.addComponent(panel_scoopMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_depthMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panel_robotData.createSequentialGroup()
-							.addComponent(panel_winchMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(44, Short.MAX_VALUE))
+						.addComponent(panel_leftMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_scoopMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_winchMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_rightMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_depthMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(26, Short.MAX_VALUE))
 		);
 		gl_panel_robotData.setVerticalGroup(
 			gl_panel_robotData.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_robotData.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel_rightMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_leftMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel_scoopMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_depthMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_winchMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_panel_robotData.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_panel_robotData.createSequentialGroup()
+							.addComponent(panel_leftMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(panel_scoopMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(panel_winchMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_robotData.createSequentialGroup()
+							.addComponent(panel_rightMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(panel_depthMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap())
 		);
 		panel_leftMotorData.setLayout(null);
 
 
 		JLabel lbl_leftMotorID = new JLabel("Device ID:");
+		lbl_leftMotorID.setForeground(Color.WHITE);
 		lbl_leftMotorID.setHorizontalAlignment(SwingConstants.TRAILING);
-		lbl_leftMotorID.setBounds(10, 54, 88, 14);
+		lbl_leftMotorID.setBounds(10, 51, 88, 14);
 		panel_leftMotorData.add(lbl_leftMotorID);
 
 		tbox_leftMotorID = new JTextField();
@@ -1051,6 +1151,7 @@ public class GUI extends JFrame {
 		tbox_leftMotorID.setColumns(10);
 
 		JLabel lbl_leftMotorCurrent = new JLabel("Current (A):");
+		lbl_leftMotorCurrent.setForeground(Color.WHITE);
 		lbl_leftMotorCurrent.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_leftMotorCurrent.setBounds(10, 76, 88, 14);
 		panel_leftMotorData.add(lbl_leftMotorCurrent);
@@ -1066,11 +1167,13 @@ public class GUI extends JFrame {
 		panel_leftMotorData.add(tbox_leftMotorVoltage);
 
 		JLabel leftMotorVoltage = new JLabel("Voltage (V):");
+		leftMotorVoltage.setForeground(Color.WHITE);
 		leftMotorVoltage.setHorizontalAlignment(SwingConstants.TRAILING);
 		leftMotorVoltage.setBounds(10, 126, 88, 14);
 		panel_leftMotorData.add(leftMotorVoltage);
 
-		JLabel lbl_leftMotorTemperature = new JLabel("Temperature (C):");
+		JLabel lbl_leftMotorTemperature = new JLabel("Temp. (C):");
+		lbl_leftMotorTemperature.setForeground(Color.WHITE);
 		lbl_leftMotorTemperature.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_leftMotorTemperature.setBounds(-11, 101, 109, 14);
 		panel_leftMotorData.add(lbl_leftMotorTemperature);
@@ -1086,11 +1189,13 @@ public class GUI extends JFrame {
 		panel_leftMotorData.add(tbox_leftMotorMode);
 
 		JLabel lbl_leftMotorMode = new JLabel("Mode:");
+		lbl_leftMotorMode.setForeground(Color.WHITE);
 		lbl_leftMotorMode.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_leftMotorMode.setBounds(179, 126, 72, 14);
 		panel_leftMotorData.add(lbl_leftMotorMode);
 
 		JLabel lbl_leftMotorSetpoint = new JLabel("Setpoint:");
+		lbl_leftMotorSetpoint.setForeground(Color.WHITE);
 		lbl_leftMotorSetpoint.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_leftMotorSetpoint.setBounds(179, 101, 72, 14);
 		panel_leftMotorData.add(lbl_leftMotorSetpoint);
@@ -1106,13 +1211,15 @@ public class GUI extends JFrame {
 		panel_leftMotorData.add(tbox_leftMotorPosition);
 
 		JLabel lbl_leftMotorPosition = new JLabel("Position:");
+		lbl_leftMotorPosition.setForeground(Color.WHITE);
 		lbl_leftMotorPosition.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_leftMotorPosition.setBounds(179, 76, 72, 14);
 		panel_leftMotorData.add(lbl_leftMotorPosition);
 
 		JLabel lbl_leftMotorSpeed = new JLabel("Speed:");
+		lbl_leftMotorSpeed.setForeground(Color.WHITE);
 		lbl_leftMotorSpeed.setHorizontalAlignment(SwingConstants.TRAILING);
-		lbl_leftMotorSpeed.setBounds(179, 54, 72, 14);
+		lbl_leftMotorSpeed.setBounds(179, 51, 72, 14);
 		panel_leftMotorData.add(lbl_leftMotorSpeed);
 
 		tbox_leftMotorSpeed = new JTextField();
@@ -1121,6 +1228,7 @@ public class GUI extends JFrame {
 		panel_leftMotorData.add(tbox_leftMotorSpeed);
 
 		JLabel lbl_leftMotorFLimit = new JLabel("F. Limit?:");
+		lbl_leftMotorFLimit.setForeground(Color.WHITE);
 		lbl_leftMotorFLimit.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_leftMotorFLimit.setBounds(10, 151, 88, 14);
 		panel_leftMotorData.add(lbl_leftMotorFLimit);
@@ -1131,6 +1239,7 @@ public class GUI extends JFrame {
 		panel_leftMotorData.add(tbox_leftMotorFLimit);
 
 		JLabel lbl_leftMotorRLimit = new JLabel("R. Limit?:");
+		lbl_leftMotorRLimit.setForeground(Color.WHITE);
 		lbl_leftMotorRLimit.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_leftMotorRLimit.setBounds(179, 151, 72, 14);
 		panel_leftMotorData.add(lbl_leftMotorRLimit);
@@ -1141,7 +1250,8 @@ public class GUI extends JFrame {
 		panel_leftMotorData.add(tbox_leftMotorRLimit);
 
 		JLabel lbl_leftMotor = new JLabel("Left Drive Motor");
-		lbl_leftMotor.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_leftMotor.setForeground(Color.WHITE);
+		lbl_leftMotor.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lbl_leftMotor.setBounds(10, 11, 337, 26);
 		panel_leftMotorData.add(lbl_leftMotor);
 		panel_robotData.setLayout(gl_panel_robotData);
@@ -1283,6 +1393,7 @@ public class GUI extends JFrame {
 	}
 
 	public GUI(MessageQueue messageQueue) {
+		getContentPane().setBackground(Color.DARK_GRAY);
 		initialize(messageQueue);
 	}
 
