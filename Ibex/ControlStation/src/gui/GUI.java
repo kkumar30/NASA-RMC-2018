@@ -44,6 +44,8 @@ import static java.lang.Math.abs;
 import java.awt.Label;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
+import java.awt.Panel;
+import java.awt.Canvas;
 
 
 
@@ -163,6 +165,8 @@ public class GUI extends JFrame {
 
 	private static JTextField tbox_imuData;
 	private static JTextField tbox_cameraAngleData;
+	
+	private static ImagePanel imagepanel = new ImagePanel();
 
 
 	public static void main(String[] args) {
@@ -175,6 +179,9 @@ public class GUI extends JFrame {
 					updateAutonomyQueue(messageQueue);
 					//*****************************************************************************************//
 					Timer simpleTimer = new Timer();
+					Thread cameraServerThread = new Thread(new CameraServer(imagepanel));
+					cameraServerThread.start();
+					
 					GUI window = new GUI(messageQueue);
 					simpleTimer.scheduleAtFixedRate(new RobotDataUpdateTask(), 1000, 500);
 					window.setVisible(true);
@@ -194,7 +201,7 @@ public class GUI extends JFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		setTitle("IBEX Control Station");
-		setSize(new Dimension(815, 822));
+		setSize(new Dimension(1300, 822));
 		setResizable(false);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -205,24 +212,34 @@ public class GUI extends JFrame {
 		panel_1.setBackground(Color.DARK_GRAY);
 		JLabel lblStatus = new JLabel("Status:");
 		lblStatus.setForeground(Color.WHITE);
+		
+				
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 787, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 1037, Short.MAX_VALUE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 787, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(imagepanel, GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE))
+						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(lblStatus))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addComponent(lblStatus)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblStatus))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(32)
+							.addComponent(imagepanel, GroupLayout.PREFERRED_SIZE, 314, GroupLayout.PREFERRED_SIZE)))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
