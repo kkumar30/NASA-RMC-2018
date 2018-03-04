@@ -1,7 +1,7 @@
 package network;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
+import java.io.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +16,6 @@ public class CameraServer implements Runnable
 {
 	public ServerSocket server;
 	private ImagePanel ipanel;
-
 	public CameraServer(ImagePanel ipanel)
 	{
 		this.ipanel = ipanel;
@@ -37,19 +36,27 @@ public class CameraServer implements Runnable
 		{
 			System.out.println("GotSomething!");
 			Socket sock;
+
 			try
 			{
 				sock = this.server.accept();
-				InputStream in = sock.getInputStream();
-				Integer bytesRead = 0;
-				byte[] buffer = new byte[65536];
-				while((bytesRead = in.read(buffer)) != -1)
+				DataOutputStream toPserver = new DataOutputStream(sock.getOutputStream());
+				DataInputStream fromPserver = new DataInputStream(sock.getInputStream());
+
+
+				File dlfile = new File("/home/thagen/NASA-RMC-2018/Ibex/ControlStation/pictures/contours.jpg");
+				dlfile.createNewFile();
+
+				DataOutputStream dos = new DataOutputStream(new FileOutputStream(dlfile));
+				while (fromPserver.available() > 0)
 				{
-					System.out.println("Read" + bytesRead.toString() + " bytes:[" + new String(buffer) + "]");
+					dos.writeByte(fromPserver.readByte());
 				}
-				BufferedImage jpg = ImageIO.read(new ByteArrayInputStream(buffer));
-				//ImageIO.write(jpg, "JPG", new File("robot.jpg"));
+
+				BufferedImage jpg = ImageIO.read(dlfile);
+
 				ipanel.setNewImage(jpg);
+				sock.close();
 			}
 			catch (IOException e)
 			{
