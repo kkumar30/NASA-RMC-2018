@@ -17,7 +17,7 @@ public class ImagePanel extends JPanel{
     {
        try 
        {                
-          image = ImageIO.read(new File("../pictures/markhor.jpg"));
+          image = ImageIO.read(new File("/home/thagen/NASA-RMC-2018/Ibex/ControlStation/pictures/markhor.jpg"));
        } 
        catch (IOException ex) 
        {
