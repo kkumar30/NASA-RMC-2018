@@ -17,7 +17,7 @@ public class ImagePanel extends JPanel{
     {
        try 
        {                
-          image = ImageIO.read(new File("../pictures/markhor.jpg"));
+          image = ImageIO.read(new File("pictures/markhor.jpg"));
        } 
        catch (IOException ex) 
        {
@@ -29,7 +29,7 @@ public class ImagePanel extends JPanel{
     {
     	this.image = image;
     	repaint();
-    	
+
     }
 
     @Override

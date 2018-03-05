@@ -44,9 +44,10 @@ public class CameraServer implements Runnable
 				DataInputStream fromPserver = new DataInputStream(sock.getInputStream());
 
 
-				File dlfile = new File("/home/thagen/NASA-RMC-2018/Ibex/ControlStation/pictures/contours.jpg");
-				dlfile.createNewFile();
-
+//				File dlfile = new File("/home/thagen/NASA-RMC-2018/Ibex/ControlStation/pictures/contours.jpg");
+				File dlfile = new File("C://Users//Kushagra Kumar//Documents//GitHub//NASA-RMC-2018//IBEx//ControlStation//pictures//contours.jpg");
+//				boolean a = dlfile.createNewFile();
+//				System.out.println(a);
 				DataOutputStream dos = new DataOutputStream(new FileOutputStream(dlfile));
 				while (fromPserver.available() > 0)
 				{
@@ -54,7 +55,7 @@ public class CameraServer implements Runnable
 				}
 
 				BufferedImage jpg = ImageIO.read(dlfile);
-
+//				System.out.println(jpg.getHeight());
 				ipanel.setNewImage(jpg);
 				sock.close();
 			}
@@ -62,7 +63,9 @@ public class CameraServer implements Runnable
 			{
 				e.printStackTrace();
 			}
-
+			catch (NullPointerException e){
+				System.out.println("Null ptr exception");
+			}
 
 		}
 	}
