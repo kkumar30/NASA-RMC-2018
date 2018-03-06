@@ -1444,9 +1444,9 @@ public class GUI extends JFrame {
 
 		/**********Stage 1**************/
 		q.addAtBack(findTarget);
-		q.addAtBack(alignWithBorder);
-		q.addAtBack(driveToBorder);
-		q.addAtBack(rotateToStraight);
+//		q.addAtBack(alignWithBorder);
+//		q.addAtBack(driveToBorder);
+//		q.addAtBack(rotateToStraight);
 		q.addAtBack(stopMessage);
 		/*******************************/
 //
@@ -1459,6 +1459,7 @@ public class GUI extends JFrame {
 //		q.addAtBack();
 
 		/*Stage 2*/
+
 
 	}
 }
