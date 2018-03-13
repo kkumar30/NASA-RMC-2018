@@ -20,10 +20,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.List;
 
-import common.Message;
-import common.MessageFactory;
-import common.MessageQueue;
-import common.MessageType;
+import common.*;
 import messages.*;
 import network.CameraServer;
 import network.NetworkServer;
@@ -90,9 +87,10 @@ public class GUI extends JFrame {
 	
 	private static RobotData robotData = new RobotData();
 	private static MessageQueue messageQueue = new MessageQueue();
+	private static RecoveryStack recoveryStack = new RecoveryStack();
 //	MessageQueue.
 
-	private NetworkServer server = new NetworkServer(11000, messageQueue, robotData);
+	private NetworkServer server = new NetworkServer(11000, messageQueue, robotData, recoveryStack);
 	private boolean runServer = false;
 
 	private DefaultListModel<String> model = new DefaultListModel<String>();
@@ -280,7 +278,9 @@ public class GUI extends JFrame {
 				int removalIndex;
 				try {
 					removalIndex = messageList.getSelectedIndex();
-					messageQueue.removeAtIndex(removalIndex);
+					Message pop;
+					pop = messageQueue.removeAtIndex(removalIndex);
+					recoveryStack.addAtBack(pop);
 					updateMessageQueueList(messageList);
 				} catch (Exception exception) {
 					System.out.println("Failed to remove message.");
@@ -321,19 +321,14 @@ public class GUI extends JFrame {
 		btnStop.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-//				if (runServer) {
-//					try {
-						messageQueue.clear();
-						messageQueue.addAtFront(new MsgStop());
-						updateMessageQueueList(messageList);
-						selectedMessage = MessageFactory.makeMessage(selectedMessageType);
-
-//						server.stopServer();
-//					} catch (IOException e) {
-//						e.printStackTrace();
-//					}
-//				}
-//				runServer = false;
+				if (runServer) {
+					try {
+						server.stopServer();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				runServer = false;
 			}
 		});
 		btnStop.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -1449,7 +1444,7 @@ public class GUI extends JFrame {
 
 		/**********Stage 1**************/
 		q.addAtBack(findTarget);
-//		q.addAtBack(alignWithBorder);
+		q.addAtBack(alignWithBorder);
 //		q.addAtBack(driveToBorder);
 //		q.addAtBack(rotateToStraight);
 		q.addAtBack(stopMessage);

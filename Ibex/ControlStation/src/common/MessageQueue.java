@@ -45,11 +45,19 @@ public class MessageQueue
 		queue.add(0, msg);
 	}
 	
-	public void removeAtIndex(int i)
-	{
+//	public void removeAtIndex(int i)
+//	{
+//		queue.remove(i);
+//	}
+
+	public Message removeAtIndex(int i){
+		Message popped;
+		popped = queue.get(i);
 		queue.remove(i);
+		return popped;
+
+
 	}
-	
 	public void clear()
 	{
 		queue = new ArrayList<Message>();

@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import common.Gamepad;
 import common.MessageQueue;
+import common.RecoveryStack;
 import gui.RobotData;
 
 public class NetworkServer extends Thread
@@ -16,12 +17,15 @@ public class NetworkServer extends Thread
 	private int port;
 	private boolean running = false;
 	private Gamepad g = new Gamepad();
+
+	private RecoveryStack recoveryStack;
 	
-	public NetworkServer(int port, MessageQueue queue, RobotData robotData)
+	public NetworkServer(int port, MessageQueue queue, RobotData robotData, RecoveryStack recoveryStack)
 	{
 		this.port = port;
 		this.queue = queue;
 		this.robotData = robotData;
+		this.recoveryStack = recoveryStack;
 	}
 	
 	public void startServer()
@@ -64,7 +68,7 @@ public class NetworkServer extends Thread
 //				System.out.println("HERE! - NetworkServer.java - In Try");
 				Socket socket = serverSocket.accept();
 //				System.out.println(socket.isConnected());
-				RequestHandler requestHandler = new RequestHandler(socket, queue, robotData);
+				RequestHandler requestHandler = new RequestHandler(socket, queue, robotData, recoveryStack);
 				requestHandler.start();
 				
 			}

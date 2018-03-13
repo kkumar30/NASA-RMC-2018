@@ -3,7 +3,9 @@ package network;
 import java.io.*;
 import java.net.Socket;
 
+import common.Message;
 import common.MessageQueue;
+import common.RecoveryStack;
 import gui.RobotData;
 import gui.RobotData;
 
@@ -11,11 +13,13 @@ class RequestHandler extends Thread {
 	private Socket socket;
 	private MessageQueue queue;
 	private RobotData robotData;
+	private RecoveryStack recoveryStack;
 
-	RequestHandler(Socket socket, MessageQueue queue, RobotData robotData) {
+	RequestHandler(Socket socket, MessageQueue queue, RobotData robotData, RecoveryStack recoveryStack) {
 		this.socket = socket;
 		this.queue = queue;
 		this.robotData = robotData;
+		this.recoveryStack = recoveryStack;
 	}
 
 	@Override
@@ -56,7 +60,14 @@ class RequestHandler extends Thread {
 				//if (inboundSensorMessageStr != null && inboundSensorMessageStr.replace("\n\t ", "").equals("Finished")) {
 				if (entireMessageStr != null && entireMessageStr.replace("\n\t ", "").equals("Finished")) {
 					if (!queue.isEmpty()) {
-						queue.pop();
+						Message popped;
+						popped = queue.pop();
+						if (popped == recoveryStack.peek())
+						{
+							recoveryStack.addAtBack(popped);
+							System.out.print("Added to Recovery Stack!:");
+							System.out.println(popped);
+						}
 						System.out.println("Next action in Queue!");
 					}
 				}
