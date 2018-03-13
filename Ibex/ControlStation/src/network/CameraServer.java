@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Base64;
 
 import javax.imageio.ImageIO;
 
@@ -41,22 +42,27 @@ public class CameraServer implements Runnable
 			{
 				sock = this.server.accept();
 				DataOutputStream toPserver = new DataOutputStream(sock.getOutputStream());
-				DataInputStream fromPserver = new DataInputStream(sock.getInputStream());
+//				DataInputStream fromPserver = new DataInputStream(sock.getInputStream());
+				BufferedInputStream iStream = new BufferedInputStream(sock.getInputStream());
 
+				FileOutputStream fos = new FileOutputStream(new File("pictures/contours.jpg"));
+				int c = 0;
 
-//				File dlfile = new File("/home/thagen/NASA-RMC-2018/Ibex/ControlStation/pictures/contours.jpg");
-				File dlfile = new File("C://Users//Kushagra Kumar//Documents//GitHub//NASA-RMC-2018//IBEx//ControlStation//pictures//contours.jpg");
-//				boolean a = dlfile.createNewFile();
-//				System.out.println(a);
-				DataOutputStream dos = new DataOutputStream(new FileOutputStream(dlfile));
-				while (fromPserver.available() > 0)
-				{
-					dos.writeByte(fromPserver.readByte());
+				while ((c=iStream.read())!=-1){
+					fos.write(c);
 				}
 
-				BufferedImage jpg = ImageIO.read(dlfile);
+
+
+
+
+				BufferedImage jpg = ImageIO.read(new File("pictures/contours.jpg"));
+
+
 //				System.out.println(jpg.getHeight());
 				ipanel.setNewImage(jpg);
+				fos.close();
+				iStream.close();
 				sock.close();
 			}
 			catch (IOException e)
