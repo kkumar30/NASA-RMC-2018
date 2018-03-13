@@ -18,8 +18,9 @@ public class ImagePanel extends JPanel{
        try 
        {                
 
-          image = ImageIO.read(new File("/home/thagen/NASA-RMC-2018/Ibex/ControlStation/pictures/markhor.jpg"));
-       }
+          image = ImageIO.read(new File("pictures/ibex.png"));
+       } 
+
        catch (IOException ex) 
        {
             ex.printStackTrace();
@@ -36,7 +37,7 @@ public class ImagePanel extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(image, 0, 0, this);    
+        g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);    
     }
     
     

@@ -44,28 +44,23 @@ public class CameraServer implements Runnable
 //				DataInputStream fromPserver = new DataInputStream(sock.getInputStream());
 				BufferedInputStream iStream = new BufferedInputStream(sock.getInputStream());
 
-				FileOutputStream fos = new FileOutputStream(new File("/home/thagen/NASA-RMC-2018/Ibex/ControlStation/pictures/contours.jpg"));
 
+				FileOutputStream fos = new FileOutputStream(new File("pictures/contours.jpg"));
 				int c = 0;
-				while ((c = iStream.read()) != -1) {
+
+				while ((c=iStream.read())!=-1){
+
 					fos.write(c);
 				}
 
 
-//
-//				File dlfile = new File("/home/thagen/NASA-RMC-2018/Ibex/ControlStation/pictures/contours.jpg");
-//				DataOutputStream dos = new DataOutputStream(new FileOutputStream(dlfile));
-//				while(fromPserver.available()>1)
-//				{
-//					dos.writeByte(fromPserver.readByte());
-//				}
 
 
-//				dos.write(imgData);
 
-				BufferedImage jpg = ImageIO.read(new File("/home/thagen/NASA-RMC-2018/Ibex/ControlStation/pictures/contours.jpg"));
+				BufferedImage jpg = ImageIO.read(new File("pictures/contours.jpg"));
 
 
+//				System.out.println(jpg.getHeight());
 				ipanel.setNewImage(jpg);
 				fos.close();
 				iStream.close();

@@ -321,14 +321,19 @@ public class GUI extends JFrame {
 		btnStop.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (runServer) {
-					try {
-						server.stopServer();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				runServer = false;
+//				if (runServer) {
+//					try {
+						messageQueue.clear();
+						messageQueue.addAtFront(new MsgStop());
+						updateMessageQueueList(messageList);
+						selectedMessage = MessageFactory.makeMessage(selectedMessageType);
+
+//						server.stopServer();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//				runServer = false;
 			}
 		});
 		btnStop.setFont(new Font("Tahoma", Font.BOLD, 20));
