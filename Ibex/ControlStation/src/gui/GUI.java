@@ -47,7 +47,7 @@ import java.awt.Canvas;
 
 
 public class GUI extends JFrame {
-	
+
 	/*
 	 * Small class to handle constantly updating the robot data boxes
 	 */
@@ -63,28 +63,28 @@ public class GUI extends JFrame {
 
 	@SuppressWarnings("serial")
 	public class RoundJTextField extends JTextField {
-	    private Shape shape;
-	    public RoundJTextField(int size) {
-	        super(size);
-	        setOpaque(false); // As suggested by @AVD in comment.
-	    }
-	    protected void paintComponent(Graphics g) {
-	         g.setColor(getBackground());
-	         g.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, 5, 5);
-	         super.paintComponent(g);
-	    }
-	    protected void paintBorder(Graphics g) {
-	         g.setColor(getForeground());
-	         g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 5, 5);
-	    }
-	    public boolean contains(int x, int y) {
-	         if (shape == null || !shape.getBounds().equals(getBounds())) {
-	             shape = new RoundRectangle2D.Float(0, 0, getWidth()-1, getHeight()-1, 5, 5);
-	         }
-	         return shape.contains(x, y);
-	    }
+		private Shape shape;
+		public RoundJTextField(int size) {
+			super(size);
+			setOpaque(false); // As suggested by @AVD in comment.
+		}
+		protected void paintComponent(Graphics g) {
+			g.setColor(getBackground());
+			g.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, 5, 5);
+			super.paintComponent(g);
+		}
+		protected void paintBorder(Graphics g) {
+			g.setColor(getForeground());
+			g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 5, 5);
+		}
+		public boolean contains(int x, int y) {
+			if (shape == null || !shape.getBounds().equals(getBounds())) {
+				shape = new RoundRectangle2D.Float(0, 0, getWidth()-1, getHeight()-1, 5, 5);
+			}
+			return shape.contains(x, y);
+		}
 	}
-	
+
 	private static RobotData robotData = new RobotData();
 	private static MessageQueue messageQueue = new MessageQueue();
 	private static RecoveryStack recoveryStack = new RecoveryStack();
@@ -94,6 +94,7 @@ public class GUI extends JFrame {
 	private boolean runServer = false;
 
 	private DefaultListModel<String> model = new DefaultListModel<String>();
+	private DefaultListModel<String> recovery_model = new DefaultListModel<String>();
 	private JList messageList = new JList<String>(model);
 	private MessageType selectedMessageType = MessageType.MSG_STOP;
 	private Message selectedMessage = new MsgStop();
@@ -163,7 +164,7 @@ public class GUI extends JFrame {
 
 	private static JTextField tbox_imuData;
 	private static JTextField tbox_cameraAngleData;
-	
+
 	private static ImagePanel imagepanel = new ImagePanel();
 
 
@@ -179,7 +180,7 @@ public class GUI extends JFrame {
 					Timer simpleTimer = new Timer();
 					Thread cameraServerThread = new Thread(new CameraServer(imagepanel));
 					cameraServerThread.start();
-					
+
 					GUI window = new GUI(messageQueue);
 					simpleTimer.scheduleAtFixedRate(new RobotDataUpdateTask(), 1000, 500);
 					window.setVisible(true);
@@ -191,7 +192,7 @@ public class GUI extends JFrame {
 	}
 
 	private void initialize(MessageQueue messageQueue) {
-		    
+
 		this.messageQueue = messageQueue;
 
 		frame = new JFrame();
@@ -210,54 +211,54 @@ public class GUI extends JFrame {
 		panel_1.setBackground(Color.DARK_GRAY);
 		JLabel lblStatus = new JLabel("Status:");
 		lblStatus.setForeground(Color.WHITE);
-		
-				
+
+
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+				groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 787, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(imagepanel, GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE))
-						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(lblStatus))
-					.addContainerGap())
+								.addContainerGap()
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addGroup(groupLayout.createSequentialGroup()
+												.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 787, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(imagepanel, GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE))
+										.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(lblStatus))
+								.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+				groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(lblStatus))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(32)
-							.addComponent(imagepanel, GroupLayout.PREFERRED_SIZE, 314, GroupLayout.PREFERRED_SIZE)))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addGroup(groupLayout.createSequentialGroup()
+												.addContainerGap()
+												.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(lblStatus))
+										.addGroup(groupLayout.createSequentialGroup()
+												.addGap(32)
+												.addComponent(imagepanel, GroupLayout.PREFERRED_SIZE, 314, GroupLayout.PREFERRED_SIZE)))
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap())
 		);
 
-		JList<String> list_1 = new JList<String>();
+		JList<String> list_1 = new JList<String>(recovery_model);
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 		gl_panel_1.setHorizontalGroup(
-			gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_1.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(list_1, GroupLayout.DEFAULT_SIZE, 769, Short.MAX_VALUE)
-					.addContainerGap())
+				gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_1.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(list_1, GroupLayout.DEFAULT_SIZE, 769, Short.MAX_VALUE)
+								.addContainerGap())
 		);
 		gl_panel_1.setVerticalGroup(
-			gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_1.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(list_1, GroupLayout.PREFERRED_SIZE, 113, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(96, Short.MAX_VALUE))
+				gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_1.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(list_1, GroupLayout.PREFERRED_SIZE, 113, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap(96, Short.MAX_VALUE))
 		);
 		panel_1.setLayout(gl_panel_1);
 
@@ -266,6 +267,7 @@ public class GUI extends JFrame {
 		panel_2.setBackground(Color.DARK_GRAY);
 		tabbedPane.addTab("Main", null, panel_2, null);
 		updateMessageQueueList(messageList);
+		updateRecoveryStackList(list_1);
 
 		JButton btnRemoveSelected = new JButton("Remove");
 		btnRemoveSelected.addActionListener(new ActionListener() {
@@ -282,6 +284,7 @@ public class GUI extends JFrame {
 					pop = messageQueue.removeAtIndex(removalIndex);
 					recoveryStack.addAtBack(pop);
 					updateMessageQueueList(messageList);
+					updateRecoveryStackList(list_1);
 				} catch (Exception exception) {
 					System.out.println("Failed to remove message.");
 				}
@@ -305,6 +308,7 @@ public class GUI extends JFrame {
 				Message msg_teleop = new MsgMotorValues();
 				messageQueue.addAtFront(msg_teleop);
 				updateMessageQueueList(messageList);
+				updateRecoveryStackList(list_1);
 				selectedMessage = MessageFactory.makeMessage(selectedMessageType);
 
 			}
@@ -350,33 +354,33 @@ public class GUI extends JFrame {
 		btnStartQueue.setForeground(new Color(255, 255, 255));
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
-			gl_panel_2.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_2.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(messageList, GroupLayout.PREFERRED_SIZE, 616, GroupLayout.PREFERRED_SIZE)
-					.addGap(13)
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
-						.addComponent(btnStop, GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-						.addComponent(btnStartQueue, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-						.addComponent(btnClearAll, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-						.addComponent(btnRemoveSelected, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
+				gl_panel_2.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_2.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(messageList, GroupLayout.PREFERRED_SIZE, 616, GroupLayout.PREFERRED_SIZE)
+								.addGap(13)
+								.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
+										.addComponent(btnStop, GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+										.addComponent(btnStartQueue, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+										.addComponent(btnClearAll, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+										.addComponent(btnRemoveSelected, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE))
+								.addContainerGap())
 		);
 		gl_panel_2.setVerticalGroup(
-			gl_panel_2.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_2.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+				gl_panel_2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_2.createSequentialGroup()
-							.addComponent(btnRemoveSelected, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnClearAll, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnStop, GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnStartQueue, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE))
-						.addComponent(messageList, GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE))
-					.addContainerGap())
+								.addContainerGap()
+								.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_panel_2.createSequentialGroup()
+												.addComponent(btnRemoveSelected, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(btnClearAll, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(btnStop, GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(btnStartQueue, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE))
+										.addComponent(messageList, GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE))
+								.addContainerGap())
 		);
 		panel_2.setLayout(gl_panel_2);
 
@@ -546,6 +550,7 @@ public class GUI extends JFrame {
 				}
 				messageQueue.addAtBack(selectedMessage);
 				updateMessageQueueList(messageList);
+				updateRecoveryStackList(list_1);
 				selectedMessage = MessageFactory.makeMessage(selectedMessageType);
 			}
 		});
@@ -567,6 +572,7 @@ public class GUI extends JFrame {
 					messageQueue.addAtBack(selectedMessage);
 				}
 				updateMessageQueueList(messageList);
+				updateRecoveryStackList(list_1);
 				selectedMessage = MessageFactory.makeMessage(selectedMessageType);
 			}
 		});
@@ -1085,33 +1091,33 @@ public class GUI extends JFrame {
 //		tbox_sensorData.setColumns(10);
 //		tbox_sensorData.setBounds(108, 48, 86, 20);
 //		panel_depthMotorData.add(tbox_sensorData);
-		
+
 		JPanel panel_4 = new JPanel();
 		panel_4.setBackground(new Color(70, 130, 180));
 		panel_4.setLayout(null);
-		
+
 		JLabel lblImuReadings = new JLabel("IMU Readings:");
 		lblImuReadings.setForeground(Color.WHITE);
 		lblImuReadings.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblImuReadings.setBounds(10, 51, 88, 14);
 		panel_4.add(lblImuReadings);
-		
+
 		tbox_imuData = new JTextField();
 		tbox_imuData.setColumns(10);
 		tbox_imuData.setBounds(108, 48, 86, 20);
 		panel_4.add(tbox_imuData);
-		
+
 		JLabel lblCameraAngle = new JLabel("Camera Angle:");
 		lblCameraAngle.setForeground(Color.WHITE);
 		lblCameraAngle.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblCameraAngle.setBounds(10, 76, 88, 14);
 		panel_4.add(lblCameraAngle);
-		
+
 		tbox_cameraAngleData = new JTextField();
 		tbox_cameraAngleData.setColumns(10);
 		tbox_cameraAngleData.setBounds(108, 73, 86, 20);
 		panel_4.add(tbox_cameraAngleData);
-		
+
 		JLabel lblSensordata = new JLabel("Sensor Data");
 		lblSensordata.setForeground(Color.WHITE);
 		lblSensordata.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -1120,38 +1126,38 @@ public class GUI extends JFrame {
 
 		GroupLayout gl_panel_robotData = new GroupLayout(panel_robotData);
 		gl_panel_robotData.setHorizontalGroup(
-			gl_panel_robotData.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_robotData.createSequentialGroup()
-					.addGap(26)
-					.addGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel_leftMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_scoopMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_winchMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel_rightMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_depthMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(26, Short.MAX_VALUE))
+				gl_panel_robotData.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_robotData.createSequentialGroup()
+								.addGap(26)
+								.addGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
+										.addComponent(panel_leftMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
+										.addComponent(panel_scoopMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
+										.addComponent(panel_winchMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addGroup(gl_panel_robotData.createParallelGroup(Alignment.LEADING)
+										.addComponent(panel_rightMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
+										.addComponent(panel_depthMotorData, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE)
+										.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 360, GroupLayout.PREFERRED_SIZE))
+								.addContainerGap(26, Short.MAX_VALUE))
 		);
 		gl_panel_robotData.setVerticalGroup(
-			gl_panel_robotData.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_robotData.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panel_robotData.createParallelGroup(Alignment.TRAILING)
+				gl_panel_robotData.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_robotData.createSequentialGroup()
-							.addComponent(panel_leftMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_scoopMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_winchMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panel_robotData.createSequentialGroup()
-							.addComponent(panel_rightMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_depthMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap())
+								.addContainerGap()
+								.addGroup(gl_panel_robotData.createParallelGroup(Alignment.TRAILING)
+										.addGroup(gl_panel_robotData.createSequentialGroup()
+												.addComponent(panel_leftMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(panel_scoopMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(panel_winchMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE))
+										.addGroup(gl_panel_robotData.createSequentialGroup()
+												.addComponent(panel_rightMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(panel_depthMotorData, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)))
+								.addContainerGap())
 		);
 		panel_leftMotorData.setLayout(null);
 
@@ -1286,7 +1292,19 @@ public class GUI extends JFrame {
 			listItem += msg.getType().toString() + ": ";
 			listItem += msg.getMessageString();
 			model.addElement(listItem);
+		}
+	}
 
+	private void updateRecoveryStackList(JList<String> list_1){
+		recovery_model.clear();
+		for (int i = 0; i<recoveryStack.getSize();i++){
+			Message msg = recoveryStack.peekAtIndex(i);
+			String listItem = "";
+			listItem += "(" + i + ") ";
+			listItem += msg.getType().toString() + ": ";
+			listItem += msg.getMessageString();
+//			recovery_model.addElement(listItem);
+			recovery_model.add(0, listItem);
 		}
 	}
 
@@ -1414,7 +1432,7 @@ public class GUI extends JFrame {
 		initialize(messageQueue);
 	}
 
-//	private void updateDataBoxes()
+	//	private void updateDataBoxes()
 	public static void updateAutonomyQueue(MessageQueue q){
 		MessageType stopMessageType = MessageType.MSG_STOP;
 		Message stopMessage = new MsgStop();
