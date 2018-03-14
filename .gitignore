@@ -4,6 +4,7 @@
 *.pyc 
 *.exe
 *.metadata
+IBEx/ControlStation/classes/production/
 
 
 # Unwanted repo named stuff #
