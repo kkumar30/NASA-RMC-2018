@@ -1,0 +1,257 @@
+<html>
+	<head>
+		<title>Ibex Control Station</title>
+		<meta charset="utf-8">
+	<!--	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='css/bootstrap.min.css') }}">
+-->	
+</head>
+
+	<style>
+
+		#content {
+			margin: 0 auto;
+		}
+
+		#head_text {
+			background: black;
+			color: white;
+		}
+
+		body {
+			width: 100%;
+			background: #373737;
+			overflow-x: hidden;
+		}
+
+		button, input {
+			width: 98%;
+			height: 3em;
+		}
+
+		#btn-teleop, #btn-auto, #btn-stop {
+			width: 32%;
+			height: 10%;
+			font-size: 2em;
+		}
+
+		#vid {
+			padding-top: 10%
+			border-radius: 15px;
+		}
+
+		td, th {
+			font-size: 0.9em;
+		}
+
+	</style>
+
+	<body>
+		<div id="content">
+			<div class="row">
+				<div id="head_text" class="col-sm-12">
+					<center><h1>Ibex Control Station</h1></center>
+
+				</div>
+			</div>
+			
+			<div class="row">
+				
+				<!-- <div class="col-sm-6 well">
+					<button type="button" class="btn btn-info" onclick="consoleBreak()">Add Console Break</button>
+
+					<span id="driveMode"><h2>Mode: Stopped</h2></span>
+
+					<button id="btn-teleop" type="button" class="btn btn-success" onclick="teleopMode()"><b>Teleoperate</b></button>
+					<button id="btn-auto" type="button" class="btn btn-warning" onclick="autonomousMode()"><b>Autonomous</b></button>
+					<button id="btn-stop" type="button" class="btn btn-danger" onclick="robotStop()"><b>STOP</b></button>
+
+					<div class="row">
+						<br>
+					</div>
+									
+					
+
+					<h2>Robot Data:</h2>
+
+					<table class="table table-bordered">
+						<thead>
+					    <tr>
+					      <th scope="col">ID</th>
+					      <th scope="col">Current (A)</th>
+					      <th scope="col">Temp. (&deg;F)</th>
+					      <th scope="col">Speed (RPM)</th>
+					      <th scope="col">Position (ticks)</th>
+					      <th scope="col">Setpoint</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					    <tr>
+					      <th scope="row" id="m1_id"></th>
+					      <td id="m1_curr"></td>
+					      <td id="m1_temp"></td>
+					      <td id="m1_speed"></td>
+					      <td id="m1_pos"></td>
+					      <td id="m1_setp"></td>
+					    </tr>
+					    <tr>
+					      <th scope="row" id="m2_id"></th>
+					      <td id="m2_curr"></td>
+					      <td id="m2_temp"></td>
+					      <td id="m2_speed"></td>
+					      <td id="m2_pos"></td>
+					      <td id="m2_setp"></td>
+					    </tr>
+					    <tr>
+					      <th scope="row" id="m3_id"></th>
+					      <td id="m3_curr"></td>
+					      <td id="m3_temp"></td>
+					      <td id="m3_speed"></td>
+					      <td id="m3_pos"></td>
+					      <td id="m3_setp"></td>
+					    </tr>
+					    <tr>
+					      <th scope="row" id="m4_id"></th>
+					      <td id="m4_curr"></td>
+					      <td id="m4_temp"></td>
+					      <td id="m4_speed"></td>
+					      <td id="m4_pos"></td>
+					      <td id="m4_setp"></td>
+					    </tr>
+					    <tr>
+					      <th scope="row" id="m5_id"></th>
+					      <td id="m5_curr"></td>
+					      <td id="m5_temp"></td>
+					      <td id="m5_speed"></td>
+					      <td id="m5_pos"></td>
+					      <td id="m5_setp"></td>
+					    </tr>
+					  </tbody>
+					</table>
+
+				</div>
+				-->
+				<div class="col-sm-12">
+					<div class="well">
+
+						<center>
+
+						<h2>Camera Feed</h2>
+
+						<button type="button" class="btn btn-success" onclick="showVideo()">Show Feed</button>
+						<button type="button" class="btn btn-warning" onclick="hideVideo()">Hide Feed</button>
+						
+						<div class="row">
+							<br>
+						</div>				
+						
+						<img id="vid" src="{{ url_for('video_feed') }}" width="100%">
+
+						</center>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+
+	<script>
+
+		// init();
+
+		// var m1_fields = ["m1_id", "m1_curr", "m1_temp", "m1_speed", "m1_pos", "m1_setp"];
+		// var m2_fields = ["m2_id", "m2_curr", "m2_temp", "m2_speed", "m2_pos", "m2_setp"];
+		// var m3_fields = ["m3_id", "m3_curr", "m3_temp", "m3_speed", "m3_pos", "m3_setp"];
+		// var m4_fields = ["m4_id", "m4_curr", "m4_temp", "m4_speed", "m4_pos", "m4_setp"];
+		// var m5_fields = ["m5_id", "m5_curr", "m5_temp", "m5_speed", "m5_pos", "m5_setp"];
+
+		// var currMode = "<h2>Mode: Stopped</h2>"
+
+		// function init(){
+		// 	record();
+		// 	var feed = document.getElementById("vid");
+		// 	feed.style.display ='none';
+		// }
+
+		// function hideVideo(){
+		// 	var feed = document.getElementById("vid");
+		// 	feed.style.display ='none';
+		// }
+
+		// function showVideo(){
+		// 	var feed = document.getElementById("vid");
+		// 	feed.style.display ='block';
+		// }
+
+		// function somefunction(){
+		// 	//YOU CAN CREATE SEPERATE JAVASCRIPT FILES IN 'STATIC' FOLDER AND CALL THEM HERE
+		// 	//ADD THOSE JS FILES IN THE BUNDLE ON PYTHON FILE
+		// }
+
+		// function fillData(){
+		// 	var data = getMotorData()
+
+		// 	setTimeout(function(){
+
+		// 		document.getElementById(m1_fields[0]).innerText = data[0][0];
+		// 		document.getElementById(m1_fields[1]).innerText = data[0][1];
+		// 		document.getElementById(m1_fields[2]).innerText = data[0][2];
+		// 		document.getElementById(m1_fields[3]).innerText = data[0][4];
+		// 		document.getElementById(m1_fields[4]).innerText = data[0][5];
+		// 		document.getElementById(m1_fields[5]).innerText = data[0][6];
+
+		// 		document.getElementById(m2_fields[0]).innerText = data[1][0];
+		// 		document.getElementById(m2_fields[1]).innerText = data[1][1];
+		// 		document.getElementById(m2_fields[2]).innerText = data[1][2];
+		// 		document.getElementById(m2_fields[3]).innerText = data[1][4];
+		// 		document.getElementById(m2_fields[4]).innerText = data[1][5];
+		// 		document.getElementById(m2_fields[5]).innerText = data[1][6];
+
+		// 		document.getElementById(m3_fields[0]).innerText = data[2][0];
+		// 		document.getElementById(m3_fields[1]).innerText = data[2][1];
+		// 		document.getElementById(m3_fields[2]).innerText = data[2][2];
+		// 		document.getElementById(m3_fields[3]).innerText = data[2][4];
+		// 		document.getElementById(m3_fields[4]).innerText = data[2][5];
+		// 		document.getElementById(m3_fields[5]).innerText = data[2][6];
+
+		// 		document.getElementById(m4_fields[0]).innerText = data[3][0];
+		// 		document.getElementById(m4_fields[1]).innerText = data[3][1];
+		// 		document.getElementById(m4_fields[2]).innerText = data[3][2];
+		// 		document.getElementById(m4_fields[3]).innerText = data[3][4];
+		// 		document.getElementById(m4_fields[4]).innerText = data[3][5];
+		// 		document.getElementById(m4_fields[5]).innerText = data[3][6];
+
+		// 		document.getElementById(m5_fields[0]).innerText = data[4][0];
+		// 		document.getElementById(m5_fields[1]).innerText = data[4][1];
+		// 		document.getElementById(m5_fields[2]).innerText = data[4][2];
+		// 		document.getElementById(m5_fields[3]).innerText = data[4][4];
+		// 		document.getElementById(m5_fields[4]).innerText = data[4][5];
+		// 		document.getElementById(m5_fields[5]).innerText = data[4][6];
+
+		// 	}, 500);
+
+		// }
+
+		// var frameCount = 0;
+		
+		// function setup(){
+
+		// }
+
+		// function draw(){
+		// 	if(frameCount >= 10000){
+		// 		frameCount = 0;
+		// 	}
+
+		// 	if(frameCount % 600 == 0){
+		// 		fillData()								
+		// 	}
+
+		// 	if(frameCount % 10 == 0){
+		// 		document.getElementById("driveMode").innerHTML = currMode;
+		// 	}
+		// }
+
+	</script>
+
+</html>

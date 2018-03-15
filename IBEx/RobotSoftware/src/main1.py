@@ -1,15 +1,14 @@
-import time
+import time, os, base64
 import cv2
 import copy
 import SocketServer
 import threading
 import pygame
 from threading import Thread
-
+import socket
 import Constants as CONSTANTS
 from Constants import LOGGER
 import MotorModes as MOTOR_MODES
-
 from Motor import Motor
 from MotorHandler import MotorHandler
 from Sensor import Sensor
@@ -25,7 +24,7 @@ from Servo import Servo
 from TargetPipeline import TargetFinder
 from AngleWithTarget import center
 import BeepCodes as BEEPCODES
-
+from scipy.interpolate import interp1d
 from time import gmtime, strftime
 #from main import inboundMessageQueue
 
@@ -42,6 +41,10 @@ motorHandlerLock = threading.Lock()
 #cameraHandlerLock = threading.Lock()
 #LOGGER.Low("Motor Handler Lock: " + str(motorHandlerLock))
 
+joyMap = interp1d([-1.0,1.0],[-0.5,0.5])
+def marioThread():
+    while True:
+        BEEPCODES.mario()
 
 def motorCommunicationThread():
     while True:
@@ -110,9 +113,9 @@ if CONSTANTS.USING_NETWORK_COMM:
 LOGGER.Debug("Initializing motor objects...")
 leftDriveMotor       = Motor("LeftDriveMotor",       CONSTANTS.LEFT_DRIVE_DEVICE_ID,       MOTOR_MODES.K_PERCENT_VBUS)
 rightDriveMotor      = Motor("RightDriveMotor",      CONSTANTS.RIGHT_DRIVE_DEVICE_ID,      MOTOR_MODES.K_PERCENT_VBUS)
-#collectorScoopsMotor = Motor("CollectorScoopsMotor", CONSTANTS.COLLECTOR_SCOOPS_DEVICE_ID, MOTOR_MODES.K_PERCENT_VBUS)
-#collectorDepthMotor  = Motor("CollectorDepthMotor",  CONSTANTS.COLLECTOR_DEPTH_DEVICE_ID,  MOTOR_MODES.K_PERCENT_VBUS)
-#winchMotor           = Motor("WinchMotor",           CONSTANTS.WINCH_DEVICE_ID,            MOTOR_MODES.K_PERCENT_VBUS)
+collectorScoopsMotor = Motor("CollectorScoopsMotor", CONSTANTS.COLLECTOR_SCOOPS_DEVICE_ID, MOTOR_MODES.K_PERCENT_VBUS)
+collectorDepthMotor  = Motor("CollectorDepthMotor",  CONSTANTS.COLLECTOR_DEPTH_DEVICE_ID,  MOTOR_MODES.K_PERCENT_VBUS)
+winchMotor           = Motor("WinchMotor",           CONSTANTS.WINCH_DEVICE_ID,            MOTOR_MODES.K_PERCENT_VBUS)
 
 # initialize motor handler and add motors
 
@@ -217,6 +220,14 @@ if CONSTANTS.USING_SENSOR_BOARD:
     sensorCommThread.daemon = True
     sensorCommThread.start()
 
+marioThreadThread = Thread(target=marioThread)
+marioThreadThread.daemon = True
+marioThreadThread.start()
+
+def tankDrive(joyRead1, joyRead2):
+    leftDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyRead1)
+    rightDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, joyRead2)
+    
 
 # final line before entering main loop
 robotEnabled = True
@@ -295,7 +306,7 @@ while robotEnabled:
             elif(currentMessage.type == "MSG_DEPTH_TIME"):
                 LOGGER.Debug("Received a MSG_DEPTH_TIME")
 
-            elif(currentMessage.type == "MSG_BUCKET_TIME"):
+            elif(currentMessage.type == "MSG_ROTATE_TO_CENTER"):
                 LOGGER.Debug("Received a MSG_BUCKET_TIME")
                 currAngle = 0
                 turned = False
@@ -314,7 +325,7 @@ while robotEnabled:
                 LOGGER.Low("SENT MESSAGE TO RESET")
                 motorHandlerLock.release()
 
-            elif(currentMessage.type == "MSG_BUCKET_POSITION"):
+            elif(currentMessage.type == "MSG_GET_TARGET"):
                 #winchMotor.setMode(MOTOR_MODES.K_POSITION)
                 #winchEncoderResetFlag = True
                 #LOGGER.Low("Acquiring Lock")
@@ -322,12 +333,14 @@ while robotEnabled:
                 #motorSerialHandler.sendMessage("<ResetWinchEncoder>\n")
                 #motorHandlerLock.release()
                 LOGGER.Low("Releasing Lock")
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
 
             elif(currentMessage.type == "MSG_MOTOR_VALUES"):
                 LOGGER.Debug("Received a MSG_MOTOR_VALUES")
                 print "MADE IT 1"
 
-            elif(currentMessage.type == "MSG_RATCHET_POSITION"):
+            elif(currentMessage.type == "MSG_ROTATE_TO_PERPENDICULAR"):
                 LOGGER.Debug("Received a MSG_RATCHET_POSITION")
                 currAngle = 0
                 turned = False
@@ -420,7 +433,7 @@ while robotEnabled:
         # Data 0: The time in seconds the bucket motor should run
         # Data 1: The power/speed to run the motor at
         #
-        elif(currentMessage.type == "MSG_BUCKET_TIME"):
+        elif(currentMessage.type == "MSG_ROTATE_TO_CENTER"):
             #currentMessage.printMessage()
             if not turned:
                 if side == "Left":
@@ -542,7 +555,7 @@ while robotEnabled:
                 outboundMessageQueue.add("Finished\n")
 
 
-        elif(currentMessage.type == "MSG_BUCKET_POSITION"):
+        elif(currentMessage.type == "MSG_GET_TARGET"):
             if camServo.getSetpoint()<180 and not foundTarget:
                 camServo.setSetpoint(camServo.getSetpoint()+1)
 
@@ -557,6 +570,17 @@ while robotEnabled:
                     print "Num of Contours: ", len(contours)
                     if len(contours) == 2:
                         cv2.imwrite("Contours.jpg", frame)
+                        time.sleep(.3)
+                        sock.connect((CONSTANTS.CONTROL_STATION_IP, 11001))
+ 
+                        #SIZE = os.path.getsize("Contours.jpg")
+                        #print "Size of image: "+ str(SIZE)
+                        #contentStr = base64.b64encode(content)                     
+                        #sock.send(contentStr)
+ 
+                        #size = len(content)
+                        #sock.send(str(size)+"\n")
+                      
                         targetAngle = float(camServo.getSetpoint())
                         side = center(contours)
                         foundTarget = True
@@ -572,6 +596,17 @@ while robotEnabled:
                 if not foundTarget:
                     LOGGER.Debug("COULD NOT FIND TARGET")
                 cap.release()
+                file = open("Contours.jpg", 'r+b')
+                content = file.read()
+                file.close()
+                SIZE = os.path.getsize("Contours.jpg")
+                while content:
+                    current = content[:SIZE]
+                    content = content[SIZE:]                           
+                    sock.send(current)
+                sock.close()
+#                sock.send(content)
+
            # currentMessage.printMessage()
            # positionVal = currentMessage.messageData[0]
            # LOGGER.Low("Check Setpoint: " + str(positionVal))
@@ -590,7 +625,7 @@ while robotEnabled:
                 outboundMessageQueue.add("Finished\n")
 
         elif(currentMessage.type == "MSG_MOTOR_VALUES"):
-            leftDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, currentMessage.messageData[0])
+            tankDrive(currentMessage.messageData[0],currentMessage.messageData[1])
             #rightDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS,currentMessage.messageData[1])
             #collectorScoopsMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS,currentMessage.messageData[2])
             #collectorDepthMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS,currentMessage.messageData[3])

@@ -14,19 +14,20 @@ class Sensor:
 
 	def update(self, update_info):
 		# message contains info for all motors, need to parse info specific to this motor
-		matchList = re.findall(r'<([A-Za-z_]\w+):(\d+)>', update_info, re.M|re.I)
+		matchList = re.findall(r'<([A-Za-z_]\w+):(\-?\d+\.\d+)>', update_info, re.M|re.I)
 
 		# check each match to see if this contains data for this motor controller
 		for match in matchList:
 
 			# match has enough data elements to contain valid data
-			if(len(match) >= 2):
-
-				# be ready to throw an error if any data is incorrect
+			if(len(match) >= 2):# be ready to throw an error if any data is incorrect
+				# print "In Here"
+				#print match[0], match[1]
 				try:
 					#try to read all the values before assigning anything
 					msg_sensor_name = str(match[0])
-					msg_sensor_value = int(match[1])
+					msg_sensor_value = float(match[1])
+
 
 					if(msg_sensor_name == self.sensor_name):
 						self.value = msg_sensor_value
@@ -35,6 +36,6 @@ class Sensor:
 
 	def getNetworkMessage(self):
 		msg = "<"
-		msg += self.sensor_name + ":"
-		msg += str(self.value) + ">"
+		msg += self.sensor_name+":"
+		msg += str(self.value)+">"
 		return msg
