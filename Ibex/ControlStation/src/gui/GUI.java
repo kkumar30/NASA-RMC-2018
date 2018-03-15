@@ -110,6 +110,7 @@ public class GUI extends JFrame {
 	private JTextField tbox_data5;
 	private JTextField tbox_data6;
 	private JTextField tbox_data7;
+	private JList<String> list_1;
 	private static JTextField tbox_leftMotorID;
 	private static JTextField tbox_leftMotorCurrent;
 	private static JTextField tbox_leftMotorVoltage;
@@ -211,40 +212,123 @@ public class GUI extends JFrame {
 		panel_1.setBackground(Color.DARK_GRAY);
 		JLabel lblStatus = new JLabel("Status:");
 		lblStatus.setForeground(Color.WHITE);
+		
+		JButton pingButton = new JButton("Ping");
+		pingButton.setBackground(new Color(100, 149, 237));
+		pingButton.setForeground(Color.WHITE);
+		pingButton.setFont(new Font("Tahoma", Font.BOLD, 20));
+		pingButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		
+				JButton btnClearAll = new JButton("Teleop");//"Clear all"
+				btnClearAll.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+					}
+				});
+				btnClearAll.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						messageQueue.clear();
+						Message msg_teleop = new MsgMotorValues();
+						messageQueue.addAtFront(msg_teleop);
+						updateMessageQueueList(messageList);
+						updateRecoveryStackList(list_1);
+						selectedMessage = MessageFactory.makeMessage(selectedMessageType);
+
+					}
+				});
+				btnClearAll.setBackground(new Color(255, 165, 0));
+				btnClearAll.setForeground(new Color(255, 255, 255));
+				btnClearAll.setFont(new Font("Tahoma", Font.BOLD, 20));
+		
+				JButton btnStartQueue = new JButton("START");
+				btnStartQueue.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent arg0) {
+						if (!runServer) {
+							server.startServer();
+						}
+						runServer = true;
+					}
+				});
+				btnStartQueue.setFont(new Font("Tahoma", Font.BOLD, 20));
+				btnStartQueue.setBackground(new Color(154, 205, 50));
+				btnStartQueue.setForeground(new Color(255, 255, 255));
+		
+				JButton btnStop = new JButton("STOP");
+				btnStop.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					}
+				});
+				btnStop.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent arg0) {
+						if (runServer) {
+							try {
+								server.stopServer();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+						runServer = false;
+					}
+				});
+				btnStop.setFont(new Font("Tahoma", Font.BOLD, 20));
+				btnStop.setForeground(new Color(255, 255, 255));
+				btnStop.setBackground(new Color(205, 92, 92));
 
 
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-								.addContainerGap()
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addGroup(groupLayout.createSequentialGroup()
-												.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 787, GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(imagepanel, GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE))
-										.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(lblStatus))
-								.addContainerGap())
+							.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 787, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(imagepanel, GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+										.addComponent(btnStartQueue, GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+										.addComponent(pingButton, GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(btnStop, GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+										.addComponent(btnClearAll, GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)))))
+						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 1274, Short.MAX_VALUE)
+						.addComponent(lblStatus))
+					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
-				groupLayout.createParallelGroup(Alignment.TRAILING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addGroup(groupLayout.createSequentialGroup()
-												.addContainerGap()
-												.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-												.addComponent(lblStatus))
-										.addGroup(groupLayout.createSequentialGroup()
-												.addGap(32)
-												.addComponent(imagepanel, GroupLayout.PREFERRED_SIZE, 314, GroupLayout.PREFERRED_SIZE)))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
-								.addContainerGap())
+							.addContainerGap()
+							.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(32)
+							.addComponent(imagepanel, GroupLayout.PREFERRED_SIZE, 314, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(pingButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnClearAll, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(btnStop, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+								.addComponent(btnStartQueue, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblStatus)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
 		);
 
-		JList<String> list_1 = new JList<String>(recovery_model);
+		list_1 = new JList<String>(recovery_model);
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 		gl_panel_1.setHorizontalGroup(
 				gl_panel_1.createParallelGroup(Alignment.LEADING)
@@ -295,92 +379,24 @@ public class GUI extends JFrame {
 		btnRemoveSelected.setForeground(new Color(255, 255, 255));
 		btnRemoveSelected.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnRemoveSelected.setPreferredSize(new Dimension(100, 100));
-
-		JButton btnClearAll = new JButton("Teleop");//"Clear all"
-		btnClearAll.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		btnClearAll.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				messageQueue.clear();
-				Message msg_teleop = new MsgMotorValues();
-				messageQueue.addAtFront(msg_teleop);
-				updateMessageQueueList(messageList);
-				updateRecoveryStackList(list_1);
-				selectedMessage = MessageFactory.makeMessage(selectedMessageType);
-
-			}
-		});
-		btnClearAll.setBackground(new Color(255, 165, 0));
-		btnClearAll.setForeground(new Color(255, 255, 255));
-		btnClearAll.setFont(new Font("Tahoma", Font.BOLD, 20));
-
-		JButton btnStop = new JButton("STOP");
-		btnStop.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnStop.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				if (runServer) {
-					try {
-						server.stopServer();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				runServer = false;
-			}
-		});
-		btnStop.setFont(new Font("Tahoma", Font.BOLD, 20));
-		btnStop.setForeground(new Color(255, 255, 255));
-		btnStop.setBackground(new Color(205, 92, 92));
-
-		JButton btnStartQueue = new JButton("START");
-		btnStartQueue.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				if (!runServer) {
-					server.startServer();
-				}
-				runServer = true;
-			}
-		});
-		btnStartQueue.setFont(new Font("Tahoma", Font.BOLD, 20));
-		btnStartQueue.setBackground(new Color(154, 205, 50));
-		btnStartQueue.setForeground(new Color(255, 255, 255));
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
-				gl_panel_2.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_2.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(messageList, GroupLayout.PREFERRED_SIZE, 616, GroupLayout.PREFERRED_SIZE)
-								.addGap(13)
-								.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
-										.addComponent(btnStop, GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-										.addComponent(btnStartQueue, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-										.addComponent(btnClearAll, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-										.addComponent(btnRemoveSelected, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE))
-								.addContainerGap())
+			gl_panel_2.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_2.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(messageList, GroupLayout.PREFERRED_SIZE, 616, GroupLayout.PREFERRED_SIZE)
+					.addGap(13)
+					.addComponent(btnRemoveSelected, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
 		);
 		gl_panel_2.setVerticalGroup(
-				gl_panel_2.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_2.createSequentialGroup()
-								.addContainerGap()
-								.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_panel_2.createSequentialGroup()
-												.addComponent(btnRemoveSelected, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(btnClearAll, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(btnStop, GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(btnStartQueue, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE))
-										.addComponent(messageList, GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE))
-								.addContainerGap())
+			gl_panel_2.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_2.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnRemoveSelected, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
+						.addComponent(messageList, GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE))
+					.addContainerGap())
 		);
 		panel_2.setLayout(gl_panel_2);
 
@@ -1463,8 +1479,8 @@ public class GUI extends JFrame {
 		/**********Stage 1**************/
 		q.addAtBack(findTarget);
 		q.addAtBack(alignWithBorder);
-//		q.addAtBack(driveToBorder);
-//		q.addAtBack(rotateToStraight);
+		q.addAtBack(driveToBorder);
+		q.addAtBack(rotateToStraight);
 		q.addAtBack(stopMessage);
 		/*******************************/
 //

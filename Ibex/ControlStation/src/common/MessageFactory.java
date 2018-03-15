@@ -15,12 +15,12 @@ public class MessageFactory
 	   else if(type == MessageType.MSG_ROTATE_TIME) { return new MsgRotateTime(); }
 	   else if(type == MessageType.MSG_SCOOP_TIME) { return new MsgScoopTime(); }
 	   //else if(type == MessageType.MSG_SCOOP_DISTANCE) { return new MsgScoopDistance(); }
-	   else if(type == MessageType.MSG_BUCKET_TIME) { return new MsgBucketTime(); }
+	   else if(type == MessageType.MSG_ROTATE_TO_CENTER) { return new MsgBucketTime(); }
 	   //else if(type == MessageType.MSG_BUCKET_DISTANCE) { return new MsgBucketDistance(); }
-	   else if(type == MessageType.MSG_BUCKET_POSITION) { return new MsgBucketPosition(); }
+	   else if(type == MessageType.MSG_GET_TARGET) { return new MsgBucketPosition(); }
 	   //else if(type == MessageType.MSG_STOP_TIME) { return new MsgStopTime(); }
 	   else if(type == MessageType.MSG_MOTOR_VALUES) { return new MsgMotorValues(); }
-	   else if(type == MessageType.MSG_RATCHET_POSITION) { return new MsgRatchetPosition(); }
+	   else if(type == MessageType.MSG_ROTATE_TO_PERPENDICULAR) { return new MsgRatchetPosition(); }
       
       return null;
    }

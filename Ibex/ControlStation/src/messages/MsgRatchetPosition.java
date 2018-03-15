@@ -13,7 +13,7 @@ public class MsgRatchetPosition extends AbsMessage
 	public MsgRatchetPosition(double position)
 	{
 		super();
-		setType(MessageType.MSG_RATCHET_POSITION);
+		setType(MessageType.MSG_ROTATE_TO_PERPENDICULAR);
 		setSize(1);
 		setInfo("Moving ratchet to position: " + position + "\n");
 		

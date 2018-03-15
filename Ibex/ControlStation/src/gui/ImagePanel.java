@@ -17,7 +17,6 @@ public class ImagePanel extends JPanel{
     {
        try 
        {                
-
           image = ImageIO.read(new File("pictures/ibex.png"));
        } 
 

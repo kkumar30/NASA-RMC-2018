@@ -14,7 +14,7 @@ public class MsgBucketPosition extends AbsMessage
 	public MsgBucketPosition(double position, double speed)
 	{
 		super();
-		setType(MessageType.MSG_BUCKET_POSITION);
+		setType(MessageType.MSG_GET_TARGET);
 		setSize(2);
 		setInfo("Moving winch to position" + position + "m at speed:" + speed + "\n");
 		
