@@ -142,7 +142,7 @@ class TargetFinder:
             M = cv2.moments(contour)
             cX = int(M["m10"]/M["m00"])
             cY = int(M["m01"]/M["m00"])
-            cv2.putText(source0, "Area: "+str(w*h), (cX-20,cY-20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255),2)
+            cv2.putText(source0, "Area: "+str(w*h), (cX-80,cY-80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255),2)
 
 
         return output

@@ -1,7 +1,7 @@
 class Servo:
 
     def __init__(self):
-	self.setpoint = 90
+	self.setpoint = 0
 
     def getSetpoint(self):
 	return self.setpoint

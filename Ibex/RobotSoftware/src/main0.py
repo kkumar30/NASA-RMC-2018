@@ -63,9 +63,9 @@ def ceaseAllMotorFunctions():
 	#Stop all motors
 	leftDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
 	rightDriveMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
-	collectorDepthMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
-	collectorScoopsMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
-	winchMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
+	#collectorDepthMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
+	#collectorScoopsMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
+	#winchMotor.setSetpoint(MOTOR_MODES.K_PERCENT_VBUS, 0.0)
 
 #initialize handlers
 LOGGER.Debug("Initializing handlers...")
@@ -101,17 +101,17 @@ currentMessage = NetworkMessage("")
 LOGGER.Debug("Initializing motor objects...")
 leftDriveMotor       = Motor("LeftDriveMotor",       CONSTANTS.LEFT_DRIVE_DEVICE_ID,       MOTOR_MODES.K_PERCENT_VBUS)
 rightDriveMotor      = Motor("RightDriveMotor",      CONSTANTS.RIGHT_DRIVE_DEVICE_ID,      MOTOR_MODES.K_PERCENT_VBUS)
-collectorScoopsMotor = Motor("CollectorScoopsMotor", CONSTANTS.COLLECTOR_SCOOPS_DEVICE_ID, MOTOR_MODES.K_PERCENT_VBUS)
-collectorDepthMotor  = Motor("CollectorDepthMotor",  CONSTANTS.COLLECTOR_DEPTH_DEVICE_ID,  MOTOR_MODES.K_PERCENT_VBUS)
-winchMotor           = Motor("WinchMotor",           CONSTANTS.WINCH_DEVICE_ID,            MOTOR_MODES.K_PERCENT_VBUS)
+#collectorScoopsMotor = Motor("CollectorScoopsMotor", CONSTANTS.COLLECTOR_SCOOPS_DEVICE_ID, MOTOR_MODES.K_PERCENT_VBUS)
+#collectorDepthMotor  = Motor("CollectorDepthMotor",  CONSTANTS.COLLECTOR_DEPTH_DEVICE_ID,  MOTOR_MODES.K_PERCENT_VBUS)
+#winchMotor           = Motor("WinchMotor",           CONSTANTS.WINCH_DEVICE_ID,            MOTOR_MODES.K_PERCENT_VBUS)
 
 # initialize motor handler and add motors
 LOGGER.Debug("Linking motors to motor handler...")
 motorHandler.addMotor(leftDriveMotor)
 motorHandler.addMotor(rightDriveMotor)
-motorHandler.addMotor(collectorScoopsMotor)
-motorHandler.addMotor(collectorDepthMotor)
-motorHandler.addMotor(winchMotor)
+#motorHandler.addMotor(collectorScoopsMotor)
+#motorHandler.addMotor(collectorDepthMotor)
+#motorHandler.addMotor(winchMotor)
 
 # initialize encoder reset flags
 driveEncoderResetFlag = False
@@ -121,13 +121,13 @@ winchEncoderResetFlag = False
 
 # initialize sensors
 LOGGER.Debug("Initializing sensor objects...")
-leftDriveCurrentSense = Sensor("LeftDriveCurrentSense")
-rightDriveCurrentSense = Sensor("RightDriveCurrentSense")
-collectorDepthCurrentSense = Sensor("CollectorDepthCurrentSense")
-collectorScoopsCurrentSense = Sensor("CollectorScoopsCurrentSense")
-winchMotorCurrentSense = Sensor("WinchMotorCurrentSense")
-scoopReedSwitch = Sensor("ScoopReedSwitch")
-bucketMaterialDepthSense = Sensor("BucketMaterialDepthSense")
+imuReading = Sensor("IMUReading")
+#rightDriveCurrentSense = Sensor("RightDriveCurrentSense")
+#collectorDepthCurrentSense = Sensor("CollectorDepthCurrentSense")
+#collectorScoopsCurrentSense = Sensor("CollectorScoopsCurrentSense")
+#winchMotorCurrentSense = Sensor("WinchMotorCurrentSense")
+#scoopReedSwitch = Sensor("ScoopReedSwitch")
+#bucketMaterialDepthSense = Sensor("BucketMaterialDepthSense")
 
 #initialize servos
 ratchetServo = Servo()
@@ -138,13 +138,13 @@ camServo4 = Servo()
 
 # initialize sensor handler and add sensors
 LOGGER.Debug("Linking sensor objects to sensor handler...")
-sensorHandler.addSensor(leftDriveCurrentSense)
-sensorHandler.addSensor(rightDriveCurrentSense)
-sensorHandler.addSensor(collectorDepthCurrentSense)
-sensorHandler.addSensor(collectorScoopsCurrentSense)
-sensorHandler.addSensor(winchMotorCurrentSense)
-sensorHandler.addSensor(scoopReedSwitch)
-sensorHandler.addSensor(bucketMaterialDepthSense)
+sensorHandler.addSensor(imuReading)
+#sensorHandler.addSensor(rightDriveCurrentSense)
+#sensorHandler.addSensor(collectorDepthCurrentSense)
+#sensorHandler.addSensor(collectorScoopsCurrentSense)
+#sensorHandler.addSensor(winchMotorCurrentSense)
+#sensorHandler.addSensor(scoopReedSwitch)
+#sensorHandler.addSensor(bucketMaterialDepthSense)
 
 sensorHandler.addServo(ratchetServo)
 sensorHandler.addServo(camServo1)
@@ -210,6 +210,7 @@ while robotEnabled:
 			try:
 				if(outboundMessageQueue.isEmpty()):
 					networkClient.send(motorHandler.getMotorNetworkMessage()+"\n\r")
+                    networkClient.send(sensorHandler.getSensorNetworkMessage()+"\n\r")
 				else:
 					networkClient.send(outboundMessageQueue.getNext())
 				connected = True

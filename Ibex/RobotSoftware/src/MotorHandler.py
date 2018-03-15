@@ -12,14 +12,13 @@ class MotorHandler:
 		for motor in self.motors:
 			motor.update(update_msg)
 
-	#Get status message of each motor
 	def getMotorStateMessage(self):
 		msg = ""
 		for motor in self.motors:
 			msg += motor.getStateMessage()
 		msg += "\n\r"
 		return msg
-
+	
 	def getMotorNetworkMessage(self):
 		msg = ""
 		for motor in self.motors:

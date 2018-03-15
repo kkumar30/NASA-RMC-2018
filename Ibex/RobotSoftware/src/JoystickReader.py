@@ -63,8 +63,8 @@ class JoystickReader:
     def printAxes(self):
         print self.axis_y1
     def getAxisValues(self):
-       return  self.axis_y1
-        # return (self.axis_y1,self.axis_y2)
+       #return  self.axis_y1
+       return (self.axis_y1,self.axis_y2)
     def getAButton(self):
         print self.btn_a
         return self.btn_a

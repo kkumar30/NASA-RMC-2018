@@ -210,7 +210,6 @@ while robotEnabled:
 			try:
 				if(outboundMessageQueue.isEmpty()):
 					networkClient.send(motorHandler.getMotorNetworkMessage()+"\n\r")
-					networkClient.send(sensorHandler.getSensorNetworkMessage()+"\n\r")
 				else:
 					networkClient.send(outboundMessageQueue.getNext())
 				connected = True
@@ -384,7 +383,7 @@ while robotEnabled:
 
 			if(driveEncoderResetFlag):
 				ceaseAllMotorFunctions()
-				if (abs(leftDriveMotor.position) < 1) and (abs(rightDriveMotor.position) < 1):
+				if((abs(leftDriveMotor.position) < 1) and (abs(rightDriveMotor.position) < 1)):
 					LOGGER.Low("Encoders reset.")
 					driveEncoderResetFlag = False
 					leftDriveMotor.setSetpoint(MOTOR_MODES.K_POSITION, positionVal)

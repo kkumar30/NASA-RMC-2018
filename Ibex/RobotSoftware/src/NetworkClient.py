@@ -18,6 +18,7 @@ class NetworkClient:
         try:
             s.connect((self.ip_addr, self.port))
             s.send(msg_str)
+            LOGGER.Debug("Sent "+msg_str)
             data = s.recv(self.buffer_size)
             self.inboundMessageQueue.add(NetworkMessage(str(data)))
             print "Received: " + str(data)
@@ -28,7 +29,7 @@ class NetworkClient:
 
     def send(self, msg_str):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.settimeout(0.5)
+        s.settimeout(.5)
         s.connect((self.ip_addr, self.port))
         s.send(msg_str)
         data = s.recv(self.buffer_size)
