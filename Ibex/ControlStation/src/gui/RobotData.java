@@ -17,6 +17,7 @@ public class RobotData
 
 	private Sensor imu;
 	private Sensor camServo;
+	private Sensor LEDSensor;
 	
 	public RobotData()
 	{
@@ -28,6 +29,7 @@ public class RobotData
 
 		imu = new Sensor();
 		camServo = new Sensor();
+		LEDSensor = new Sensor();
 	}
 	
 	public Motor getLeftMotor() {return leftMotor;}
@@ -37,18 +39,22 @@ public class RobotData
 	public Motor getWinchMotor() {return winchMotor;}
 	public Sensor getImu() {return imu;}
 	public Sensor getCamServo() {return camServo;}
+	public Sensor getLEDSensor() {return LEDSensor;}
 
 
 	public void updateRobotData(String motorMessage, String sensorMessage)
 	{
 //		final String patternStr = "<(.+)><(.+)><(.+)><(.+)><(.+)>";
 		final String patternStr = "<(.+)><(.+)>";
+		final String SensorPatternStr = "<(.+)><(.+)><(.+)>";
 
 		Pattern pattern = Pattern.compile(patternStr);
+		Pattern sensorPattern = Pattern.compile(SensorPatternStr);
 
 		Matcher motorMatch = pattern.matcher(motorMessage);
 
-		Matcher sensorMatch = pattern.matcher(sensorMessage);
+//		Matcher sensorMatch = pattern.matcher(sensorMessage);
+		Matcher sensorMatch = sensorPattern.matcher(sensorMessage);
 		if(motorMatch.matches())
 		{
 			String leftMotorData = motorMatch.group(1);
@@ -71,6 +77,10 @@ public class RobotData
 
 			imu.updateSensorData(imuData);
 			camServo.updateSensorData(camServoData);
+
+//			For the LED ping test
+			String LEDSensorData = sensorMatch.group(3);
+			LEDSensor.updateSensorData(LEDSensorData);
 		}
 
 	}

@@ -20,6 +20,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.List;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import common.*;
 import messages.*;
 import network.CameraServer;
@@ -87,11 +88,13 @@ public class GUI extends JFrame {
 
 	private static RobotData robotData = new RobotData();
 	private static MessageQueue messageQueue = new MessageQueue();
+	private static MessageQueue pingMessageQueue = new MessageQueue();
 	private static RecoveryStack recoveryStack = new RecoveryStack();
 //	MessageQueue.
 
 	private NetworkServer server = new NetworkServer(11000, messageQueue, robotData, recoveryStack);
 	private boolean runServer = false;
+	private boolean isLEDOn = false;
 
 	private DefaultListModel<String> model = new DefaultListModel<String>();
 	private DefaultListModel<String> recovery_model = new DefaultListModel<String>();
@@ -214,12 +217,40 @@ public class GUI extends JFrame {
 		lblStatus.setForeground(Color.WHITE);
 		
 		JButton pingButton = new JButton("Ping");
-		pingButton.setBackground(new Color(100, 149, 237));
+		pingButton.setBackground(Color.GRAY);
 		pingButton.setForeground(Color.WHITE);
 		pingButton.setFont(new Font("Tahoma", Font.BOLD, 20));
 		pingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
+		});
+
+		pingButton.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						messageQueue.clear();
+						updatePingTestQueue(messageQueue);
+						updateMessageQueueList(messageList);
+						if (!runServer) {
+							server.startServer();
+						}
+
+						runServer = true;
+
+//						See the LED status
+						if (robotData.getLEDSensor().getValue().intValue()>0)
+						{
+							isLEDOn = true;
+						}
+						isLEDOn = true;
+//						TODO:Wait for the message to come and then we need to turn into green
+						if (isLEDOn){
+							pingButton.setBackground(new Color(100, 149, 237));
+							messageQueue.clear();
+							updateAutonomyQueue(messageQueue);
+							updateMessageQueueList(messageList);
+						}
+					}
 		});
 		
 				JButton btnClearAll = new JButton("Teleop");//"Clear all"
@@ -1495,5 +1526,15 @@ public class GUI extends JFrame {
 		/*Stage 2*/
 
 
+	}
+
+	public static void updatePingTestQueue(MessageQueue pq){
+		Message test_drive_motor = new MsgDriveTime(0.1, 0.2);
+//		System.out.print("Left pos=");
+		System.out.println("Left Pos:" + robotData.getLeftMotor().getPosition().intValue());
+		Message test_drive_motor_finish = new MsgRotateTime(0.1, -0.2);
+
+		pq.addAtBack(test_drive_motor);
+		pq.addAtBack(test_drive_motor_finish);
 	}
 }
