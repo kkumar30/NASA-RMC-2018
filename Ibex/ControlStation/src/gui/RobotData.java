@@ -73,13 +73,13 @@ public class RobotData
 		if(sensorMatch.matches())
 		{
 			String imuData = sensorMatch.group(1);
-			String camServoData = sensorMatch.group(2);
+			String camServoData = sensorMatch.group(3);
 
 			imu.updateSensorData(imuData);
 			camServo.updateSensorData(camServoData);
 
 //			For the LED ping test
-			String LEDSensorData = sensorMatch.group(3);
+			String LEDSensorData = sensorMatch.group(2);
 			LEDSensor.updateSensorData(LEDSensorData);
 		}
 

@@ -7,7 +7,10 @@ import common.Message;
 import common.MessageQueue;
 import common.RecoveryStack;
 import gui.RobotData;
-import gui.RobotData;
+import gui.GUI;
+
+import static gui.GUI.list_1;
+import static gui.GUI.messageList;
 
 class RequestHandler extends Thread {
 	private Socket socket;
@@ -58,17 +61,23 @@ class RequestHandler extends Thread {
 //				inboundSensorMessageStr = inFromClient.readLine();
 
 				//if (inboundSensorMessageStr != null && inboundSensorMessageStr.replace("\n\t ", "").equals("Finished")) {
+				if (entireMessageStr==null){System.out.println("Is null");}
 				if (entireMessageStr != null && entireMessageStr.replace("\n\t ", "").equals("Finished")) {
 					if (!queue.isEmpty()) {
 						Message popped;
 						popped = queue.pop();
-						if (popped == recoveryStack.peek())
+						if (popped != recoveryStack.peek())
 						{
 							recoveryStack.addAtBack(popped);
-							System.out.print("Added to Recovery Stack!:");
+							System.out.print("********************Added to Recovery Stack!:***************");
 							System.out.println(popped);
+//							GUI.recoveryStack = recoveryStack;
+							GUI.updateMessageQueueList(messageList);
+//							GUI.updateAutonomyQueue(queue);
+							GUI.updateRecoveryStackList(list_1);
 						}
 						System.out.println("Next action in Queue!");
+						System.out.println(queue.peek());
 					}
 				}
 			} catch (Exception e) {
@@ -87,7 +96,7 @@ class RequestHandler extends Thread {
 				System.out.println("Sent: " + queue.peek().getMessageString());
 				out.flush();
 			} else {
-				out.println("<0|-1>");
+				out.println("<0|-1>");  //Sending a default stop message
 				out.flush();
 			}
 			// Close our connection

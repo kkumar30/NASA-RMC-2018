@@ -20,12 +20,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.List;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import common.*;
 import messages.*;
 import network.CameraServer;
 import network.NetworkServer;
 
+//import javax.swing.Timer;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ActionListener;
@@ -44,7 +44,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.Panel;
 import java.awt.Canvas;
-
+import java.util.concurrent.TimeUnit;
 
 
 public class GUI extends JFrame {
@@ -52,6 +52,8 @@ public class GUI extends JFrame {
 	/*
 	 * Small class to handle constantly updating the robot data boxes
 	 */
+
+
 	public static class RobotDataUpdateTask extends TimerTask {
 		public RobotDataUpdateTask() {
 		};
@@ -61,6 +63,7 @@ public class GUI extends JFrame {
 
 		}
 	}
+
 
 	@SuppressWarnings("serial")
 	public class RoundJTextField extends JTextField {
@@ -87,18 +90,18 @@ public class GUI extends JFrame {
 	}
 
 	private static RobotData robotData = new RobotData();
-	private static MessageQueue messageQueue = new MessageQueue();
-	private static MessageQueue pingMessageQueue = new MessageQueue();
-	private static RecoveryStack recoveryStack = new RecoveryStack();
+	public static MessageQueue messageQueue = new MessageQueue();
+//	private static MessageQueue pingMessageQueue = new MessageQueue();
+	public static RecoveryStack recoveryStack = new RecoveryStack();
 //	MessageQueue.
 
 	private NetworkServer server = new NetworkServer(11000, messageQueue, robotData, recoveryStack);
 	private boolean runServer = false;
 	private boolean isLEDOn = false;
 
-	private DefaultListModel<String> model = new DefaultListModel<String>();
-	private DefaultListModel<String> recovery_model = new DefaultListModel<String>();
-	private JList messageList = new JList<String>(model);
+	private static DefaultListModel<String> model = new DefaultListModel<String>();
+	private static DefaultListModel<String> recovery_model = new DefaultListModel<String>();
+	public static JList messageList = new JList<String>(model);
 	private MessageType selectedMessageType = MessageType.MSG_STOP;
 	private Message selectedMessage = new MsgStop();
 	private JLabel[] messageLabels = new JLabel[8];
@@ -113,7 +116,7 @@ public class GUI extends JFrame {
 	private JTextField tbox_data5;
 	private JTextField tbox_data6;
 	private JTextField tbox_data7;
-	private JList<String> list_1;
+	public static JList<String> list_1;
 	private static JTextField tbox_leftMotorID;
 	private static JTextField tbox_leftMotorCurrent;
 	private static JTextField tbox_leftMotorVoltage;
@@ -187,6 +190,7 @@ public class GUI extends JFrame {
 
 					GUI window = new GUI(messageQueue);
 					simpleTimer.scheduleAtFixedRate(new RobotDataUpdateTask(), 1000, 500);
+//                    simpleTimer.scheduleAtFixedRate(new ModelUpdate(), 1000, 500);
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -231,25 +235,41 @@ public class GUI extends JFrame {
 						messageQueue.clear();
 						updatePingTestQueue(messageQueue);
 						updateMessageQueueList(messageList);
+
 						if (!runServer) {
 							server.startServer();
 						}
-
 						runServer = true;
 
 //						See the LED status
-						if (robotData.getLEDSensor().getValue().intValue()>0)
+//						while ((robotData.getLEDSensor().getValue().intValue()>0) && (!isLEDOn))
+						while(!isLEDOn) //was LED ever on rather than getting the real time status of the LED
 						{
-							isLEDOn = true;
+							if ((robotData.getLEDSensor().getValue().intValue() == 1)){
+								isLEDOn = true;
+								pingButton.setBackground(new Color(100, 149, 237));
+								messageQueue.clear();
+								updateMessageQueueList(messageList);
+							}
+
+
+//							System.out.print("LED inside******* = ");
+//							System.out.println((robotData.getLEDSensor().getValue().intValue()));
+							try{
+								TimeUnit.MICROSECONDS.sleep(1);
+							}
+							catch (Exception exce){
+								System.out.print(exce);
+							}
 						}
-						isLEDOn = true;
+						System.out.println("Outside");
 //						TODO:Wait for the message to come and then we need to turn into green
-						if (isLEDOn){
-							pingButton.setBackground(new Color(100, 149, 237));
-							messageQueue.clear();
-							updateAutonomyQueue(messageQueue);
-							updateMessageQueueList(messageList);
-						}
+//						if (isLEDOn){
+//							pingButton.setBackground(new Color(100, 149, 237));
+//							messageQueue.clear();
+//							updateAutonomyQueue(messageQueue);
+//							updateMessageQueueList(messageList);
+//						}
 					}
 		});
 		
@@ -278,6 +298,9 @@ public class GUI extends JFrame {
 				btnStartQueue.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent arg0) {
+						messageQueue.clear();
+						updateAutonomyQueue(messageQueue);
+						updateMessageQueueList(messageList);
 						if (!runServer) {
 							server.startServer();
 						}
@@ -1330,7 +1353,7 @@ public class GUI extends JFrame {
 
 	}
 
-	private void updateMessageQueueList(JList<String> messageList) {
+	public static void updateMessageQueueList(JList<String> messageList) {
 		model.clear();
 		for (int i = 0; i < messageQueue.getSize(); i++) {
 			Message msg = messageQueue.peekAtIndex(i);
@@ -1342,7 +1365,7 @@ public class GUI extends JFrame {
 		}
 	}
 
-	private void updateRecoveryStackList(JList<String> list_1){
+	public static void updateRecoveryStackList(JList<String> list_1){
 		recovery_model.clear();
 		for (int i = 0; i<recoveryStack.getSize();i++){
 			Message msg = recoveryStack.peekAtIndex(i);
@@ -1371,6 +1394,7 @@ public class GUI extends JFrame {
 		cbox.addItem("Stop Time");
 		cbox.addItem("Motor Values");
 		cbox.addItem("Ratchet Position");
+		cbox.addItem("Ping Test");
 	}
 
 	private void updateMessageLabels() {
@@ -1472,6 +1496,9 @@ public class GUI extends JFrame {
 
 		tbox_imuData.setText((robotData.getImu().getValue().toString()));
 		tbox_cameraAngleData.setText((robotData.getCamServo().getValue().toString()));
+
+		System.out.print("LED = ");
+		System.out.println(robotData.getLEDSensor().getValue().intValue());
 	}
 
 	public GUI(MessageQueue messageQueue) {
@@ -1508,11 +1535,12 @@ public class GUI extends JFrame {
 
 
 		/**********Stage 1**************/
-		q.addAtBack(findTarget);
-		q.addAtBack(alignWithBorder);
+//		q.addAtBack(stopMessage);
+//		q.addAtBack(findTarget);
+//		q.addAtBack(alignWithBorder);
 		q.addAtBack(driveToBorder);
-		q.addAtBack(rotateToStraight);
-		q.addAtBack(stopMessage);
+//		q.addAtBack(rotateToStraight);
+//		q.addAtBack(stopMessage);
 		/*******************************/
 //
 
@@ -1529,12 +1557,15 @@ public class GUI extends JFrame {
 	}
 
 	public static void updatePingTestQueue(MessageQueue pq){
-		Message test_drive_motor = new MsgDriveTime(0.1, 0.2);
+//		Message test_drive_motor = new MsgDriveTime(0.1, 0.2);
 //		System.out.print("Left pos=");
-		System.out.println("Left Pos:" + robotData.getLeftMotor().getPosition().intValue());
-		Message test_drive_motor_finish = new MsgRotateTime(0.1, -0.2);
-
-		pq.addAtBack(test_drive_motor);
-		pq.addAtBack(test_drive_motor_finish);
+		Message ping_test = new MsgPingTest(1.0);
+//		System.out.println("Left Pos:" + robotData.getLeftMotor().getPosition().intValue());
+//		Message test_drive_motor_finish = new MsgRotateTime(0.1, -0.2);
+		Message stop = new MsgStop();
+		pq.addAtBack(ping_test);
+//		pq.addAtBack(stop);
+//		pq.addAtBack(test_drive_motor_finish);
 	}
+
 }

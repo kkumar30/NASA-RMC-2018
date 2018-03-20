@@ -21,6 +21,7 @@ public class MessageFactory
 	   //else if(type == MessageType.MSG_STOP_TIME) { return new MsgStopTime(); }
 	   else if(type == MessageType.MSG_MOTOR_VALUES) { return new MsgMotorValues(); }
 	   else if(type == MessageType.MSG_ROTATE_TO_PERPENDICULAR) { return new MsgRatchetPosition(); }
+	   else if(type == MessageType.MSG_PING) {return new MsgPingTest();}
       
       return null;
    }
