@@ -12,8 +12,10 @@ const unsigned int CAM_SERVO_2_PIN = 4;
 const unsigned int CAM_SERVO_3_PIN = 5;
 const unsigned int CAM_SERVO_4_PIN = 6;
 const unsigned int TEST_IR = 2;//For the IR Sensor
+const int ledPin = 6;
 int testcamservoSetpoint;
 int prevSetpoint;
+int ledVal = 0;
 
 unsigned int ratchetMotorSetpoint;
 unsigned int camServo1Setpoint;
@@ -38,8 +40,9 @@ void setup()
   //  camServo2.attach(CAM_SERVO_2_PIN);
   //  camServo3.attach(CAM_SERVO_3_PIN);
   //  camServo4.attach(CAM_SERVO_4_PIN);
-  pinMode(8, INPUT);
-  digitalWrite(8, HIGH);       // turn on pullup resistors
+  pinMode(8, INPUT_PULLUP);
+  pinMode(ledPin, OUTPUT);      //LED Pin
+  
   Serial.begin(115200);
   Serial1.begin(115200);
 
@@ -52,6 +55,20 @@ void setup()
   testCameraServo.write(90);
   prevSetpoint = 90;
   gyro.enableDefault();
+
+  digitalWrite(ledPin, 0);
+  delay(500);
+  digitalWrite(ledPin, 1);
+  delay(500);
+  digitalWrite(ledPin, 0);
+  delay(500);
+  digitalWrite(ledPin, 1);
+  delay(500);
+  digitalWrite(ledPin, 0);
+  delay(500);
+  digitalWrite(ledPin, 1);
+  delay(500);
+  digitalWrite(ledPin, 0);
 }
 
 void loop()
@@ -71,6 +88,7 @@ void loop()
     //    outboundMessage += makeMessageString("LimitSwitch", digitalRead(8));
     //    outboundMessage += makeMessageString("IRSensor", analogRead(TEST_IR));
     outboundMessage += makeMessageString("IMU", dps);
+    outboundMessage += makeMessageString("LED", float(ledVal));
     //    Serial.println("There");
 
     //    delay(100);
@@ -91,9 +109,15 @@ void loop()
         if (msg.toInt() < 0) {
           msg = msg.charAt(msg.length() - 1);
         }
-        testcamservoSetpoint = msg.toInt();
-        writeMotorValues();
+        
+        if (msg.toInt() == 8888){
+          pingLed();
+        }
 
+        else {
+          testcamservoSetpoint = msg.toInt();
+          writeMotorValues();
+        }
         //**************************SENDING IMU MESSAGE HERE*******************************************
         for (int i = 0; i <= outboundMessage.length(); i++) {
           Serial.write(outboundMessage[i]);
@@ -117,7 +141,7 @@ void parseInboundMessage(String message)
 {
   const int openIndex = message.indexOf('<');
   const int closeIndex = message.indexOf('>');
-  //  const int colonIndex1 = message.indexOf(':');
+  const int colonIndex1 = message.indexOf(':');
   //  const int colonIndex2 = message.indexOf(':', colonIndex1+1);
   //  const int colonIndex3 = message.indexOf(':', colonIndex2+1);
   //  const int colonIndex4 = message.indexOf(':', colonIndex3+1);
@@ -127,7 +151,8 @@ void parseInboundMessage(String message)
   //  {
   //    return;
   //  }
-  String val1 = message.substring(openIndex + 1, closeIndex);
+  //  String val1 = message.substring(openIndex + 1, closeIndex);
+  String val1 = message.substring(openIndex + 1, colonIndex1);
   //  if (val1.toInt() % 10 == 0) {
   //
   //    digitalWrite(13, HIGH);
@@ -135,7 +160,7 @@ void parseInboundMessage(String message)
   //  else {
   //    digitalWrite(13, LOW);
   //  }
-  //  String val2 = message.substring(colonIndex1+1, colonIndex2);
+  String val2 = message.substring(colonIndex1 + 1, closeIndex);
   //  String val3 = message.substring(colonIndex2+1, colonIndex3);
   //  String val4 = message.substring(colonIndex3+1, colonIndex4);
   //  String val5 = message.substring(colonIndex4+1, closeIndex);
@@ -147,6 +172,7 @@ void parseInboundMessage(String message)
   //  Serial.println("[" + val5 + "]");
 
   testcamservoSetpoint = val1.toInt();
+  ledVal = val2.toInt();
   //    Serial3.println("P = " +   testcamservoSetpoint);
 
   //  ratchetMotorSetpoint = val1.toInt();
@@ -196,3 +222,15 @@ void writeMotorValues()
   //  camServo3.write(camServo3Setpoint);
   //  camServo4.write(camServo4Setpoint);
 }
+
+void pingLed() {
+  if(ledVal == 0){
+    digitalWrite(ledPin, 1);
+    ledVal = 1;
+  }
+  else if(ledVal == 1){
+    digitalWrite(ledPin, 0);
+    ledVal = 0;
+  }
+}
+
