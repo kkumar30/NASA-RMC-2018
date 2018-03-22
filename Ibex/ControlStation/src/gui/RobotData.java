@@ -18,6 +18,7 @@ public class RobotData
 	private Sensor imu;
 	private Sensor camServo;
 	private Sensor LEDSensor;
+	private Sensor hb; //Heartbeat
 	
 	public RobotData()
 	{
@@ -30,6 +31,7 @@ public class RobotData
 		imu = new Sensor();
 		camServo = new Sensor();
 		LEDSensor = new Sensor();
+		hb = new Sensor();
 	}
 	
 	public Motor getLeftMotor() {return leftMotor;}
@@ -40,13 +42,15 @@ public class RobotData
 	public Sensor getImu() {return imu;}
 	public Sensor getCamServo() {return camServo;}
 	public Sensor getLEDSensor() {return LEDSensor;}
+	public Sensor getHb(){return hb;}
+	
 
 
 	public void updateRobotData(String motorMessage, String sensorMessage)
 	{
 //		final String patternStr = "<(.+)><(.+)><(.+)><(.+)><(.+)>";
 		final String patternStr = "<(.+)><(.+)>";
-		final String SensorPatternStr = "<(.+)><(.+)><(.+)>";
+		final String SensorPatternStr = "<(.+)><(.+)><(.+)><(.+)>";
 
 		Pattern pattern = Pattern.compile(patternStr);
 		Pattern sensorPattern = Pattern.compile(SensorPatternStr);
@@ -73,13 +77,13 @@ public class RobotData
 		if(sensorMatch.matches())
 		{
 			String imuData = sensorMatch.group(1);
-			String camServoData = sensorMatch.group(3);
+			String LEDSensorData = sensorMatch.group(2);
+			String hbData = sensorMatch.group(3);
+			String camServoData = sensorMatch.group(4);
 
 			imu.updateSensorData(imuData);
 			camServo.updateSensorData(camServoData);
-
-//			For the LED ping test
-			String LEDSensorData = sensorMatch.group(2);
+			hb.updateSensorData(hbData);
 			LEDSensor.updateSensorData(LEDSensorData);
 		}
 

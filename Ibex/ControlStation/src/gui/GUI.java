@@ -171,6 +171,7 @@ public class GUI extends JFrame {
 
 	private static JTextField tbox_imuData;
 	private static JTextField tbox_cameraAngleData;
+	private static JLabel hbLabel;
 
 	private static ImagePanel imagepanel = new ImagePanel();
 
@@ -254,11 +255,14 @@ public class GUI extends JFrame {
 								pingButton.setBackground(Color.GRAY);
 								break;
 							}
-
+							
 							messageQueue.clear();
 							updateMessageQueueList(messageList);
+							
+							
 							System.out.println("GOT RESPONSE");
 						}
+						
 
 
 //						System.out.println("*******LED inside*******");
@@ -339,6 +343,13 @@ public class GUI extends JFrame {
 				btnStop.setFont(new Font("Tahoma", Font.BOLD, 20));
 				btnStop.setForeground(new Color(255, 255, 255));
 				btnStop.setBackground(new Color(205, 92, 92));
+		
+		hbLabel = new JLabel("HB");
+		hbLabel.setOpaque(true);
+		hbLabel.setBackground(Color.GRAY);
+		hbLabel.setForeground(Color.WHITE);
+		hbLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		hbLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
 
 
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
@@ -352,13 +363,16 @@ public class GUI extends JFrame {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 								.addGroup(groupLayout.createSequentialGroup()
-									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-										.addComponent(btnStartQueue, GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
-										.addComponent(pingButton, GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE))
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(btnStartQueue, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+										.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+											.addComponent(pingButton, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(hbLabel, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)))
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(btnStop, GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
-										.addComponent(btnClearAll, GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)))
+										.addComponent(btnStop, GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+										.addComponent(btnClearAll, GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)))
 								.addComponent(imagepanel, GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)))
 						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 1274, Short.MAX_VALUE)
 						.addComponent(lblStatus))
@@ -375,8 +389,9 @@ public class GUI extends JFrame {
 							.addGap(35)
 							.addComponent(imagepanel, GroupLayout.PREFERRED_SIZE, 311, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(pingButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(pingButton, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+								.addComponent(hbLabel, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
 								.addComponent(btnClearAll, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -1414,6 +1429,11 @@ public class GUI extends JFrame {
 	}
 
 	private static void updateRobotDataBoxes() {
+		if (robotData.getHb().getValue().intValue()==1){hbLabel.setBackground(Color.GRAY);}
+		else{
+			hbLabel.setBackground(new Color(255, 0, 255));
+		}
+		
 		tbox_leftMotorID.setText((robotData.getLeftMotor().getDeviceID().toString()));
 		tbox_leftMotorCurrent.setText((robotData.getLeftMotor().getCurrent().toString()));
 		tbox_leftMotorVoltage.setText((robotData.getLeftMotor().getVoltage().toString()));
@@ -1574,5 +1594,4 @@ public class GUI extends JFrame {
 //		pq.addAtBack(stop);
 //		pq.addAtBack(test_drive_motor_finish);
 	}
-
 }
