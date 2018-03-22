@@ -35,6 +35,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -97,7 +98,6 @@ public class GUI extends JFrame {
 
 	private NetworkServer server = new NetworkServer(11000, messageQueue, robotData, recoveryStack);
 	private boolean runServer = false;
-	private boolean isLEDOn = false;
 
 	private static DefaultListModel<String> model = new DefaultListModel<String>();
 	private static DefaultListModel<String> recovery_model = new DefaultListModel<String>();
@@ -243,27 +243,34 @@ public class GUI extends JFrame {
 
 //						See the LED status
 //						while ((robotData.getLEDSensor().getValue().intValue()>0) && (!isLEDOn))
-						while(!isLEDOn) //was LED ever on rather than getting the real time status of the LED
+
+						while(true) //was LED ever on rather than getting the real time status of the LED
 						{
-							if ((robotData.getLEDSensor().getValue().intValue() == 1)){
-								isLEDOn = true;
+							if (robotData.getLEDSensor().getValue().intValue() == 0){
 								pingButton.setBackground(new Color(100, 149, 237));
-								messageQueue.clear();
-								updateMessageQueueList(messageList);
+								break;
+							}
+							else if (robotData.getLEDSensor().getValue().intValue() == 1){
+								pingButton.setBackground(Color.GRAY);
+								break;
 							}
 
-
-//							System.out.print("LED inside******* = ");
-//							System.out.println((robotData.getLEDSensor().getValue().intValue()));
-							try{
-								TimeUnit.MICROSECONDS.sleep(1);
-							}
-							catch (Exception exce){
-								System.out.print(exce);
-							}
+							messageQueue.clear();
+							updateMessageQueueList(messageList);
+							System.out.println("GOT RESPONSE");
 						}
-						System.out.println("Outside");
-//						TODO:Wait for the message to come and then we need to turn into green
+
+
+//						System.out.println("*******LED inside*******");
+//							System.out.println((robotData.getLEDSensor().getValue().intValue()));
+//						try{
+//							TimeUnit.MICROSECONDS.sleep(1);
+//						}
+//						catch (Exception timer_exception){
+//							System.out.print(timer_exception);
+//						}
+//
+//						System.out.println("Outside");
 //						if (isLEDOn){
 //							pingButton.setBackground(new Color(100, 149, 237));
 //							messageQueue.clear();
