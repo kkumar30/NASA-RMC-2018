@@ -1391,10 +1391,11 @@ public class GUI extends JFrame {
 		recovery_model.clear();
 		for (int i = 0; i<recoveryStack.getSize();i++){
 			Message msg = recoveryStack.peekAtIndex(i);
+//			System.out.println(msg.getSize());
 			String listItem = "";
 			listItem += "(" + i + ") ";
 			listItem += msg.getType().toString() + ": ";
-			listItem += msg.getMessageString();
+			listItem += msg.convertRecoveryMessageString(); //This is where the opposite function is created
 //			recovery_model.addElement(listItem);
 			recovery_model.add(0, listItem);
 		}
@@ -1436,6 +1437,15 @@ public class GUI extends JFrame {
 		
 		tbox_leftMotorID.setText((robotData.getLeftMotor().getDeviceID().toString()));
 		tbox_leftMotorCurrent.setText((robotData.getLeftMotor().getCurrent().toString()));
+		if ((robotData.getLeftMotor().getCurrent().floatValue())> 1.5)
+		{
+//			TODO: Test if this works in the real case
+			Message recovery_method = recoveryStack.pop();
+			messageQueue.addAtFront(recovery_method);
+			updateMessageQueueList(messageList);
+			updateRecoveryStackList(list_1);
+		}
+
 		tbox_leftMotorVoltage.setText((robotData.getLeftMotor().getVoltage().toString()));
 		tbox_leftMotorTemperature.setText((robotData.getLeftMotor().getTemperature().toString()));
 		tbox_leftMotorMode.setText((robotData.getLeftMotor().getMode().toString()));

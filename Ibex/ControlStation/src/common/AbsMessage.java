@@ -99,7 +99,24 @@ public abstract class AbsMessage implements Message
 		messageString += ">";
 		return messageString;
 	}
-	
+
+	public String convertRecoveryMessageString(){
+		String messageString = "<";
+		messageString += type.ordinal() + "|";
+		messageString += messageNumber + "";
+		for(int i = 0; i < size; i++)
+		{
+			messageString += ":";
+			if (i==size-1){
+				messageString += -data[i];
+			}
+			else {
+				messageString += data[i];
+			}
+		}
+		messageString += ">";
+		return messageString;
+	}
 	
 	
 }
