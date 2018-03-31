@@ -7,4 +7,5 @@ public interface Message {
 	MessageType getType();
 	void setDataByIndex(int index, double data);
 
+	String convertRecoveryMessageString();
 }

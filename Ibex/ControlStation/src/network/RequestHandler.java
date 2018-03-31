@@ -85,8 +85,8 @@ class RequestHandler extends Thread {
 				inboundMotorMessageStr = "Errors";
 			}
 
-			System.out.println("Received Motors: " + inboundMotorMessageStr);
-			System.out.println("Received Sensors: "+ inboundSensorMessageStr);
+//			System.out.println("Received Motors: " + inboundMotorMessageStr);
+//			System.out.println("Received Sensors: "+ inboundSensorMessageStr);
 //			System.out.println("Camera Servo Pos: "+ inboundCameraMessageStr);
 			robotData.updateRobotData(inboundMotorMessageStr, inboundSensorMessageStr);
 
