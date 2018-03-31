@@ -363,12 +363,12 @@ public class GUI extends JFrame {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 								.addGroup(groupLayout.createSequentialGroup()
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 										.addComponent(btnStartQueue, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-										.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-											.addComponent(pingButton, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+										.addGroup(groupLayout.createSequentialGroup()
+											.addComponent(hbLabel, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
 											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(hbLabel, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)))
+											.addComponent(pingButton, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)))
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 										.addComponent(btnStop, GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
@@ -390,8 +390,9 @@ public class GUI extends JFrame {
 							.addComponent(imagepanel, GroupLayout.PREFERRED_SIZE, 311, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(pingButton, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
-								.addComponent(hbLabel, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+								.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+									.addComponent(hbLabel, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+									.addComponent(pingButton, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE))
 								.addComponent(btnClearAll, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -1429,9 +1430,9 @@ public class GUI extends JFrame {
 	}
 
 	private static void updateRobotDataBoxes() {
-		if (robotData.getHb().getValue().intValue()==1){hbLabel.setBackground(Color.GRAY);}
+		if (robotData.getHb().getValue().intValue()==1){hbLabel.setBackground(new Color(255, 0, 255));}
 		else{
-			hbLabel.setBackground(new Color(255, 0, 255));
+			hbLabel.setBackground(Color.GRAY);
 		}
 		
 		tbox_leftMotorID.setText((robotData.getLeftMotor().getDeviceID().toString()));
