@@ -51,8 +51,8 @@ public class RobotData
 
 	public void updateRobotData(String motorMessage, String sensorMessage)
 	{
-//		final String patternStr = "<(.+)><(.+)><(.+)><(.+)><(.+)>";
-		final String patternStr = "<(.+)><(.+)>"; //patterns for all motors only
+		final String patternStr = "<(.+)><(.+)><(.+)><(.+)><(.+)>";
+//		final String patternStr = "<(.+)><(.+)>"; //patterns for all motors only
 //
 		final String SensorPatternStr = "<(.+)><(.+)><(.+)><(.+)>"; //patterns for sensors and other status messages
 
@@ -67,15 +67,15 @@ public class RobotData
 		{
 			String leftMotorData = motorMatch.group(1);
 			String rightMotorData = motorMatch.group(2);
-//			String scoopMotorData = m.group(3);
-//			String depthMotorData = m.group(4);
-//			String winchMotorData = m.group(5);
+			String scoopMotorData = motorMatch.group(3);
+			String depthMotorData = motorMatch.group(4);
+			String dumpMotorData = motorMatch.group(5);
 			
 			leftMotor.updateMotorData(leftMotorData);
 			rightMotor.updateMotorData(rightMotorData);
-//			scoopMotor.updateMotorData(scoopMotorData);
-//			depthMotor.updateMotorData(depthMotorData);
-//			winchMotor.updateMotorData(winchMotorData);
+			scoopMotor.updateMotorData(scoopMotorData);
+			depthMotor.updateMotorData(depthMotorData);
+			dumpMotor.updateMotorData(dumpMotorData);
 		}
 		System.out.println(sensorMatch.matches());
 		if(sensorMatch.matches())

@@ -22,6 +22,7 @@ namespace Ibex_Motor_Control
             {
                 foreach (Match m in mc)
                 {
+                    Debug.Print("Matches: " + m);
                     String data = m.Value;
                     data = data.Substring(1, data.Length - 2);
                     String[] subparts = data.Split(':');

@@ -58,12 +58,22 @@ public class Gamepad
 			//System.exit(0);
 		}
 	}
-	
-	public double getAxisX1() { return joystick.getComponents()[AXS_X1].getPollData(); }
-	public double getAxisY1() { return -joystick.getComponents()[AXS_Y1].getPollData(); }
-	public double getAxisX2() { return joystick.getComponents()[AXS_X2].getPollData(); }
-	public double getAxisY2() { return -joystick.getComponents()[AXS_Y2].getPollData(); }
-	public double getAxisT() { return joystick.getComponents()[AXS_T].getPollData(); }
+
+	public double applyDeadzone(double val) {
+		if (val < 0.1 && val> -0.1)
+		{
+			val = 0.0;
+		}
+		return val;
+	}
+
+	public double getAxisX1() { return applyDeadzone(joystick.getComponents()[AXS_X1].getPollData()); }
+	public double getAxisY1() { return applyDeadzone(-joystick.getComponents()[AXS_Y1].getPollData()); }
+	public double getAxisX2() { return applyDeadzone(joystick.getComponents()[AXS_X2].getPollData()); }
+	public double getAxisY2() { return applyDeadzone(-joystick.getComponents()[AXS_Y2].getPollData()); }
+	public double getAxisT() {
+		return  applyDeadzone(joystick.getComponents()[AXS_T].getPollData());
+	}
 	
 	public boolean getButtonA() { return joystick.getComponents()[BTN_A].getPollData() != 0.0; }
 	public boolean getButtonB() { return joystick.getComponents()[BTN_B].getPollData() != 0.0; }
