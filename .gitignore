@@ -5,7 +5,7 @@
 *.exe
 *.metadata
 IBEx/ControlStation/classes/production/
-
+.recommenders/
 
 # Unwanted repo named stuff #
 *.iml

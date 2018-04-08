@@ -170,10 +170,12 @@ public class GUI extends JFrame {
 
 
 	private static JTextField tbox_imuData;
-	private static JTextField tbox_cameraAngleData;
+	private static JTextField tbox_cameraAngleData1;
 	private static JLabel hbLabel;
 
 	private static ImagePanel imagepanel = new ImagePanel();
+	private static JTextField tbox_cameraAngleData2;
+	private static JTextField tbox_IRData;
 
 
 	public static void main(String[] args) {
@@ -295,13 +297,15 @@ public class GUI extends JFrame {
 						messageQueue.clear();
 						Message msg_teleop = new MsgMotorValues();
 						messageQueue.addAtFront(msg_teleop);
+						btnClearAll.setBackground(new Color(255, 165, 0));
+
 						updateMessageQueueList(messageList);
 						updateRecoveryStackList(list_1);
 						selectedMessage = MessageFactory.makeMessage(selectedMessageType);
 
 					}
 				});
-				btnClearAll.setBackground(new Color(255, 165, 0));
+				btnClearAll.setBackground(Color.GRAY);
 				btnClearAll.setForeground(new Color(255, 255, 255));
 				btnClearAll.setFont(new Font("Tahoma", Font.BOLD, 20));
 		
@@ -1192,24 +1196,24 @@ public class GUI extends JFrame {
 		JLabel lblImuReadings = new JLabel("IMU Readings:");
 		lblImuReadings.setForeground(Color.WHITE);
 		lblImuReadings.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblImuReadings.setBounds(10, 51, 88, 14);
+		lblImuReadings.setBounds(10, 51, 100, 14);
 		panel_4.add(lblImuReadings);
 
 		tbox_imuData = new JTextField();
 		tbox_imuData.setColumns(10);
-		tbox_imuData.setBounds(108, 48, 86, 20);
+		tbox_imuData.setBounds(116, 48, 86, 20);
 		panel_4.add(tbox_imuData);
 
-		JLabel lblCameraAngle = new JLabel("Camera Angle:");
-		lblCameraAngle.setForeground(Color.WHITE);
-		lblCameraAngle.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblCameraAngle.setBounds(10, 76, 88, 14);
-		panel_4.add(lblCameraAngle);
+		JLabel lblCameraAngle1 = new JLabel("Camera 1 Angle:");
+		lblCameraAngle1.setForeground(Color.WHITE);
+		lblCameraAngle1.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblCameraAngle1.setBounds(10, 78, 100, 14);
+		panel_4.add(lblCameraAngle1);
 
-		tbox_cameraAngleData = new JTextField();
-		tbox_cameraAngleData.setColumns(10);
-		tbox_cameraAngleData.setBounds(108, 73, 86, 20);
-		panel_4.add(tbox_cameraAngleData);
+		tbox_cameraAngleData1 = new JTextField();
+		tbox_cameraAngleData1.setColumns(10);
+		tbox_cameraAngleData1.setBounds(116, 75, 86, 20);
+		panel_4.add(tbox_cameraAngleData1);
 
 		JLabel lblSensordata = new JLabel("Sensor Data");
 		lblSensordata.setForeground(Color.WHITE);
@@ -1252,6 +1256,51 @@ public class GUI extends JFrame {
 												.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)))
 								.addContainerGap())
 		);
+		
+		JLabel lblCameraAngle2 = new JLabel("Camera 2 Angle:");
+		lblCameraAngle2.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblCameraAngle2.setForeground(Color.WHITE);
+		lblCameraAngle2.setBounds(10, 105, 100, 14);
+		panel_4.add(lblCameraAngle2);
+		
+		tbox_cameraAngleData2 = new JTextField();
+		tbox_cameraAngleData2.setColumns(10);
+		tbox_cameraAngleData2.setBounds(116, 102, 86, 20);
+		panel_4.add(tbox_cameraAngleData2);
+		
+		JLabel lblIR = new JLabel("Bucket Capacity (IR): ");
+		lblIR.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblIR.setForeground(Color.WHITE);
+		lblIR.setBounds(0, 133, 120, 14);
+		panel_4.add(lblIR);
+		
+		tbox_IRData = new JTextField();
+		tbox_IRData.setColumns(10);
+		tbox_IRData.setBounds(116, 130, 86, 20);
+		panel_4.add(tbox_IRData);
+		
+		JLabel lblBumpLeft = new JLabel("LEFT");
+		lblBumpLeft.setBackground(Color.GRAY);
+		lblBumpLeft.setOpaque(true);
+		lblBumpLeft.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBumpLeft.setForeground(Color.WHITE);
+		lblBumpLeft.setBounds(220, 74, 58, 45);
+		panel_4.add(lblBumpLeft);
+		
+		JLabel lblBumpRight = new JLabel("RIGHT");
+		lblBumpRight.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBumpRight.setForeground(Color.WHITE);
+		lblBumpRight.setBackground(Color.GRAY);
+		lblBumpRight.setOpaque(true);
+		lblBumpRight.setBounds(289, 74, 58, 45);
+		panel_4.add(lblBumpRight);
+		
+		JLabel lblBumps = new JLabel("Bump Sensors");
+		lblBumps.setFont(new Font("Dialog", Font.BOLD, 14));
+		lblBumps.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBumps.setForeground(Color.WHITE);
+		lblBumps.setBounds(220, 50, 127, 14);
+		panel_4.add(lblBumps);
 		panel_leftMotorData.setLayout(null);
 
 
@@ -1441,10 +1490,11 @@ public class GUI extends JFrame {
 		if ((robotData.getLeftMotor().getCurrent().floatValue())> 1.5)
 		{
 //			TODO: Test if this works in the real case
-			Message recovery_method = recoveryStack.pop();
-			messageQueue.addAtFront(recovery_method);
-			updateMessageQueueList(messageList);
-			updateRecoveryStackList(list_1);
+			runRecovery();
+//			Message recovery_method = recoveryStack.pop();
+//			messageQueue.addAtFront(recovery_method);
+//			updateMessageQueueList(messageList);
+//			updateRecoveryStackList(list_1);
 		}
 
 		tbox_leftMotorVoltage.setText((robotData.getLeftMotor().getVoltage().toString()));
@@ -1521,22 +1571,27 @@ public class GUI extends JFrame {
 		tbox_depthMotorFLimit.setText((robotData.getDepthMotor().getForwardLimit().toString()));
 		tbox_depthMotorRLimit.setText((robotData.getDepthMotor().getReverseLimit().toString()));
 
-		tbox_winchMotorID.setText((robotData.getWinchMotor().getDeviceID().toString()));
-		tbox_winchMotorCurrent.setText((robotData.getWinchMotor().getCurrent().toString()));
-		tbox_winchMotorVoltage.setText((robotData.getWinchMotor().getVoltage().toString()));
-		tbox_winchMotorTemperature.setText((robotData.getWinchMotor().getTemperature().toString()));
-		tbox_winchMotorMode.setText((robotData.getWinchMotor().getMode().toString()));
-		tbox_winchMotorSetpoint.setText((robotData.getWinchMotor().getSetpoint().toString()));
-		tbox_winchMotorPosition.setText((robotData.getWinchMotor().getPosition().toString()));
-		tbox_winchMotorSpeed.setText((robotData.getWinchMotor().getSpeed().toString()));
-		tbox_winchMotorFLimit.setText((robotData.getWinchMotor().getForwardLimit().toString()));
-		tbox_winchMotorRLimit.setText((robotData.getWinchMotor().getReverseLimit().toString()));
+		tbox_winchMotorID.setText((robotData.getDumpMotor().getDeviceID().toString()));
+		tbox_winchMotorCurrent.setText((robotData.getDumpMotor().getCurrent().toString()));
+		tbox_winchMotorVoltage.setText((robotData.getDumpMotor().getVoltage().toString()));
+		tbox_winchMotorTemperature.setText((robotData.getDumpMotor().getTemperature().toString()));
+		tbox_winchMotorMode.setText((robotData.getDumpMotor().getMode().toString()));
+		tbox_winchMotorSetpoint.setText((robotData.getDumpMotor().getSetpoint().toString()));
+		tbox_winchMotorPosition.setText((robotData.getDumpMotor().getPosition().toString()));
+		tbox_winchMotorSpeed.setText((robotData.getDumpMotor().getSpeed().toString()));
+		tbox_winchMotorFLimit.setText((robotData.getDumpMotor().getForwardLimit().toString()));
+		tbox_winchMotorRLimit.setText((robotData.getDumpMotor().getReverseLimit().toString()));
 
 		tbox_imuData.setText((robotData.getImu().getValue().toString()));
-		tbox_cameraAngleData.setText((robotData.getCamServo().getValue().toString()));
+		tbox_cameraAngleData1.setText((robotData.getCamServo1().getValue().toString()));
+		tbox_cameraAngleData2.setText((robotData.getCamServo2().getValue().toString()));
+	}
 
-		System.out.print("LED = ");
-		System.out.println(robotData.getLEDSensor().getValue().intValue());
+	private static void runRecovery() {
+		Message recovery_method = recoveryStack.pop();
+		messageQueue.addAtFront(recovery_method);
+		updateMessageQueueList(messageList);
+		updateRecoveryStackList(list_1);
 	}
 
 	public GUI(MessageQueue messageQueue) {
@@ -1567,7 +1622,7 @@ public class GUI extends JFrame {
 		Message driveToBorder = new MsgDriveTime(4.0, -1.0);
 		Message rotateToStraight = new MsgRatchetPosition();
 
-		double camServoData = robotData.getCamServo().getValue();
+//		double camServoData = robotData.getCamServo1().getValue();
 //		System.out.println("Can set camera Servo Data in the queue");
 //		System.out.println(camServoData);
 
