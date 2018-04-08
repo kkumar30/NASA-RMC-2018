@@ -64,20 +64,20 @@ class RequestHandler extends Thread {
 				if (entireMessageStr==null){System.out.println("Is null");}
 				if (entireMessageStr != null && entireMessageStr.replace("\n\t ", "").equals("Finished")) {
 					if (!queue.isEmpty()) {
-						Message popped;
-						popped = queue.pop();
-						if (popped != recoveryStack.peek())
-						{
-							recoveryStack.addAtBack(popped);
-							System.out.print("********************Added to Recovery Stack!:***************");
-							System.out.println(popped);
-//							GUI.recoveryStack = recoveryStack;
-							GUI.updateMessageQueueList(messageList);
-//							GUI.updateAutonomyQueue(queue);
-							GUI.updateRecoveryStackList(list_1);
-						}
-						System.out.println("Next action in Queue!");
-						System.out.println(queue.peek());
+//						Message popped;
+						queue.pop();
+//						if (popped != recoveryStack.peek())
+//						{
+//							recoveryStack.addAtBack(popped);
+//							System.out.print("********************Added to Recovery Stack!:***************");
+//							System.out.println(popped);
+////							GUI.recoveryStack = recoveryStack;
+//							GUI.updateMessageQueueList(messageList);
+////							GUI.updateAutonomyQueue(queue);
+//							GUI.updateRecoveryStackList(list_1);
+//						}
+//						System.out.println("Next action in Queue!");
+//						System.out.println(queue.peek());
 					}
 				}
 			} catch (Exception e) {
@@ -91,7 +91,23 @@ class RequestHandler extends Thread {
 			robotData.updateRobotData(inboundMotorMessageStr, inboundSensorMessageStr);
 
 			if (!queue.isEmpty()) {
-				queue.peek();
+//	********************************************************
+
+
+				Message popped = queue.peek();
+				if (popped != recoveryStack.peek()) {
+					recoveryStack.addAtBack(popped);
+					System.out.print("********************Added to Recovery Stack!:***************");
+					System.out.println(popped);
+					GUI.updateMessageQueueList(messageList);
+					GUI.updateRecoveryStackList(list_1);
+				}
+
+//	*********************************************************
+
+
+
+//				queue.peek();
 				out.println(queue.peek().getMessageString());
 				System.out.println("Sent: " + queue.peek().getMessageString());
 				out.flush();

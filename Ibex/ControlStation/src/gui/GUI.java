@@ -313,8 +313,8 @@ public class GUI extends JFrame {
 				btnStartQueue.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent arg0) {
-						messageQueue.clear();
-						updateAutonomyQueue(messageQueue);
+//						messageQueue.clear();
+//						updateAutonomyQueue(messageQueue);
 						updateMessageQueueList(messageList);
 						if (!runServer) {
 							server.startServer();
@@ -1631,11 +1631,22 @@ public class GUI extends JFrame {
 //		q.addAtBack(stopMessage);
 //		q.addAtBack(findTarget);
 //		q.addAtBack(alignWithBorder);
-		q.addAtBack(driveToBorder);
+//		q.addAtBack(driveToBorder);
 //		q.addAtBack(rotateToStraight);
 //		q.addAtBack(stopMessage);
 		/*******************************/
-//
+		Message testdrive1 = new MsgDriveTime(2.0, -1.0);
+		Message testdrive2 = new MsgDriveTime(2.0, -1.0);
+		Message testdrive3 = new MsgDriveTime(2.0, -1.0);
+		Message rotate = new MsgRotateTime();
+
+		q.addAtBack(testdrive1);
+		q.addAtBack(stopMessage);
+		q.addAtBack(testdrive2);
+		q.addAtBack(rotate);
+		q.addAtBack(stopMessage);
+		q.addAtBack(testdrive3);
+
 
 //		updateMessageQueueList(messageList);
 //		System.out.println(q.getSize());
