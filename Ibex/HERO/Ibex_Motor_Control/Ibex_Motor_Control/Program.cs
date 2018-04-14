@@ -79,24 +79,24 @@ namespace Ibex_Motor_Control
             rightmotor.SelectProfileSlot(0);
 
             
-                        scoopMotor.SetP(0, 0.6F);
-                        scoopMotor.SetI(0, 0.0F);
-                        scoopMotor.SetD(0, 0.0F);
-                        scoopMotor.SetF(0, 0.0F);
-                        scoopMotor.SelectProfileSlot(0);
+            scoopMotor.SetP(0, 0.6F);
+            scoopMotor.SetI(0, 0.0F);
+            scoopMotor.SetD(0, 0.0F);
+            scoopMotor.SetF(0, 0.0F);
+            scoopMotor.SelectProfileSlot(0);
 
-                        depthMotor.SetP(0, 0.6F);
-                        depthMotor.SetI(0, 0.0F);
-                        depthMotor.SetD(0, 0.0F);
-                        depthMotor.SetF(0, 0.0F);
-                        depthMotor.SelectProfileSlot(0);
+            depthMotor.SetP(0, 0.6F);
+            depthMotor.SetI(0, 0.0F);
+            depthMotor.SetD(0, 0.0F);
+            depthMotor.SetF(0, 0.0F);
+            depthMotor.SelectProfileSlot(0);
 
-                        winchMotor.SetP(0, 0.6F);
-                        winchMotor.SetI(0, 0.0F);
-                        winchMotor.SetD(0, 0.0F);
-                        winchMotor.SetF(0, 0.0F);
-                        winchMotor.SelectProfileSlot(0);
-                        //////////////////////////////////
+            winchMotor.SetP(0, 0.6F);
+            winchMotor.SetI(0, 0.0F);
+            winchMotor.SetD(0, 0.0F);
+            winchMotor.SetF(0, 0.0F);
+            winchMotor.SelectProfileSlot(0);
+            //////////////////////////////////
             
 
             //Sets Nominal Output Voltage for each motor
@@ -108,16 +108,14 @@ namespace Ibex_Motor_Control
 
             // Set allowed error for closed loop feedback
             leftmotor.SetAllowableClosedLoopErr(0, 0);
-            rightmotor.SetAllowableClosedLoopErr(0, 0);
-
+            rightmotor.SetAllowableClosedLoopErr(0, 0); 
             scoopMotor.SetAllowableClosedLoopErr(0, 0);
             depthMotor.SetAllowableClosedLoopErr(0, 0);
             winchMotor.SetAllowableClosedLoopErr(0, 0);
 
             //Set Initial position of the motors
             leftmotor.SetPosition(0);
-            rightmotor.SetPosition(0);
-           
+            rightmotor.SetPosition(0);           
             scoopMotor.SetPosition(0);
             depthMotor.SetPosition(0);
             winchMotor.SetPosition(0);
@@ -149,7 +147,6 @@ namespace Ibex_Motor_Control
             //Initializes and adds the SetpointData and the StatusData for each motor (ID, mode, setpoint//
             SetpointData leftmotorSetpointData = new SetpointData(1, 0, 0.0F);
             SetpointData rightmotorSetpointData = new SetpointData(2, 0, 0.0F);
-            
             SetpointData scoopMotorSetpointData = new SetpointData(3, 0, 0.0F);
             SetpointData depthMotorSetpointData = new SetpointData(4, 0, 0.0F);
             SetpointData winchMotorSetpointData = new SetpointData(5, 0, 0.0F);
@@ -162,7 +159,6 @@ namespace Ibex_Motor_Control
 
             motorSetpointData.Add(leftmotorSetpointData);
             motorSetpointData.Add(rightmotorSetpointData);
-            
             motorSetpointData.Add(scoopMotorSetpointData);
             motorSetpointData.Add(depthMotorSetpointData);
             motorSetpointData.Add(winchMotorSetpointData);

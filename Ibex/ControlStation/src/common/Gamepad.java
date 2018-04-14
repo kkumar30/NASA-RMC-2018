@@ -106,5 +106,5 @@ public class Gamepad
 			System.out.println("Component " + i + ": " + components[i].getName());
 		}
 	}
-	
+
 }

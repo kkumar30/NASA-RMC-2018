@@ -7,7 +7,8 @@ public class MessageFactory
 
 	 //use getShape method to get object of type shape 
    public static Message makeMessage(MessageType type){
-	   
+
+//	   System.out.println(type.toString());
 	   if(type == null){ return null; }
 	   else if(type == MessageType.MSG_STOP) { return new MsgStop(); }
 	   else if(type == MessageType.MSG_DRIVE_TIME) { return new MsgDriveTime(); }
@@ -21,7 +22,12 @@ public class MessageFactory
 	   //else if(type == MessageType.MSG_STOP_TIME) { return new MsgStopTime(); }
 	   else if(type == MessageType.MSG_MOTOR_VALUES) { return new MsgMotorValues(); }
 	   else if(type == MessageType.MSG_ROTATE_TO_PERPENDICULAR) { return new MsgRatchetPosition(); }
+	   else if (type == MessageType.MSG_DIG){ return new MsgDigTime();}
 	   else if(type == MessageType.MSG_PING) {return new MsgPingTest();}
+	   else if(type == MessageType.MSG_RETRACT_DIGGER) {return new MsgRetractDigger();}
+	   else if(type == MessageType.MSG_GO_TO_DUMP) {return new MsgGoToDump();}
+	   else if(type == MessageType.MSG_DUMP){return new MsgDump();}
+
       
       return null;
    }

@@ -218,8 +218,10 @@ public class GUI extends JFrame {
 		tabbedPane.setBorder(null);
 		tabbedPane.setMaximumSize(new Dimension(785, 32767));
 
+//		JScrollPane panel_1 = new JScrollPane();
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.DARK_GRAY);
+		panel_1.setAutoscrolls(true);
 		JLabel lblStatus = new JLabel("Status:");
 		lblStatus.setForeground(Color.WHITE);
 		
@@ -411,6 +413,8 @@ public class GUI extends JFrame {
 
 		list_1 = new JList<String>(recovery_model);
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
+//		panel_1.setAutoscrolls(true);
+//		list_1.setAutoscrolls(true);
 		gl_panel_1.setHorizontalGroup(
 				gl_panel_1.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_1.createSequentialGroup()
@@ -426,6 +430,7 @@ public class GUI extends JFrame {
 								.addContainerGap(96, Short.MAX_VALUE))
 		);
 		panel_1.setLayout(gl_panel_1);
+
 
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -1468,6 +1473,10 @@ public class GUI extends JFrame {
 		cbox.addItem("Motor Values");
 		cbox.addItem("Ratchet Position");
 		cbox.addItem("Ping Test");
+		cbox.addItem("Dig Time");
+		cbox.addItem("Retract Digger");
+		cbox.addItem("Go to Dump");
+		cbox.addItem("Dump");
 	}
 
 	private void updateMessageLabels() {
@@ -1518,6 +1527,12 @@ public class GUI extends JFrame {
 
 		tbox_rightMotorID.setText((robotData.getRightMotor().getDeviceID().toString()));
 		tbox_rightMotorCurrent.setText((robotData.getRightMotor().getCurrent().toString()));
+
+		if((robotData.getRightMotor().getCurrent().floatValue()>1.0)){
+//			TODO: Test recovery for the right motor
+			runRecovery();
+		}
+
 		tbox_rightMotorVoltage.setText((robotData.getRightMotor().getVoltage().toString()));
 		tbox_rightMotorTemperature.setText((robotData.getRightMotor().getTemperature().toString()));
 		tbox_rightMotorMode.setText((robotData.getRightMotor().getMode().toString()));
@@ -1555,6 +1570,10 @@ public class GUI extends JFrame {
 		tbox_scoopMotorTemperature.setText((robotData.getScoopMotor().getTemperature().toString()));
 		tbox_scoopMotorMode.setText((robotData.getScoopMotor().getMode().toString()));
 		tbox_scoopMotorSetpoint.setText((robotData.getScoopMotor().getSetpoint().toString()));
+		if (abs(robotData.getScoopMotor().getSetpoint())>0.7)
+		{
+			tbox_scoopMotorSetpoint.setBackground(Color.RED);
+		}
 		tbox_scoopMotorPosition.setText((robotData.getScoopMotor().getPosition().toString()));
 		tbox_scoopMotorSpeed.setText((robotData.getScoopMotor().getSpeed().toString()));
 		tbox_scoopMotorFLimit.setText((robotData.getScoopMotor().getForwardLimit().toString()));
@@ -1566,6 +1585,10 @@ public class GUI extends JFrame {
 		tbox_depthMotorTemperature.setText((robotData.getDepthMotor().getTemperature().toString()));
 		tbox_depthMotorMode.setText((robotData.getDepthMotor().getMode().toString()));
 		tbox_depthMotorSetpoint.setText((robotData.getDepthMotor().getSetpoint().toString()));
+		if (abs(robotData.getDepthMotor().getSetpoint())>0.2)
+		{
+			tbox_depthMotorSetpoint.setBackground(Color.RED);
+		}
 		tbox_depthMotorPosition.setText((robotData.getDepthMotor().getPosition().toString()));
 		tbox_depthMotorSpeed.setText((robotData.getDepthMotor().getSpeed().toString()));
 		tbox_depthMotorFLimit.setText((robotData.getDepthMotor().getForwardLimit().toString()));
@@ -1640,23 +1663,30 @@ public class GUI extends JFrame {
 		Message testdrive3 = new MsgDriveTime(2.0, -1.0);
 		Message rotate = new MsgRotateTime();
 
-		q.addAtBack(testdrive1);
-		q.addAtBack(stopMessage);
-		q.addAtBack(testdrive2);
-		q.addAtBack(rotate);
-		q.addAtBack(stopMessage);
-		q.addAtBack(testdrive3);
+//		q.addAtBack(testdrive1);
+//		q.addAtBack(stopMessage);
+//		q.addAtBack(testdrive2);
+//		q.addAtBack(rotate);
+//		q.addAtBack(stopMessage);
+//		q.addAtBack(testdrive3);
 
 
 //		updateMessageQueueList(messageList);
-//		System.out.println(q.getSize());
-//		System.out.println(q.peek());
 //		selectedMessage = MessageFactory.makeMessage(selectedMessageType);
 
-//		q.addAtBack();
+		/************Stage 2***************/
 
-		/*Stage 2*/
+		Message drive_to_ez = new MsgDriveTime(2.0, -1.0); // TODO: Change the parameters accordingly
+		Message excavate = new MsgDigTime(180);
+		Message retract_digger = new MsgRetractDigger();
+		Message go_back = new MsgGoToDump();
+		Message dump = new MsgDump();
 
+		q.addAtBack(drive_to_ez);
+		q.addAtBack(excavate);
+		q.addAtBack(retract_digger);
+		q.addAtBack(go_back);
+		q.addAtBack(dump);
 
 	}
 

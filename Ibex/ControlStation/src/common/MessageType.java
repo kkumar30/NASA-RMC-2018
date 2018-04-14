@@ -15,5 +15,11 @@ public enum MessageType {
 	MSG_STOP_TIME,
 	MSG_MOTOR_VALUES,
 	MSG_ROTATE_TO_PERPENDICULAR,
-	MSG_PING
+	MSG_PING,
+	MSG_DIG,
+	MSG_RETRACT_DIGGER,
+//	TODO: Make the functions
+	MSG_GO_TO_DUMP,
+	MSG_DUMP
+//	TODO: Celebrate by spinning
 }
