@@ -102,6 +102,7 @@ public class GUI extends JFrame {
 	private static DefaultListModel<String> model = new DefaultListModel<String>();
 	private static DefaultListModel<String> recovery_model = new DefaultListModel<String>();
 	public static JList messageList = new JList<String>(model);
+	public static Message already_ran_recovery_message;
 	private MessageType selectedMessageType = MessageType.MSG_STOP;
 	private Message selectedMessage = new MsgStop();
 	private JLabel[] messageLabels = new JLabel[8];
@@ -1539,42 +1540,32 @@ public class GUI extends JFrame {
 		tbox_rightMotorMode.setText((robotData.getRightMotor().getMode().toString()));
 		tbox_rightMotorSetpoint.setText((robotData.getRightMotor().getSetpoint().toString()));
 		tbox_rightMotorPosition.setText((robotData.getRightMotor().getPosition().toString()));
-		if (robotData.getRightMotor().getPosition()>10  || robotData.getRightMotor().getPosition()<-10)
-		{
-			tbox_rightMotorPosition.setBackground(Color.RED);
-		}
-
-		else if (robotData.getRightMotor().getPosition() == 0){
-			tbox_rightMotorPosition.setBackground(Color.GREEN);
-		}
-		else{
-			tbox_rightMotorPosition.setBackground(Color.ORANGE);
-		}
+		if (abs(robotData.getRightMotor().getPosition())>10) {tbox_rightMotorPosition.setBackground(Color.RED);}
+		else if (robotData.getRightMotor().getPosition() == 0){tbox_rightMotorPosition.setBackground(Color.WHITE);}
+		else{tbox_rightMotorPosition.setBackground(Color.ORANGE);}
 
 		tbox_rightMotorSpeed.setText((robotData.getRightMotor().getSpeed().toString()));
 
-		if (abs(robotData.getRightMotor().getSpeed())>0.9)
-		{
-			tbox_rightMotorSpeed.setBackground(Color.RED);
-		}
+		if (abs(robotData.getRightMotor().getSpeed())>0.9) {tbox_rightMotorSpeed.setBackground(Color.ORANGE);}
 
-		else if (robotData.getRightMotor().getPosition() == 0){
-			tbox_rightMotorSpeed.setBackground(Color.GREEN);
-		}
+		else if (robotData.getRightMotor().getPosition() == 0){tbox_rightMotorSpeed.setBackground(Color.WHITE);}
 
 		tbox_rightMotorFLimit.setText((robotData.getRightMotor().getForwardLimit().toString()));
 		tbox_rightMotorRLimit.setText((robotData.getRightMotor().getReverseLimit().toString()));
 
 		tbox_scoopMotorID.setText((robotData.getScoopMotor().getDeviceID().toString()));
 		tbox_scoopMotorCurrent.setText((robotData.getScoopMotor().getCurrent().toString()));
+	// Recovery for scoop action
+		if (robotData.getScoopMotor().getCurrent()>2.0){
+			runRecovery();
+		}
 		tbox_scoopMotorVoltage.setText((robotData.getScoopMotor().getVoltage().toString()));
 		tbox_scoopMotorTemperature.setText((robotData.getScoopMotor().getTemperature().toString()));
 		tbox_scoopMotorMode.setText((robotData.getScoopMotor().getMode().toString()));
 		tbox_scoopMotorSetpoint.setText((robotData.getScoopMotor().getSetpoint().toString()));
-		if (abs(robotData.getScoopMotor().getSetpoint())>0.7)
-		{
-			tbox_scoopMotorSetpoint.setBackground(Color.RED);
-		}
+		if (abs(robotData.getScoopMotor().getSetpoint())>0.8){tbox_scoopMotorSetpoint.setBackground(Color.RED);}
+		else {tbox_scoopMotorSetpoint.setBackground(Color.WHITE);}
+
 		tbox_scoopMotorPosition.setText((robotData.getScoopMotor().getPosition().toString()));
 		tbox_scoopMotorSpeed.setText((robotData.getScoopMotor().getSpeed().toString()));
 		tbox_scoopMotorFLimit.setText((robotData.getScoopMotor().getForwardLimit().toString()));
@@ -1582,14 +1573,14 @@ public class GUI extends JFrame {
 
 		tbox_depthMotorID.setText((robotData.getDepthMotor().getDeviceID().toString()));
 		tbox_depthMotorCurrent.setText((robotData.getDepthMotor().getCurrent().toString()));
+//		Recovery for the depth motor (aka MSG_DIG most of the time)
+		if (robotData.getDepthMotor().getCurrent()> 15.0){ runRecovery();}
+
 		tbox_depthMotorVoltage.setText((robotData.getDepthMotor().getVoltage().toString()));
 		tbox_depthMotorTemperature.setText((robotData.getDepthMotor().getTemperature().toString()));
 		tbox_depthMotorMode.setText((robotData.getDepthMotor().getMode().toString()));
 		tbox_depthMotorSetpoint.setText((robotData.getDepthMotor().getSetpoint().toString()));
-		if (abs(robotData.getDepthMotor().getSetpoint())>0.2)
-		{
-			tbox_depthMotorSetpoint.setBackground(Color.RED);
-		}
+		if (abs(robotData.getDepthMotor().getSetpoint())>0.2){tbox_depthMotorSetpoint.setBackground(Color.RED);}
 		tbox_depthMotorPosition.setText((robotData.getDepthMotor().getPosition().toString()));
 		tbox_depthMotorSpeed.setText((robotData.getDepthMotor().getSpeed().toString()));
 		tbox_depthMotorFLimit.setText((robotData.getDepthMotor().getForwardLimit().toString()));
@@ -1612,6 +1603,8 @@ public class GUI extends JFrame {
 	}
 
 	private static void runRecovery() {
+		already_ran_recovery_message = recoveryStack.peek();
+
 		Message recovery_method = recoveryStack.pop();
 		messageQueue.addAtFront(recovery_method);
 		updateMessageQueueList(messageList);
