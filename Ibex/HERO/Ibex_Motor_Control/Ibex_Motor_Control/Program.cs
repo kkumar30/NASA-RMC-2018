@@ -62,7 +62,7 @@ namespace Ibex_Motor_Control
             leftmotor.ConfigEncoderCodesPerRev(80);
             rightmotor.ConfigEncoderCodesPerRev(80);
             scoopMotor.ConfigEncoderCodesPerRev(80);
-            depthMotor.ConfigEncoderCodesPerRev(80);
+            depthMotor.ConfigEncoderCodesPerRev(20);
             winchMotor.ConfigEncoderCodesPerRev(80);
            
             //Sets PIDF values for each motor//
@@ -188,8 +188,8 @@ namespace Ibex_Motor_Control
                 if (motorSetpointData.Count > 0)
                 {
                     //if any of the talon positions need to be reset, this will reset them
-                    //resetEncoderPositions(talons);
-                    //CTRE.Watchdog.Feed();
+                    resetEncoderPositions(talons);
+                    CTRE.Watchdog.Feed();
 
                     //attempt to process whatever was contained in the most recent message
                     processInboundData(motorSetpointData, talons);
@@ -211,6 +211,7 @@ namespace Ibex_Motor_Control
                 //send that message back to the main CPU
                 //Debug.Print(outboundMessageStr);
                 //if (uart.IsOpen) { 
+                Debug.Print("Depth Encoder Value: " + depthMotor.GetPosition());
                 writeUART(outboundMessageStr);
                 CTRE.Watchdog.Feed();
                 //}
@@ -238,7 +239,7 @@ namespace Ibex_Motor_Control
                         checkEncoderResetFlags(messageStr);
                         Debug.Print("Inbound Message String: " + messageStr);
                         setpointData = MessageParser.parseMessage(messageStr);
-                        Debug.Print("Setpoint Data: " + setpointData[4]);
+                        // Debug.Print("Setpoint Data: " + setpointData[4]);
                         // int c = setpointData.Count;
                         //Console.WriteLine(c);
                         //Debug.Print(c.ToString());

@@ -11,7 +11,7 @@ public class MsgMotorValues extends AbsMessage
 	{
 		super();
 		setType(MessageType.MSG_MOTOR_VALUES);
-		setSize(5);
+		setSize(6);
 		setInfo("Writing Values from Gamepad\n");
 	}
 	
@@ -24,16 +24,24 @@ public class MsgMotorValues extends AbsMessage
 		double scoopMotorVal = g.getAxisT();
 		double depthMotorVal = g.getButtonA() ? 1.0 : g.getButtonY() ? -1.0 : 0.0;
 		double winchMotorVal = g.getButtonLB() ? 1.0 : g.getButtonRB() ? -1.0 : 0.0;
+		double excavateVal = g.getButtonB() ? 1.0: 0.0;
+//		if (g.getButtonB()){
+////			depthMotorVal = 1.0;
+////			scoopMotorVal = 1.0;
+//			double excavateVal = 1.0;
+//		}
 		setDataByIndex(0, leftMotorVal);
 		setDataByIndex(1, rightMotorVal);	
 		setDataByIndex(2, scoopMotorVal);
 		setDataByIndex(3, depthMotorVal);
 		setDataByIndex(4, winchMotorVal);
+		setDataByIndex(5, excavateVal);
 		setDataTagByIndex(0, "Left Motor");
 		setDataTagByIndex(1, "Right Motor");
 		setDataTagByIndex(2, "Scoop Motor");
 		setDataTagByIndex(3, "Depth Motor");
 		setDataTagByIndex(4, "Winch Motor");
+		setDataTagByIndex(5, "Excavate Flag");
 		String messageString = "<";
 		messageString += getType().ordinal() + "|";
 		messageString += getMessageNumber();
@@ -42,6 +50,7 @@ public class MsgMotorValues extends AbsMessage
 		messageString += ":" + scoopMotorVal;
 		messageString += ":" + depthMotorVal;
 		messageString += ":" + winchMotorVal;
+		messageString += ":" + excavateVal;
 		messageString += ">";
 		System.out.println("Sending MessageString");
 		return messageString;

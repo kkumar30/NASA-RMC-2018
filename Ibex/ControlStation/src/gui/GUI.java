@@ -430,6 +430,7 @@ public class GUI extends JFrame {
 								.addContainerGap(96, Short.MAX_VALUE))
 		);
 		panel_1.setLayout(gl_panel_1);
+//		panel_1.setViewportView(list_1);
 
 
 		JPanel panel_2 = new JPanel();
@@ -1677,7 +1678,7 @@ public class GUI extends JFrame {
 		/************Stage 2***************/
 
 		Message drive_to_ez = new MsgDriveTime(2.0, -1.0); // TODO: Change the parameters accordingly
-		Message excavate = new MsgDigTime(180);
+		Message excavate = new MsgDigTime(5.0);
 		Message retract_digger = new MsgRetractDigger();
 		Message go_back = new MsgGoToDump();
 		Message dump = new MsgDump();
