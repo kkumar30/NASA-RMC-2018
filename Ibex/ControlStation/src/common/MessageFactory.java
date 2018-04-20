@@ -27,6 +27,7 @@ public class MessageFactory
 	   else if(type == MessageType.MSG_RETRACT_DIGGER) {return new MsgRetractDigger();}
 	   else if(type == MessageType.MSG_GO_TO_DUMP) {return new MsgGoToDump();}
 	   else if(type == MessageType.MSG_DUMP){return new MsgDump();}
+	   else if(type == MessageType.MSG_DEPTH_TIME){return new MsgDepthTime();}
 
       
       return null;

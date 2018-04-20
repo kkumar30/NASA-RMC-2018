@@ -51,9 +51,11 @@ class RequestHandler extends Thread {
 				System.out.println("Entire MessageString: " + entireMessageStr);
 				MotorAndSensorStr = entireMessageStr.split("\\$");
 				inboundMotorMessageStr = MotorAndSensorStr[0];
+//				System.out.println(MotorAndSensorStr[1]);
 
 				if (MotorAndSensorStr.length> 1) {
 					inboundSensorMessageStr = MotorAndSensorStr[1];
+					System.out.println(inboundSensorMessageStr);
 				}
 //				if (MotorAndSensorStr.length> 2) {
 //					inboundCameraMessageStr = MotorAndSensorStr[2];
@@ -95,7 +97,7 @@ class RequestHandler extends Thread {
 
 
 				Message popped = queue.peek();
-				if (popped != recoveryStack.peek() && popped!= GUI.already_ran_recovery_message) {
+				if (popped != recoveryStack.peek() && popped != GUI.already_ran_recovery_message) {
 //					System.out.print("Popped Msg Type:");
 //					System.out.println(popped.getType());
 					recoveryStack.addAtBack(popped);

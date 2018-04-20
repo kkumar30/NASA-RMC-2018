@@ -45,8 +45,8 @@ void setup()
   //  camServo4.attach(CAM_SERVO_4_PIN);
   pinMode(8, INPUT_PULLUP);
   pinMode(ledPin, OUTPUT);      //LED Pin
-  pinMode(LIMIT1_PIN, INPUT);
-  pinMode(LIMIT2_PIN, INPUT);
+  pinMode(LIMIT1_PIN, INPUT_PULLUP);
+  pinMode(LIMIT2_PIN, INPUT_PULLUP);
   
   Serial.begin(115200);
   Serial1.begin(115200);
@@ -84,6 +84,9 @@ void loop()
   bool foundEndOfLine = false;
   while (1)
   {
+    int lim1 = digitalRead(LIMIT1_PIN);
+    int lim2= digitalRead(LIMIT2_PIN);
+    
     gyro.read();
     float dps = (float)gyro.g.x * 8.75 / 1000;
     dps += 0.45; //additional Calibration
@@ -95,8 +98,8 @@ void loop()
     //    outboundMessage += makeMessageString("IRSensor", analogRead(TEST_IR));
     outboundMessage += makeMessageString("IMU", dps);
     outboundMessage += makeMessageString("LED", float(ledVal));
-    outboundMessage += makeMessageString("LimitSwitch1", digitalRead(LIMIT1_PIN));
-    outboundMessage += makeMessageString("LimitSwitch2", digitalRead(LIMIT2_PIN));
+    outboundMessage += makeMessageString("LimitSwitch1", float(lim1));
+    outboundMessage += makeMessageString("LimitSwitch2", float(lim2));
     //    Serial.println("There");
 
     //    delay(100);

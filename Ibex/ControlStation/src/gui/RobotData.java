@@ -20,6 +20,7 @@ public class RobotData
 	private Sensor camServo2;
 	private Sensor LEDSensor;
 	private Sensor hb; //Heartbeat
+	private Sensor limitSwitch1;
 	
 	public RobotData()
 	{
@@ -34,6 +35,7 @@ public class RobotData
 		camServo2 = new Sensor();
 		LEDSensor = new Sensor();
 		hb = new Sensor();
+		limitSwitch1 = new Sensor();
 	}
 	
 	public Motor getLeftMotor() {return leftMotor;}
@@ -46,6 +48,7 @@ public class RobotData
 	public Sensor getCamServo2() {return camServo2;}
 	public Sensor getLEDSensor() {return LEDSensor;}
 	public Sensor getHb(){return hb;}
+	public Sensor getLimitSwitch1(){return limitSwitch1;}
 	
 
 
@@ -54,7 +57,7 @@ public class RobotData
 		final String patternStr = "<(.+)><(.+)><(.+)><(.+)><(.+)>";
 //		final String patternStr = "<(.+)><(.+)>"; //patterns for all motors only
 //
-		final String SensorPatternStr = "<(.+)><(.+)><(.+)><(.+)>"; //patterns for sensors and other status messages
+		final String SensorPatternStr = "<(.+)><(.+)><(.+)><(.+)><(.+)>"; //patterns for sensors and other status messages
 
 		Pattern pattern = Pattern.compile(patternStr);
 		Pattern sensorPattern = Pattern.compile(SensorPatternStr);
@@ -82,14 +85,16 @@ public class RobotData
 		{
 			String imuData = sensorMatch.group(1);
 			String LEDSensorData = sensorMatch.group(2);
-			String hbData = sensorMatch.group(3);
-			String camServoData1 = sensorMatch.group(4);
+			String bump1 = sensorMatch.group(3);
+			String hbData = sensorMatch.group(4);
+			String camServoData1 = sensorMatch.group(5);
 //			String camServoData2 = sensorMatch.group(5);
 			imu.updateSensorData(imuData);
 			camServo1.updateSensorData(camServoData1);
 //			camServo2.updateSensorData(camServoData2);
 			hb.updateSensorData(hbData);
 			LEDSensor.updateSensorData(LEDSensorData);
+			limitSwitch1.updateSensorData(bump1);
 		}
 
 	}

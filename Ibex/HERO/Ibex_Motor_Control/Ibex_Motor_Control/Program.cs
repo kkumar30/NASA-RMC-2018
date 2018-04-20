@@ -62,7 +62,7 @@ namespace Ibex_Motor_Control
             leftmotor.ConfigEncoderCodesPerRev(80);
             rightmotor.ConfigEncoderCodesPerRev(80);
             scoopMotor.ConfigEncoderCodesPerRev(80);
-            depthMotor.ConfigEncoderCodesPerRev(20);
+            depthMotor.ConfigEncoderCodesPerRev(50);
             winchMotor.ConfigEncoderCodesPerRev(80);
            
             //Sets PIDF values for each motor//

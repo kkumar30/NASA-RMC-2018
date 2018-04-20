@@ -173,6 +173,7 @@ public class GUI extends JFrame {
 	private static JTextField tbox_imuData;
 	private static JTextField tbox_cameraAngleData1;
 	private static JLabel hbLabel;
+	private static JLabel lblBumpLeft;
 
 	private static ImagePanel imagepanel = new ImagePanel();
 	private static JTextField tbox_cameraAngleData2;
@@ -337,14 +338,21 @@ public class GUI extends JFrame {
 				btnStop.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent arg0) {
-						if (runServer) {
-							try {
-								server.stopServer();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-						}
-						runServer = false;
+//						TODO: TEST if Stop message works
+//						if (runServer) {
+//							try {
+//								server.stopServer();
+//							} catch (IOException e) {
+//								e.printStackTrace();
+//							}
+//						}
+//						runServer = false;
+						Message stopMsgClose = new MsgStop();
+						messageQueue.clear();
+
+						messageQueue.addAtFront(stopMsgClose);
+						updateMessageQueueList(messageList);
+						updateRecoveryStackList(list_1);
 					}
 				});
 				btnStop.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -1286,7 +1294,7 @@ public class GUI extends JFrame {
 		tbox_IRData.setBounds(116, 130, 86, 20);
 		panel_4.add(tbox_IRData);
 		
-		JLabel lblBumpLeft = new JLabel("LEFT");
+		lblBumpLeft = new JLabel("LEFT");
 		lblBumpLeft.setBackground(Color.GRAY);
 		lblBumpLeft.setOpaque(true);
 		lblBumpLeft.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1498,15 +1506,7 @@ public class GUI extends JFrame {
 		
 		tbox_leftMotorID.setText((robotData.getLeftMotor().getDeviceID().toString()));
 		tbox_leftMotorCurrent.setText((robotData.getLeftMotor().getCurrent().toString()));
-		if ((robotData.getLeftMotor().getCurrent().floatValue())> 1.5)
-		{
-//			TODO: Test if this works in the real case
-			runRecovery();
-//			Message recovery_method = recoveryStack.pop();
-//			messageQueue.addAtFront(recovery_method);
-//			updateMessageQueueList(messageList);
-//			updateRecoveryStackList(list_1);
-		}
+		if ((robotData.getLeftMotor().getCurrent().floatValue())> 1.5) {runRecovery();}
 
 		tbox_leftMotorVoltage.setText((robotData.getLeftMotor().getVoltage().toString()));
 		tbox_leftMotorTemperature.setText((robotData.getLeftMotor().getTemperature().toString()));
@@ -1530,7 +1530,7 @@ public class GUI extends JFrame {
 		tbox_rightMotorID.setText((robotData.getRightMotor().getDeviceID().toString()));
 		tbox_rightMotorCurrent.setText((robotData.getRightMotor().getCurrent().toString()));
 
-		if((robotData.getRightMotor().getCurrent().floatValue()>1.0)){
+		if((robotData.getRightMotor().getCurrent().floatValue()>10.0)){
 //			TODO: Test recovery for the right motor
 			runRecovery();
 		}
@@ -1556,9 +1556,7 @@ public class GUI extends JFrame {
 		tbox_scoopMotorID.setText((robotData.getScoopMotor().getDeviceID().toString()));
 		tbox_scoopMotorCurrent.setText((robotData.getScoopMotor().getCurrent().toString()));
 	// Recovery for scoop action
-		if (robotData.getScoopMotor().getCurrent()>2.0){
-			runRecovery();
-		}
+		if (robotData.getScoopMotor().getCurrent()>5.0){runRecovery();}
 		tbox_scoopMotorVoltage.setText((robotData.getScoopMotor().getVoltage().toString()));
 		tbox_scoopMotorTemperature.setText((robotData.getScoopMotor().getTemperature().toString()));
 		tbox_scoopMotorMode.setText((robotData.getScoopMotor().getMode().toString()));
@@ -1574,7 +1572,7 @@ public class GUI extends JFrame {
 		tbox_depthMotorID.setText((robotData.getDepthMotor().getDeviceID().toString()));
 		tbox_depthMotorCurrent.setText((robotData.getDepthMotor().getCurrent().toString()));
 //		Recovery for the depth motor (aka MSG_DIG most of the time)
-		if (robotData.getDepthMotor().getCurrent()> 15.0){ runRecovery();}
+		if (robotData.getDepthMotor().getCurrent()> 25.0){ runRecovery();}
 
 		tbox_depthMotorVoltage.setText((robotData.getDepthMotor().getVoltage().toString()));
 		tbox_depthMotorTemperature.setText((robotData.getDepthMotor().getTemperature().toString()));
@@ -1600,15 +1598,22 @@ public class GUI extends JFrame {
 		tbox_imuData.setText((robotData.getImu().getValue().toString()));
 		tbox_cameraAngleData1.setText((robotData.getCamServo1().getValue().toString()));
 		tbox_cameraAngleData2.setText((robotData.getCamServo2().getValue().toString()));
+
+//		TODO: add the lblBumpLeft and lblBumpRight button display
+		if (robotData.getLimitSwitch1().getValue()<1.0){lblBumpLeft.setBackground(Color.GREEN);}
+		else if (robotData.getLimitSwitch1().getValue()== 1.0){lblBumpLeft.setBackground(Color.GRAY);}
+
 	}
 
 	private static void runRecovery() {
-		already_ran_recovery_message = recoveryStack.peek();
-
-		Message recovery_method = recoveryStack.pop();
-		messageQueue.addAtFront(recovery_method);
-		updateMessageQueueList(messageList);
-		updateRecoveryStackList(list_1);
+	//TODO: Handle null ptr exception
+		if (!recoveryStack.isEmpty()){
+			already_ran_recovery_message = recoveryStack.peek();
+			Message recovery_method = recoveryStack.pop();
+			messageQueue.addAtFront(recovery_method);
+			updateMessageQueueList(messageList);
+			updateRecoveryStackList(list_1);
+		}
 	}
 
 	public GUI(MessageQueue messageQueue) {
@@ -1669,8 +1674,8 @@ public class GUI extends JFrame {
 //		selectedMessage = MessageFactory.makeMessage(selectedMessageType);
 
 		/************Stage 2***************/
-
-		Message drive_to_ez = new MsgDriveTime(2.0, -1.0); // TODO: Change the parameters accordingly
+// TODO: Change the parameters accordingly once tested
+		Message drive_to_ez = new MsgDriveTime(2.0, 1.0); // TODO: Change the parameters accordingly
 		Message excavate = new MsgDigTime(5.0);
 		Message retract_digger = new MsgRetractDigger();
 		Message go_back = new MsgGoToDump();
@@ -1678,9 +1683,9 @@ public class GUI extends JFrame {
 
 		q.addAtBack(drive_to_ez);
 		q.addAtBack(excavate);
-		q.addAtBack(retract_digger);
-		q.addAtBack(go_back);
-		q.addAtBack(dump);
+//		q.addAtBack(retract_digger);
+//		q.addAtBack(go_back);
+//		q.addAtBack(dump);
 
 	}
 
