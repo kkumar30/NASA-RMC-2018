@@ -338,7 +338,6 @@ public class GUI extends JFrame {
 				btnStop.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent arg0) {
-//						TODO: TEST if Stop message works
 //						if (runServer) {
 //							try {
 //								server.stopServer();
@@ -1498,107 +1497,147 @@ public class GUI extends JFrame {
 		}
 	}
 
+	/**
+	 * Updates the robot data boxes in the GUI
+	 * <p>
+	 * Convention Followed-
+	 * Blue = +
+//	 * Orange = -
+//	 * RED = Extreme Vals
+	 */
 	private static void updateRobotDataBoxes() {
+
 		if (robotData.getHb().getValue().intValue()==1){hbLabel.setBackground(new Color(255, 0, 255));}
 		else{
 			hbLabel.setBackground(Color.GRAY);
 		}
-		
+
+//		TODO: Test recovery for the motors
+//		*******LEFT MOTOR******
 		tbox_leftMotorID.setText((robotData.getLeftMotor().getDeviceID().toString()));
 		tbox_leftMotorCurrent.setText((robotData.getLeftMotor().getCurrent().toString()));
-		if ((robotData.getLeftMotor().getCurrent().floatValue())> 1.5) {runRecovery();}
-
+		if ((robotData.getLeftMotor().getCurrent().floatValue()) >= 10.0) {runRecovery(); tbox_leftMotorCurrent.setBackground(Color.GRAY);}
+		else if ((robotData.getLeftMotor().getCurrent().floatValue())< 10.0) {tbox_leftMotorCurrent.setBackground(Color.WHITE);}
 		tbox_leftMotorVoltage.setText((robotData.getLeftMotor().getVoltage().toString()));
 		tbox_leftMotorTemperature.setText((robotData.getLeftMotor().getTemperature().toString()));
 		tbox_leftMotorMode.setText((robotData.getLeftMotor().getMode().toString()));
-		tbox_leftMotorSetpoint.setText((robotData.getLeftMotor().getSetpoint().toString()));
-		tbox_leftMotorPosition.setText((robotData.getLeftMotor().getPosition().toString()));
 
-		if (abs(robotData.getLeftMotor().getPosition())>10){
-			tbox_leftMotorPosition.setBackground(Color.RED);
-		}
-		else if (robotData.getLeftMotor().getPosition() == 0){
-			tbox_leftMotorPosition.setBackground(Color.GREEN);
-		}
-		else {
-			tbox_leftMotorPosition.setBackground(Color.ORANGE);
-		}
+		tbox_leftMotorSetpoint.setText((robotData.getLeftMotor().getSetpoint().toString()));
+		if (robotData.getLeftMotor().getSetpoint()>0.0){tbox_leftMotorSetpoint.setBackground(Color.BLUE);}
+		else if(robotData.getLeftMotor().getSetpoint()<0.0){tbox_leftMotorSetpoint.setBackground(Color.ORANGE);}
+		else if (robotData.getLeftMotor().getSetpoint() == 0.0){tbox_leftMotorSetpoint.setBackground(Color.WHITE);}
+
+		tbox_leftMotorPosition.setText((robotData.getLeftMotor().getPosition().toString()));
+		if (abs(robotData.getLeftMotor().getPosition())>10){tbox_leftMotorPosition.setBackground(Color.RED);}
+		else if (robotData.getLeftMotor().getPosition() == 0){tbox_leftMotorPosition.setBackground(Color.WHITE);}
+
 		tbox_leftMotorSpeed.setText((robotData.getLeftMotor().getSpeed().toString()));
 		tbox_leftMotorFLimit.setText((robotData.getLeftMotor().getForwardLimit().toString()));
 		tbox_leftMotorRLimit.setText((robotData.getLeftMotor().getReverseLimit().toString()));
 
+//	 	************RIGHT MOTOR**********
 		tbox_rightMotorID.setText((robotData.getRightMotor().getDeviceID().toString()));
 		tbox_rightMotorCurrent.setText((robotData.getRightMotor().getCurrent().toString()));
 
-		if((robotData.getRightMotor().getCurrent().floatValue()>10.0)){
-//			TODO: Test recovery for the right motor
-			runRecovery();
-		}
+		if((robotData.getRightMotor().getCurrent().floatValue() >= 10.0)){runRecovery(); tbox_rightMotorCurrent.setBackground(Color.GRAY);}
+		else if((robotData.getRightMotor().getCurrent().floatValue() < 10.0)){tbox_rightMotorCurrent.setBackground(Color.WHITE);}
+
 
 		tbox_rightMotorVoltage.setText((robotData.getRightMotor().getVoltage().toString()));
 		tbox_rightMotorTemperature.setText((robotData.getRightMotor().getTemperature().toString()));
 		tbox_rightMotorMode.setText((robotData.getRightMotor().getMode().toString()));
 		tbox_rightMotorSetpoint.setText((robotData.getRightMotor().getSetpoint().toString()));
+		if (robotData.getRightMotor().getSetpoint()>0.0){tbox_rightMotorSetpoint.setBackground(Color.BLUE);}
+		else if(robotData.getRightMotor().getSetpoint()<0.0){tbox_rightMotorSetpoint.setBackground(Color.ORANGE);}
+		else if (robotData.getRightMotor().getSetpoint() == 0.0){tbox_rightMotorSetpoint.setBackground(Color.WHITE);}
+
 		tbox_rightMotorPosition.setText((robotData.getRightMotor().getPosition().toString()));
 		if (abs(robotData.getRightMotor().getPosition())>10) {tbox_rightMotorPosition.setBackground(Color.RED);}
 		else if (robotData.getRightMotor().getPosition() == 0){tbox_rightMotorPosition.setBackground(Color.WHITE);}
-		else{tbox_rightMotorPosition.setBackground(Color.ORANGE);}
+
 
 		tbox_rightMotorSpeed.setText((robotData.getRightMotor().getSpeed().toString()));
-
-		if (abs(robotData.getRightMotor().getSpeed())>0.9) {tbox_rightMotorSpeed.setBackground(Color.ORANGE);}
-
-		else if (robotData.getRightMotor().getPosition() == 0){tbox_rightMotorSpeed.setBackground(Color.WHITE);}
-
 		tbox_rightMotorFLimit.setText((robotData.getRightMotor().getForwardLimit().toString()));
 		tbox_rightMotorRLimit.setText((robotData.getRightMotor().getReverseLimit().toString()));
 
+
+//******SCOOP MOTOR***************
 		tbox_scoopMotorID.setText((robotData.getScoopMotor().getDeviceID().toString()));
 		tbox_scoopMotorCurrent.setText((robotData.getScoopMotor().getCurrent().toString()));
 	// Recovery for scoop action
-		if (robotData.getScoopMotor().getCurrent()>5.0){runRecovery();}
+		if (robotData.getScoopMotor().getCurrent() >= 20.0){runRecovery(); tbox_scoopMotorCurrent.setBackground(Color.GRAY);}
+		else if (robotData.getScoopMotor().getCurrent()<20.0) {tbox_scoopMotorCurrent.setBackground(Color.WHITE);}
 		tbox_scoopMotorVoltage.setText((robotData.getScoopMotor().getVoltage().toString()));
 		tbox_scoopMotorTemperature.setText((robotData.getScoopMotor().getTemperature().toString()));
 		tbox_scoopMotorMode.setText((robotData.getScoopMotor().getMode().toString()));
 		tbox_scoopMotorSetpoint.setText((robotData.getScoopMotor().getSetpoint().toString()));
-		if (abs(robotData.getScoopMotor().getSetpoint())>0.8){tbox_scoopMotorSetpoint.setBackground(Color.RED);}
-		else {tbox_scoopMotorSetpoint.setBackground(Color.WHITE);}
+		if (robotData.getScoopMotor().getSetpoint()>0.0){tbox_scoopMotorSetpoint.setBackground(Color.BLUE);}
+		else if(robotData.getScoopMotor().getSetpoint()<0.0){tbox_scoopMotorSetpoint.setBackground(Color.ORANGE);}
+		else if (robotData.getScoopMotor().getSetpoint() == 0.0){tbox_scoopMotorSetpoint.setBackground(Color.WHITE);}
+
 
 		tbox_scoopMotorPosition.setText((robotData.getScoopMotor().getPosition().toString()));
+		if (abs(robotData.getScoopMotor().getPosition())>10) {tbox_scoopMotorPosition.setBackground(Color.RED);}
+		else if (robotData.getScoopMotor().getPosition() == 0){tbox_scoopMotorPosition.setBackground(Color.WHITE);}
+
 		tbox_scoopMotorSpeed.setText((robotData.getScoopMotor().getSpeed().toString()));
 		tbox_scoopMotorFLimit.setText((robotData.getScoopMotor().getForwardLimit().toString()));
 		tbox_scoopMotorRLimit.setText((robotData.getScoopMotor().getReverseLimit().toString()));
 
+//		*************DEPTH MOTOR************
 		tbox_depthMotorID.setText((robotData.getDepthMotor().getDeviceID().toString()));
 		tbox_depthMotorCurrent.setText((robotData.getDepthMotor().getCurrent().toString()));
 //		Recovery for the depth motor (aka MSG_DIG most of the time)
-		if (robotData.getDepthMotor().getCurrent()> 25.0){ runRecovery();}
-
+		if (robotData.getDepthMotor().getCurrent() >= 25.0){ runRecovery(); tbox_depthMotorCurrent.setBackground(Color.GRAY);}
+		else if (robotData.getDepthMotor().getCurrent() < 25.0){tbox_depthMotorCurrent.setBackground(Color.WHITE);}
 		tbox_depthMotorVoltage.setText((robotData.getDepthMotor().getVoltage().toString()));
 		tbox_depthMotorTemperature.setText((robotData.getDepthMotor().getTemperature().toString()));
 		tbox_depthMotorMode.setText((robotData.getDepthMotor().getMode().toString()));
 		tbox_depthMotorSetpoint.setText((robotData.getDepthMotor().getSetpoint().toString()));
-		if (abs(robotData.getDepthMotor().getSetpoint())>0.2){tbox_depthMotorSetpoint.setBackground(Color.RED);}
+		if ((robotData.getDepthMotor().getSetpoint())>0.3) {tbox_depthMotorSetpoint.setBackground(Color.RED);}
+		else if (robotData.getDepthMotor().getSetpoint()>0.0){tbox_depthMotorSetpoint.setBackground(Color.BLUE);}
+		else if(robotData.getDepthMotor().getSetpoint()<0.0){tbox_depthMotorSetpoint.setBackground(Color.ORANGE);}
+		else if (robotData.getDepthMotor().getSetpoint() == 0.0){tbox_depthMotorSetpoint.setBackground(Color.WHITE);}
+
+
+
 		tbox_depthMotorPosition.setText((robotData.getDepthMotor().getPosition().toString()));
+		if (abs(robotData.getDepthMotor().getPosition())>45) {tbox_depthMotorPosition.setBackground(Color.ORANGE);}
+		else if (robotData.getDepthMotor().getPosition() > 0){tbox_depthMotorPosition.setBackground(Color.GREEN);}
+		else if (robotData.getDepthMotor().getPosition() == 0){tbox_depthMotorPosition.setBackground(Color.WHITE);}
+
 		tbox_depthMotorSpeed.setText((robotData.getDepthMotor().getSpeed().toString()));
 		tbox_depthMotorFLimit.setText((robotData.getDepthMotor().getForwardLimit().toString()));
 		tbox_depthMotorRLimit.setText((robotData.getDepthMotor().getReverseLimit().toString()));
 
+//		***********Dump Motor*************
 		tbox_winchMotorID.setText((robotData.getDumpMotor().getDeviceID().toString()));
 		tbox_winchMotorCurrent.setText((robotData.getDumpMotor().getCurrent().toString()));
+		if (robotData.getDumpMotor().getCurrent() >= 15.0){ runRecovery(); tbox_winchMotorCurrent.setBackground(Color.GRAY);}
+		if (robotData.getDumpMotor().getCurrent() < 15.0) { tbox_winchMotorCurrent.setBackground(Color.WHITE);}
+
 		tbox_winchMotorVoltage.setText((robotData.getDumpMotor().getVoltage().toString()));
 		tbox_winchMotorTemperature.setText((robotData.getDumpMotor().getTemperature().toString()));
 		tbox_winchMotorMode.setText((robotData.getDumpMotor().getMode().toString()));
 		tbox_winchMotorSetpoint.setText((robotData.getDumpMotor().getSetpoint().toString()));
+		if (robotData.getDumpMotor().getSetpoint()>0.0){tbox_winchMotorSetpoint.setBackground(Color.BLUE);}
+		else if(robotData.getDumpMotor().getSetpoint()<0.0){tbox_winchMotorSetpoint.setBackground(Color.ORANGE);}
+		else if (robotData.getDumpMotor().getSetpoint() == 0.0){tbox_winchMotorSetpoint.setBackground(Color.WHITE);}
+
+
 		tbox_winchMotorPosition.setText((robotData.getDumpMotor().getPosition().toString()));
+		if (abs(robotData.getDumpMotor().getPosition())> 20) {tbox_winchMotorPosition.setBackground(Color.ORANGE);}
+		else if (robotData.getDumpMotor().getPosition() > 0){tbox_winchMotorPosition.setBackground(Color.GREEN);}
+		else if (robotData.getDumpMotor().getPosition() == 0){tbox_winchMotorPosition.setBackground(Color.WHITE);}
+
 		tbox_winchMotorSpeed.setText((robotData.getDumpMotor().getSpeed().toString()));
 		tbox_winchMotorFLimit.setText((robotData.getDumpMotor().getForwardLimit().toString()));
 		tbox_winchMotorRLimit.setText((robotData.getDumpMotor().getReverseLimit().toString()));
 
+	//********Sensors*****************
 		tbox_imuData.setText((robotData.getImu().getValue().toString()));
 		tbox_cameraAngleData1.setText((robotData.getCamServo1().getValue().toString()));
 		tbox_cameraAngleData2.setText((robotData.getCamServo2().getValue().toString()));
-
 //		TODO: add the lblBumpLeft and lblBumpRight button display
 		if (robotData.getLimitSwitch1().getValue()<1.0){lblBumpLeft.setBackground(Color.GREEN);}
 		else if (robotData.getLimitSwitch1().getValue()== 1.0){lblBumpLeft.setBackground(Color.GRAY);}

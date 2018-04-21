@@ -18,7 +18,6 @@ public enum MessageType {
 	MSG_PING,
 	MSG_DIG,
 	MSG_RETRACT_DIGGER,
-//	TODO: Make the functions
 	MSG_GO_TO_DUMP,
 	MSG_DUMP
 }

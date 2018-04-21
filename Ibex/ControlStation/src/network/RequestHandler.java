@@ -95,7 +95,6 @@ class RequestHandler extends Thread {
 			if (!queue.isEmpty()) {
 //	********************************************************
 
-
 				Message popped = queue.peek();
 				if (popped != recoveryStack.peek() && popped != GUI.already_ran_recovery_message) {
 //					System.out.print("Popped Msg Type:");
