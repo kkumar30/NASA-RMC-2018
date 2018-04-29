@@ -3,15 +3,15 @@ package messages;
 import common.AbsMessage;
 import common.MessageType;
 
-public class MsgBucketPosition extends AbsMessage 
+public class MsgGetTarget extends AbsMessage
 {
 	
-	public MsgBucketPosition()
+	public MsgGetTarget()
 	{
 		this(0.0, 0.0);
 	}
 	
-	public MsgBucketPosition(double position, double speed)
+	public MsgGetTarget(double position, double speed)
 	{
 		super();
 		setType(MessageType.MSG_GET_TARGET);

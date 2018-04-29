@@ -47,7 +47,6 @@ import java.awt.Panel;
 import java.awt.Canvas;
 import java.util.concurrent.TimeUnit;
 
-
 public class GUI extends JFrame {
 
 	/*
@@ -95,6 +94,7 @@ public class GUI extends JFrame {
 //	private static MessageQueue pingMessageQueue = new MessageQueue();
 	public static RecoveryStack recoveryStack = new RecoveryStack();
 //	MessageQueue.
+
 
 	private NetworkServer server = new NetworkServer(11000, messageQueue, robotData, recoveryStack);
 	private boolean runServer = false;
@@ -178,6 +178,7 @@ public class GUI extends JFrame {
 	private static ImagePanel imagepanel = new ImagePanel();
 	private static JTextField tbox_cameraAngleData2;
 	private static JTextField tbox_IRData;
+	public static double pose;
 
 
 	public static void main(String[] args) {
@@ -346,9 +347,10 @@ public class GUI extends JFrame {
 //							}
 //						}
 //						runServer = false;
+//						runRecovery();
+
 						Message stopMsgClose = new MsgStop();
 						messageQueue.clear();
-
 						messageQueue.addAtFront(stopMsgClose);
 						updateMessageQueueList(messageList);
 						updateRecoveryStackList(list_1);
@@ -461,7 +463,7 @@ public class GUI extends JFrame {
 					removalIndex = messageList.getSelectedIndex();
 					Message pop;
 					pop = messageQueue.removeAtIndex(removalIndex);
-					recoveryStack.addAtBack(pop);
+					recoveryStack.addToStack(pop);
 					updateMessageQueueList(messageList);
 					updateRecoveryStackList(list_1);
 				} catch (Exception exception) {
@@ -682,7 +684,7 @@ public class GUI extends JFrame {
 					System.out.println("Could not add message at selected index, added to back of queue.");
 					messageQueue.addAtBack(selectedMessage);
 				}
-				updateMessageQueueList(messageList);
+  				updateMessageQueueList(messageList);
 				updateRecoveryStackList(list_1);
 				selectedMessage = MessageFactory.makeMessage(selectedMessageType);
 			}
@@ -1218,7 +1220,7 @@ public class GUI extends JFrame {
 		tbox_imuData.setBounds(116, 48, 86, 20);
 		panel_4.add(tbox_imuData);
 
-		JLabel lblCameraAngle1 = new JLabel("Camera 1 Angle:");
+		JLabel lblCameraAngle1 = new JLabel("Camera Angle:");
 		lblCameraAngle1.setForeground(Color.WHITE);
 		lblCameraAngle1.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblCameraAngle1.setBounds(10, 78, 100, 14);
@@ -1271,7 +1273,7 @@ public class GUI extends JFrame {
 								.addContainerGap())
 		);
 		
-		JLabel lblCameraAngle2 = new JLabel("Camera 2 Angle:");
+		JLabel lblCameraAngle2 = new JLabel("Robot Pose:");
 		lblCameraAngle2.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblCameraAngle2.setForeground(Color.WHITE);
 		lblCameraAngle2.setBounds(10, 105, 100, 14);
@@ -1282,7 +1284,7 @@ public class GUI extends JFrame {
 		tbox_cameraAngleData2.setBounds(116, 102, 86, 20);
 		panel_4.add(tbox_cameraAngleData2);
 		
-		JLabel lblIR = new JLabel("Bucket Capacity (IR): ");
+		JLabel lblIR = new JLabel("Camera Value: ");
 		lblIR.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblIR.setForeground(Color.WHITE);
 		lblIR.setBounds(0, 133, 120, 14);
@@ -1477,7 +1479,7 @@ public class GUI extends JFrame {
 		cbox.addItem("Depth Distance");
 		cbox.addItem("Bucket Time");
 		cbox.addItem("Bucket Distance");
-		cbox.addItem("Bucket Position");
+		cbox.addItem("Find Target");
 		cbox.addItem("Stop Time");
 		cbox.addItem("Motor Values");
 		cbox.addItem("Ratchet Position");
@@ -1637,16 +1639,22 @@ public class GUI extends JFrame {
 	//********Sensors*****************
 		tbox_imuData.setText((robotData.getImu().getValue().toString()));
 		tbox_cameraAngleData1.setText((robotData.getCamServo1().getValue().toString()));
-		tbox_cameraAngleData2.setText((robotData.getCamServo2().getValue().toString()));
+		tbox_cameraAngleData2.setText((robotData.getPose().getValue().toString()));
 //		TODO: add the lblBumpLeft and lblBumpRight button display
 		if (robotData.getLimitSwitch1().getValue()<1.0){lblBumpLeft.setBackground(Color.GREEN);}
 		else if (robotData.getLimitSwitch1().getValue()== 1.0){lblBumpLeft.setBackground(Color.GRAY);}
+		pose = robotData.getPose().getValue();
+
+		if (robotData.getCamera().getValue()==1.0){ tbox_IRData.setText("Right");}
+		else if (robotData.getCamera().getValue()==2.0){ tbox_IRData.setText("Left");}
+		else if(robotData.getCamera().getValue()!= 1.0 || robotData.getCamera().getValue()!= 2.0) { tbox_IRData.setText("Janeen");}
 
 	}
 
 	private static void runRecovery() {
 	//TODO: Handle null ptr exception
 		if (!recoveryStack.isEmpty()){
+//			if already_ran_recovery_message !=
 			already_ran_recovery_message = recoveryStack.peek();
 			Message recovery_method = recoveryStack.pop();
 			messageQueue.addAtFront(recovery_method);
@@ -1677,7 +1685,7 @@ public class GUI extends JFrame {
 		driveTimeBack.setDataByIndex(0,5.0);//Setting Time
 		driveTimeBack.setDataByIndex(1,-0.6); //Setting Speed
 
-		Message findTarget = new MsgBucketPosition();
+		Message findTarget = new MsgGetTarget();
 		Message alignWithBorder = new MsgBucketTime();
 
 		Message driveToBorder = new MsgDriveTime(4.0, -1.0);
@@ -1690,7 +1698,7 @@ public class GUI extends JFrame {
 
 		/**********Stage 1**************/
 //		q.addAtBack(stopMessage);
-//		q.addAtBack(findTarget);
+		q.addAtBack(findTarget);
 //		q.addAtBack(alignWithBorder);
 //		q.addAtBack(driveToBorder);
 //		q.addAtBack(rotateToStraight);
@@ -1720,8 +1728,8 @@ public class GUI extends JFrame {
 		Message go_back = new MsgGoToDump();
 		Message dump = new MsgDump();
 
-		q.addAtBack(drive_to_ez);
-		q.addAtBack(excavate);
+//		q.addAtBack(drive_to_ez);
+//		q.addAtBack(excavate);
 //		q.addAtBack(retract_digger);
 //		q.addAtBack(go_back);
 //		q.addAtBack(dump);

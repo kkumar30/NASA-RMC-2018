@@ -108,6 +108,8 @@ public abstract class AbsMessage implements Message
 		{
 			messageString += ":";
 			if (i==size-1){
+//				TODO: Make this.data and then see if that works
+				data[i] = -data[i]; //Should change the message's data structure
 				messageString += -data[i];
 			}
 			else {
@@ -115,6 +117,7 @@ public abstract class AbsMessage implements Message
 			}
 		}
 		messageString += ">";
+
 		return messageString;
 	}
 	

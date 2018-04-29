@@ -21,6 +21,8 @@ public class RobotData
 	private Sensor LEDSensor;
 	private Sensor hb; //Heartbeat
 	private Sensor limitSwitch1;
+	private Sensor pose;
+	private Sensor camera;
 	
 	public RobotData()
 	{
@@ -36,6 +38,8 @@ public class RobotData
 		LEDSensor = new Sensor();
 		hb = new Sensor();
 		limitSwitch1 = new Sensor();
+		pose = new Sensor();
+		camera = new Sensor();
 	}
 	
 	public Motor getLeftMotor() {return leftMotor;}
@@ -49,15 +53,15 @@ public class RobotData
 	public Sensor getLEDSensor() {return LEDSensor;}
 	public Sensor getHb(){return hb;}
 	public Sensor getLimitSwitch1(){return limitSwitch1;}
-	
-
+	public Sensor getPose(){return pose;}
+	public Sensor getCamera() {return camera;}
 
 	public void updateRobotData(String motorMessage, String sensorMessage)
 	{
 		final String patternStr = "<(.+)><(.+)><(.+)><(.+)><(.+)>";
 //		final String patternStr = "<(.+)><(.+)>"; //patterns for all motors only
 //
-		final String SensorPatternStr = "<(.+)><(.+)><(.+)><(.+)><(.+)>"; //patterns for sensors and other status messages
+		final String SensorPatternStr = "<(.+)><(.+)><(.+)><(.+)><(.+)><(.+)><(.+)>"; //patterns for sensors and other status messages
 
 		Pattern pattern = Pattern.compile(patternStr);
 		Pattern sensorPattern = Pattern.compile(SensorPatternStr);
@@ -73,7 +77,7 @@ public class RobotData
 			String scoopMotorData = motorMatch.group(3);
 			String depthMotorData = motorMatch.group(4);
 			String dumpMotorData = motorMatch.group(5);
-			
+
 			leftMotor.updateMotorData(leftMotorData);
 			rightMotor.updateMotorData(rightMotorData);
 			scoopMotor.updateMotorData(scoopMotorData);
@@ -88,13 +92,16 @@ public class RobotData
 			String bump1 = sensorMatch.group(3);
 			String hbData = sensorMatch.group(4);
 			String camServoData1 = sensorMatch.group(5);
-//			String camServoData2 = sensorMatch.group(5);
+			String position = sensorMatch.group(6);
+			String camVal = sensorMatch.group(7);
+
 			imu.updateSensorData(imuData);
 			camServo1.updateSensorData(camServoData1);
-//			camServo2.updateSensorData(camServoData2);
+			pose.updateSensorData(position);
 			hb.updateSensorData(hbData);
 			LEDSensor.updateSensorData(LEDSensorData);
 			limitSwitch1.updateSensorData(bump1);
+			camera.updateSensorData(camVal);
 		}
 
 	}

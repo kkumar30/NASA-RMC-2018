@@ -9,8 +9,8 @@ String msg = "";
 const unsigned int RATCHET_PIN = 9; // was 2
 const unsigned int CAM_SERVO_1_PIN = 9;
 const unsigned int CAM_SERVO_2_PIN = 4;
-const unsigned int CAM_SERVO_3_PIN = 5;
-const unsigned int CAM_SERVO_4_PIN = 6;
+//const unsigned int CAM_SERVO_3_PIN = 5;
+//const unsigned int CAM_SERVO_4_PIN = 6;
 const unsigned int TEST_IR = 2;//For the IR Sensor
 const unsigned int LIMIT1_PIN = 7;
 const unsigned int LIMIT2_PIN = 8;
@@ -126,7 +126,11 @@ void loop()
         }
 
         else {
-          testcamservoSetpoint = msg.toInt();
+          const int colonIndex = msg.indexOf(':');
+          testcamservoSetpoint = msg.substring(0,colonIndex).toInt();
+          camServo2Setpoint = msg.substring(colonIndex+1).toInt();
+//          testcamservoSetpoint = msg.toInt();
+//          camServo2Setpoint = msg.toInt();
           writeMotorValues();
         }
         //**************************SENDING IMU MESSAGE HERE*******************************************
@@ -140,7 +144,7 @@ void loop()
       }
 
       else {
-        msg += data - 48;
+        msg += data;// - 48;
       }
     }
 

@@ -31,7 +31,7 @@ public class RecoveryStack {
         return !isEmpty() ? stack.remove(getSize()-1) : null;
     }
 
-    public void addAtBack(Message msg)
+    public void addToStack(Message msg)
     {
         stack.add(getSize(), msg);
     }

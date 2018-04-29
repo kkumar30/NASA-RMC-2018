@@ -5,16 +5,18 @@ import java.net.Socket;
 
 import common.Message;
 import common.MessageQueue;
+import common.MessageType;
 import common.RecoveryStack;
 import gui.RobotData;
 import gui.GUI;
+import messages.MsgDummy;
 
 import static gui.GUI.list_1;
 import static gui.GUI.messageList;
 
 class RequestHandler extends Thread {
 	private Socket socket;
-	private MessageQueue queue;
+	public MessageQueue queue;
 	private RobotData robotData;
 	private RecoveryStack recoveryStack;
 
@@ -48,7 +50,7 @@ class RequestHandler extends Thread {
 				inboundMotorMessageStr = "None";
 
 				entireMessageStr= inFromClient.readLine();
-				System.out.println("Entire MessageString: " + entireMessageStr);
+//				System.out.println("Entire MessageString: " + entireMessageStr);
 				MotorAndSensorStr = entireMessageStr.split("\\$");
 				inboundMotorMessageStr = MotorAndSensorStr[0];
 //				System.out.println(MotorAndSensorStr[1]);
@@ -92,16 +94,20 @@ class RequestHandler extends Thread {
 //			System.out.println("Camera Servo Pos: "+ inboundCameraMessageStr);
 			robotData.updateRobotData(inboundMotorMessageStr, inboundSensorMessageStr);
 
-			if (!queue.isEmpty()) {
-//	********************************************************
 
+			if (!queue.isEmpty()) {
 				Message popped = queue.peek();
-				if (popped != recoveryStack.peek() && popped != GUI.already_ran_recovery_message) {
-//					System.out.print("Popped Msg Type:");
-//					System.out.println(popped.getType());
-					recoveryStack.addAtBack(popped);
-					System.out.print("********************Added to Recovery Stack!:***************");
-					System.out.println(popped);
+				if (popped != recoveryStack.peek() && popped.getType() != MessageType.MSG_MOTOR_VALUES) { //Handles so that the current message doesn't go in the stack agn
+					System.out.print("Already ran Msg Holder:");
+					System.out.println(GUI.already_ran_recovery_message);
+					if (popped != GUI.already_ran_recovery_message){
+						recoveryStack.addToStack(popped);
+						GUI.already_ran_recovery_message = new MsgDummy(); //Flush the value to allow multiple recovery of the same kind once the recovery function is run
+						System.out.print("********************Added to Recovery Stack!:***************");
+						System.out.println(popped);
+					}
+
+
 					GUI.updateMessageQueueList(messageList);
 					GUI.updateRecoveryStackList(list_1);
 				}
