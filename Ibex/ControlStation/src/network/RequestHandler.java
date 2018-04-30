@@ -80,7 +80,7 @@ class RequestHandler extends Thread {
 ////							GUI.updateAutonomyQueue(queue);
 //							GUI.updateRecoveryStackList(list_1);
 //						}
-//						System.out.println("Next action in Queue!");
+						System.out.println("Next action in Queue!");
 //						System.out.println(queue.peek());
 					}
 				}
@@ -100,13 +100,12 @@ class RequestHandler extends Thread {
 				if (popped != recoveryStack.peek() && popped.getType() != MessageType.MSG_MOTOR_VALUES) { //Handles so that the current message doesn't go in the stack agn
 					System.out.print("Already ran Msg Holder:");
 					System.out.println(GUI.already_ran_recovery_message);
-					if (popped != GUI.already_ran_recovery_message){
+					if (popped != GUI.already_ran_recovery_message) {
 						recoveryStack.addToStack(popped);
 						GUI.already_ran_recovery_message = new MsgDummy(); //Flush the value to allow multiple recovery of the same kind once the recovery function is run
 						System.out.print("********************Added to Recovery Stack!:***************");
 						System.out.println(popped);
 					}
-
 
 					GUI.updateMessageQueueList(messageList);
 					GUI.updateRecoveryStackList(list_1);
@@ -118,7 +117,8 @@ class RequestHandler extends Thread {
 
 //				queue.peek();
 				out.println(queue.peek().getMessageString());
-				System.out.println("Sent: " + queue.peek().getMessageString());
+				System.out.println("Type:" + queue.peek().getType());
+				System.out.println("     Sent: " + queue.peek().getMessageString());
 				out.flush();
 			} else {
 				out.println("<0|-1>");  //Sending a default stop message

@@ -6,14 +6,13 @@
 L3G gyro;
 String msg = "";
 
-const unsigned int RATCHET_PIN = 9; // was 2
 const unsigned int CAM_SERVO_1_PIN = 9;
 const unsigned int CAM_SERVO_2_PIN = 4;
-//const unsigned int CAM_SERVO_3_PIN = 5;
-//const unsigned int CAM_SERVO_4_PIN = 6;
 const unsigned int TEST_IR = 2;//For the IR Sensor
 const unsigned int LIMIT1_PIN = 7;
 const unsigned int LIMIT2_PIN = 8;
+const unsigned int BUMP1_PIN = 11;
+const unsigned int BUMP2_PIN = 12;
 
 const int ledPin = 6;
 int testcamservoSetpoint;
@@ -47,7 +46,8 @@ void setup()
   pinMode(ledPin, OUTPUT);      //LED Pin
   pinMode(LIMIT1_PIN, INPUT_PULLUP);
   pinMode(LIMIT2_PIN, INPUT_PULLUP);
-  
+  pinMode(BUMP1_PIN, INPUT_PULLUP);
+  pinMode(BUMP2_PIN, INPUT_PULLUP);
   Serial.begin(115200);
   Serial1.begin(115200);
 
@@ -57,8 +57,8 @@ void setup()
     Serial.println("Failed to autodetect gyro type!");
     while (1);
   }
-  testCameraServo.write(90);
-  camServo2.write(90);
+  testCameraServo.write(0);
+  camServo2.write(0);
   prevSetpoint = 90;
   gyro.enableDefault();
 
@@ -86,20 +86,25 @@ void loop()
   {
     int lim1 = digitalRead(LIMIT1_PIN);
     int lim2= digitalRead(LIMIT2_PIN);
+    int bump1 = digitalRead(BUMP1_PIN);
+    int bump2 = digitalRead(BUMP2_PIN);
     
     gyro.read();
     float dps = (float)gyro.g.x * 8.75 / 1000;
-    dps += 0.45; //additional Calibration
+    dps += 0.55; //additional Calibration
     outboundMessage = "";
     //float heading = compass.heading();
     //    outboundMessage += makeMessageString("ScoopReedSwitch", analogRead(A0));
     //    outboundMessage += makeMessageString("BucketMaterialDepthSense", analogRead(A1));
     //    outboundMessage += makeMessageString("LimitSwitch", digitalRead(8));
     //    outboundMessage += makeMessageString("IRSensor", analogRead(TEST_IR));
-    outboundMessage += makeMessageString("IMU", dps);
+    outboundMessage += makeMessageString("IMU", abs(dps));
     outboundMessage += makeMessageString("LED", float(ledVal));
-    outboundMessage += makeMessageString("LimitSwitch1", float(lim1));
-    outboundMessage += makeMessageString("LimitSwitch2", float(lim2));
+    outboundMessage += makeMessageString("UpperLimitSwitch", float(lim1));
+    outboundMessage += makeMessageString("LowerLimitSwitch", float(lim2));
+    outboundMessage += makeMessageString("Bump1", float(bump1));
+    outboundMessage += makeMessageString("Bump2", float(bump2));
+    
     //    Serial.println("There");
 
     //    delay(100);

@@ -3,14 +3,14 @@ package messages;
 import common.AbsMessage;
 import common.MessageType;
 
-public class MsgRatchetPosition extends AbsMessage
+public class MsgRotatePerpendicular extends AbsMessage
 {
-	public MsgRatchetPosition()
+	public MsgRotatePerpendicular()
 	{
 		this(90.0);
 	}
 	
-	public MsgRatchetPosition(double position)
+	public MsgRotatePerpendicular(double position)
 	{
 		super();
 		setType(MessageType.MSG_ROTATE_TO_PERPENDICULAR);

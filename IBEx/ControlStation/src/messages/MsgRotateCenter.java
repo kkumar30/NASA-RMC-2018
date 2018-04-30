@@ -3,14 +3,14 @@ package messages;
 import common.AbsMessage;
 import common.MessageType;
 
-public class MsgBucketTime extends AbsMessage
+public class MsgRotateCenter extends AbsMessage
 {
-	public MsgBucketTime()
+	public MsgRotateCenter()
 	{
 		this(0.0, 0.0);
 	}
 	
-	public MsgBucketTime(double time, double speed)
+	public MsgRotateCenter(double time, double speed)
 	{
 		super();
 		setType(MessageType.MSG_ROTATE_TO_CENTER);

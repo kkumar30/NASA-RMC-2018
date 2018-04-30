@@ -174,6 +174,7 @@ public class GUI extends JFrame {
 	private static JTextField tbox_cameraAngleData1;
 	private static JLabel hbLabel;
 	private static JLabel lblBumpLeft;
+	private static JLabel lblBumpRight;
 
 	private static ImagePanel imagepanel = new ImagePanel();
 	private static JTextField tbox_cameraAngleData2;
@@ -1284,10 +1285,10 @@ public class GUI extends JFrame {
 		tbox_cameraAngleData2.setBounds(116, 102, 86, 20);
 		panel_4.add(tbox_cameraAngleData2);
 		
-		JLabel lblIR = new JLabel("Camera Value: ");
+		JLabel lblIR = new JLabel("Which Camera?: ");
 		lblIR.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblIR.setForeground(Color.WHITE);
-		lblIR.setBounds(0, 133, 120, 14);
+		lblIR.setBounds(-6, 133, 120, 14);
 		panel_4.add(lblIR);
 		
 		tbox_IRData = new JTextField();
@@ -1303,7 +1304,7 @@ public class GUI extends JFrame {
 		lblBumpLeft.setBounds(220, 74, 58, 45);
 		panel_4.add(lblBumpLeft);
 		
-		JLabel lblBumpRight = new JLabel("RIGHT");
+		lblBumpRight = new JLabel("RIGHT");
 		lblBumpRight.setHorizontalAlignment(SwingConstants.CENTER);
 		lblBumpRight.setForeground(Color.WHITE);
 		lblBumpRight.setBackground(Color.GRAY);
@@ -1477,12 +1478,12 @@ public class GUI extends JFrame {
 		cbox.addItem("Scoop Distance");
 		cbox.addItem("Depth Time");
 		cbox.addItem("Depth Distance");
-		cbox.addItem("Bucket Time");
+		cbox.addItem("Rotate-->Center");
 		cbox.addItem("Bucket Distance");
-		cbox.addItem("Find Target");
+		cbox.addItem("Get Target");
 		cbox.addItem("Stop Time");
 		cbox.addItem("Motor Values");
-		cbox.addItem("Ratchet Position");
+		cbox.addItem("Rotate --> Perpendicular");
 		cbox.addItem("Ping Test");
 		cbox.addItem("Dig Time");
 		cbox.addItem("Retract Digger");
@@ -1518,8 +1519,8 @@ public class GUI extends JFrame {
 //		*******LEFT MOTOR******
 		tbox_leftMotorID.setText((robotData.getLeftMotor().getDeviceID().toString()));
 		tbox_leftMotorCurrent.setText((robotData.getLeftMotor().getCurrent().toString()));
-		if ((robotData.getLeftMotor().getCurrent().floatValue()) >= 10.0) {runRecovery(); tbox_leftMotorCurrent.setBackground(Color.GRAY);}
-		else if ((robotData.getLeftMotor().getCurrent().floatValue())< 10.0) {tbox_leftMotorCurrent.setBackground(Color.WHITE);}
+		if ((robotData.getLeftMotor().getCurrent().floatValue()) >= 20.0) {runRecovery(); tbox_leftMotorCurrent.setBackground(Color.GRAY);}
+		else if ((robotData.getLeftMotor().getCurrent().floatValue())< 20.0) {tbox_leftMotorCurrent.setBackground(Color.WHITE);}
 		tbox_leftMotorVoltage.setText((robotData.getLeftMotor().getVoltage().toString()));
 		tbox_leftMotorTemperature.setText((robotData.getLeftMotor().getTemperature().toString()));
 		tbox_leftMotorMode.setText((robotData.getLeftMotor().getMode().toString()));
@@ -1541,8 +1542,8 @@ public class GUI extends JFrame {
 		tbox_rightMotorID.setText((robotData.getRightMotor().getDeviceID().toString()));
 		tbox_rightMotorCurrent.setText((robotData.getRightMotor().getCurrent().toString()));
 
-		if((robotData.getRightMotor().getCurrent().floatValue() >= 10.0)){runRecovery(); tbox_rightMotorCurrent.setBackground(Color.GRAY);}
-		else if((robotData.getRightMotor().getCurrent().floatValue() < 10.0)){tbox_rightMotorCurrent.setBackground(Color.WHITE);}
+		if((robotData.getRightMotor().getCurrent().floatValue() >= 20.0)){runRecovery(); tbox_rightMotorCurrent.setBackground(Color.GRAY);}
+		else if((robotData.getRightMotor().getCurrent().floatValue() < 20.0)){tbox_rightMotorCurrent.setBackground(Color.WHITE);}
 
 
 		tbox_rightMotorVoltage.setText((robotData.getRightMotor().getVoltage().toString()));
@@ -1640,9 +1641,18 @@ public class GUI extends JFrame {
 		tbox_imuData.setText((robotData.getImu().getValue().toString()));
 		tbox_cameraAngleData1.setText((robotData.getCamServo1().getValue().toString()));
 		tbox_cameraAngleData2.setText((robotData.getPose().getValue().toString()));
-//		TODO: add the lblBumpLeft and lblBumpRight button display
-		if (robotData.getLimitSwitch1().getValue()<1.0){lblBumpLeft.setBackground(Color.GREEN);}
-		else if (robotData.getLimitSwitch1().getValue()== 1.0){lblBumpLeft.setBackground(Color.GRAY);}
+//		TODO: add the lblBumpRight button display
+//		System.out.print("Left = ");
+//		System.out.println(robotData.getLeftBump().getValue());
+//		System.out.print("Right = ");
+//		System.out.println(robotData.getRightBump().getValue());
+
+		if (robotData.getLeftBump().getValue().floatValue() < 1.0){lblBumpLeft.setBackground(Color.GREEN);}
+		else if (robotData.getLeftBump().getValue().floatValue() == 1.0){lblBumpLeft.setBackground(Color.GRAY);}
+//		Bump Right Display
+		if (robotData.getRightBump().getValue().floatValue() < 1.0){lblBumpRight.setBackground(Color.GREEN);}
+		else if (robotData.getRightBump().getValue().floatValue() == 1.0){lblBumpRight.setBackground(Color.GRAY);}
+
 		pose = robotData.getPose().getValue();
 
 		if (robotData.getCamera().getValue()==1.0){ tbox_IRData.setText("Right");}
@@ -1652,7 +1662,7 @@ public class GUI extends JFrame {
 	}
 
 	private static void runRecovery() {
-	//TODO: Handle null ptr exception
+		System.out.println((char)27 + "[31m" + "###################### !!RAN RECOVERY!! ########################");
 		if (!recoveryStack.isEmpty()){
 //			if already_ran_recovery_message !=
 			already_ran_recovery_message = recoveryStack.peek();
@@ -1686,10 +1696,10 @@ public class GUI extends JFrame {
 		driveTimeBack.setDataByIndex(1,-0.6); //Setting Speed
 
 		Message findTarget = new MsgGetTarget();
-		Message alignWithBorder = new MsgBucketTime();
+		Message alignWithBorder = new MsgRotateCenter();
 
-		Message driveToBorder = new MsgDriveTime(4.0, -1.0);
-		Message rotateToStraight = new MsgRatchetPosition();
+		Message driveToBorder = new MsgDriveTime(4.0, 1.0);
+		Message rotateToStraight = new MsgRotatePerpendicular();
 
 //		double camServoData = robotData.getCamServo1().getValue();
 //		System.out.println("Can set camera Servo Data in the queue");
@@ -1698,7 +1708,7 @@ public class GUI extends JFrame {
 
 		/**********Stage 1**************/
 //		q.addAtBack(stopMessage);
-		q.addAtBack(findTarget);
+//		q.addAtBack(findTarget);
 //		q.addAtBack(alignWithBorder);
 //		q.addAtBack(driveToBorder);
 //		q.addAtBack(rotateToStraight);
@@ -1731,8 +1741,9 @@ public class GUI extends JFrame {
 //		q.addAtBack(drive_to_ez);
 //		q.addAtBack(excavate);
 //		q.addAtBack(retract_digger);
-//		q.addAtBack(go_back);
+		q.addAtBack(go_back);
 //		q.addAtBack(dump);
+		q.addAtBack(stopMessage);
 
 	}
 
