@@ -129,7 +129,15 @@ void loop()
         if (msg.toInt() == 8888) {
           pingLed();
         }
-
+        if (msg.toInt() == 666) {
+          testCameraServo.write(0);
+          camServo2.write(0);
+          delay(100);
+          testCameraServo.detach();
+          camServo2.detach();
+          
+        }
+        
         else {
           const int colonIndex = msg.indexOf(':');
           testcamservoSetpoint = msg.substring(0,colonIndex).toInt();
