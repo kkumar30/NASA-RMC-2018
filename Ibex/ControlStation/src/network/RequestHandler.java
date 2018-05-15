@@ -80,6 +80,8 @@ class RequestHandler extends Thread {
 ////							GUI.updateAutonomyQueue(queue);
 //							GUI.updateRecoveryStackList(list_1);
 //						}
+						GUI.updateMessageQueueList(messageList);
+						GUI.updateRecoveryStackList(list_1);
 						System.out.println("Next action in Queue!");
 //						System.out.println(queue.peek());
 					}
@@ -97,13 +99,18 @@ class RequestHandler extends Thread {
 
 			if (!queue.isEmpty()) {
 				Message popped = queue.peek();
-				if (popped != recoveryStack.peek() && popped.getType() != MessageType.MSG_MOTOR_VALUES) { //Handles so that the current message doesn't go in the stack agn
-					System.out.print("Already ran Msg Holder:");
-					System.out.println(GUI.already_ran_recovery_message);
-					if (popped != GUI.already_ran_recovery_message) {
+				boolean isPoppedRecovery = popped.isRecovery(); //Stores the flag if the message removed from the queue was a recovery message
+				popped.convertToRecovery(); // Converts into the recovery msg
+				if (popped != recoveryStack.peek() && popped.getType() == MessageType.MSG_MOTOR_VALUES) { //Handles so that the current message doesn't go in the stack agn
+//					System.out.print("Already ran Msg Holder:");
+//					System.out.println(GUI.already_ran_recovery_message);
+					System.out.println(popped.isRecovery());
+//					if (popped != GUI.already_ran_recovery_message) {
+					if (!isPoppedRecovery){
 						recoveryStack.addToStack(popped);
 						GUI.already_ran_recovery_message = new MsgDummy(); //Flush the value to allow multiple recovery of the same kind once the recovery function is run
-						System.out.print("********************Added to Recovery Stack!:***************");
+						System.out.println("********************Added to Recovery Stack!:***************");
+						System.out.print("Recovery Msg = ");
 						System.out.println(popped);
 					}
 

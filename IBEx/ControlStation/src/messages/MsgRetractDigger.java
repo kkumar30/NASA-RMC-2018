@@ -9,13 +9,18 @@ import common.MessageType;
 
 public class MsgRetractDigger extends AbsMessage
 {
+
     public MsgRetractDigger()
+    {
+        this(0.0);
+    }
+
+    public MsgRetractDigger(double time)
     {
         super();
         setType(MessageType.MSG_RETRACT_DIGGER);
-        setSize(0);
-        setInfo("Retracting digger \n");
-
+        setSize(1);
+        setInfo("Retracting digger for " + time + "s \n");
     }
 }
 
