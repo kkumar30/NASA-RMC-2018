@@ -9,3 +9,5 @@ IBEx/ControlStation/classes/production/
 
 # Unwanted repo named stuff #
 *.iml
+*.jpg
+Ibex/ControlStation/pictures/contours.jpg
