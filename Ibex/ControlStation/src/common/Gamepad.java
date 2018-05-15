@@ -60,7 +60,7 @@ public class Gamepad
 	}
 
 	public double applyDeadzone(double val) {
-		if (val < 0.2 && val> -0.2)
+		if (val < 0.4 && val> -0.4)
 		{
 			val = 0.0;
 		}

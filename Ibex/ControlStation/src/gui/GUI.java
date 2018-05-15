@@ -1677,7 +1677,8 @@ public class GUI extends JFrame {
 
 	private static void runRecovery() {
 		System.out.println((char)27 + "[31m" + "###################### !!RAN RECOVERY!! ########################");
-		if (!recoveryStack.isEmpty()){
+		if (!recoveryStack.isEmpty() && messageQueue.peek().getType() != MessageType.MSG_MOTOR_VALUES){
+//			if already_ran_recovery_message !=
 			already_ran_recovery_message = recoveryStack.peek();
 			Message recovery_method = recoveryStack.pop();
 			messageQueue.addAtFront(recovery_method);
@@ -1721,7 +1722,7 @@ public class GUI extends JFrame {
 
 		/**********Stage 1**************/
 //		q.addAtBack(stopMessage);
-//		q.addAtBack(findTarget);
+		q.addAtBack(findTarget);
 //		q.addAtBack(alignWithBorder);
 //		q.addAtBack(driveToBorder);
 //		q.addAtBack(rotateToStraight);
@@ -1744,8 +1745,8 @@ public class GUI extends JFrame {
 //		selectedMessage = MessageFactory.makeMessage(selectedMessageType);
 
 		/************Stage 2***************/
-// TODO: Change the parameters accordingly once tested
-		Message drive_to_ez = new MsgDriveTime(2.0, 1.0); // TODO: Change the parameters accordingly
+		// TODO: Change the parameters accordingly once tested
+		Message drive_to_ez = new MsgDriveTime(10.0, 1.0); // TODO: Change the parameters accordingly
 		Message excavate = new MsgDigTime(5.0);
 		Message retract_digger = new MsgRetractDigger();
 		Message go_back = new MsgGoToDump();
