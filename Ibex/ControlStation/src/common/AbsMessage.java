@@ -117,9 +117,7 @@ public abstract class AbsMessage implements Message
 			}
 		}
 		messageString += ">";
-
 		return messageString;
 	}
-	
 	
 }
