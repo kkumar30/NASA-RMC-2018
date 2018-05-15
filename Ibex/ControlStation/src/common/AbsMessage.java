@@ -133,9 +133,10 @@ public abstract class AbsMessage implements Message
 //		TODO: See if recovery flag works
 		if (this.type == MessageType.MSG_DIG)
 		{
-			this.type = MessageType.MSG_RETRACT_DIGGER;
+			this.type = MessageType.MSG_SCOOP_TIME;
 			this.recovery = true;
-			this.data[0] = -1.0;
+			this.data[0] = 1.0;
+			this.data[1] = -0.5; //negative directional speed
 		}
 		else if (this.type == MessageType.MSG_DUMP){
 //			this.type = MessageType.MSG_BUCKET_DISTANCE;
