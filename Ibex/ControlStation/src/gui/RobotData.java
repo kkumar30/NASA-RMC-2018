@@ -41,7 +41,6 @@ public class RobotData
 		LEDSensor = new Sensor();
 		hb = new Sensor();
 		limitSwitch1 = new Sensor();
-		limitSwitch2 = new Sensor();
 		leftBump = new Sensor();
 		rightBump = new Sensor();
 		pose = new Sensor();
@@ -61,7 +60,6 @@ public class RobotData
 	public Sensor getLimitSwitch1(){return limitSwitch1;}
 	public Sensor getPose(){return pose;}
 	public Sensor getCamera() {return camera;}
-	public Sensor getLimitSwitch2() {return limitSwitch2;}
 	public Sensor getLeftBump() {return leftBump;}
 	public Sensor getRightBump() {return rightBump;}
 

@@ -12,7 +12,7 @@ public abstract class AbsMessage implements Message
 	private String info;
 	private double[] data = new double[N_DATA];
 	private String[] dataTags = new String[N_DATA];
-	
+	private boolean recovery = false;
 	
 	public AbsMessage()
 	{
@@ -66,6 +66,13 @@ public abstract class AbsMessage implements Message
 		}
 		return "";
 	}
+
+	public boolean isRecovery(){
+		return this.recovery;
+	}
+	public void setRecovery(boolean condition){
+		this.recovery = condition;
+	}
 	
 	public void initializeMessage()
 	{
@@ -102,13 +109,15 @@ public abstract class AbsMessage implements Message
 
 	public String convertRecoveryMessageString(){
 		String messageString = "<";
+		if (type == MessageType.MSG_DIG){
+			type = MessageType.MSG_RETRACT_DIGGER;
+		}
 		messageString += type.ordinal() + "|";
 		messageString += messageNumber + "";
 		for(int i = 0; i < size; i++)
 		{
 			messageString += ":";
 			if (i==size-1){
-//				TODO: Make this.data and then see if that works
 				data[i] = -data[i]; //Should change the message's data structure
 				messageString += -data[i];
 			}
@@ -118,6 +127,22 @@ public abstract class AbsMessage implements Message
 		}
 		messageString += ">";
 		return messageString;
+	}
+
+	public void convertToRecovery(){
+//		TODO: See if recovery flag works
+		if (this.type == MessageType.MSG_DIG)
+		{
+			this.type = MessageType.MSG_RETRACT_DIGGER;
+			this.recovery = true;
+			this.data[0] = -1.0;
+		}
+		else if (this.type == MessageType.MSG_DUMP){
+//			this.type = MessageType.MSG_BUCKET_DISTANCE;
+			this.data[0] = -1.0;
+			this.recovery = true;
+		}
+
 	}
 	
 }

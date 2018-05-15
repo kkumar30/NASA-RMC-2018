@@ -105,9 +105,11 @@ class RequestHandler extends Thread {
 					System.out.print("Already ran Msg Holder:");
 					System.out.println(GUI.already_ran_recovery_message);
 					if (!isPoppedRecovery) {
+
 						recoveryStack.addToStack(popped);
 						GUI.already_ran_recovery_message = new MsgDummy(); //Flush the value to allow multiple recovery of the same kind once the recovery function is run
-						System.out.print("********************Added to Recovery Stack!:***************");
+						System.out.println("********************Added to Recovery Stack!:***************");
+						System.out.print("Recovery Msg = ");
 						System.out.println(popped);
 					}
 

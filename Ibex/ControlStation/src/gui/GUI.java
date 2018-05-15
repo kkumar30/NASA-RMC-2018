@@ -60,7 +60,6 @@ public class GUI extends JFrame {
 
 		public void run() {
 			updateRobotDataBoxes();
-
 		}
 	}
 
@@ -175,6 +174,7 @@ public class GUI extends JFrame {
 	private static JLabel hbLabel;
 	private static JLabel lblBumpLeft;
 	private static JLabel lblBumpRight;
+	private static JLabel lblLimitSwitch;
 
 	private static ImagePanel imagepanel = new ImagePanel();
 	private static JTextField tbox_cameraAngleData2;
@@ -348,11 +348,11 @@ public class GUI extends JFrame {
 //							}
 //						}
 //						runServer = false;
-//						runRecovery();
+						runRecovery();
 
-						Message stopMsgClose = new MsgStop();
-						messageQueue.clear();
-						messageQueue.addAtFront(stopMsgClose);
+//						Message stopMsgClose = new MsgStop();
+//						messageQueue.clear();
+//						messageQueue.addAtFront(stopMsgClose);
 						updateMessageQueueList(messageList);
 						updateRecoveryStackList(list_1);
 					}
@@ -464,7 +464,11 @@ public class GUI extends JFrame {
 					removalIndex = messageList.getSelectedIndex();
 					Message pop;
 					pop = messageQueue.removeAtIndex(removalIndex);
+					boolean isPopRecovery = pop.isRecovery();
+					pop.convertToRecovery(); //Converts the recovery message here
+					if (!isPopRecovery){
 					recoveryStack.addToStack(pop);
+					}
 					updateMessageQueueList(messageList);
 					updateRecoveryStackList(list_1);
 				} catch (Exception exception) {
@@ -727,7 +731,7 @@ public class GUI extends JFrame {
 		panel_rightMotorData.add(tbox_rightMotorID);
 
 		JLabel lbl_rightMotorCurrent = new JLabel("Current (A):");
-		lbl_rightMotorCurrent.setForeground(Color.WHITE);
+		lbl_rightMotorCurrent.setForeground(Color.BLACK);
 		lbl_rightMotorCurrent.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_rightMotorCurrent.setBounds(10, 76, 88, 14);
 		panel_rightMotorData.add(lbl_rightMotorCurrent);
@@ -847,7 +851,7 @@ public class GUI extends JFrame {
 		panel_scoopMotorData.add(tbox_scoopMotorID);
 
 		JLabel lbl_scoopMotorCurrent = new JLabel("Current (A):");
-		lbl_scoopMotorCurrent.setForeground(Color.WHITE);
+		lbl_scoopMotorCurrent.setForeground(Color.BLACK);
 		lbl_scoopMotorCurrent.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_scoopMotorCurrent.setBounds(10, 76, 88, 14);
 		panel_scoopMotorData.add(lbl_scoopMotorCurrent);
@@ -967,7 +971,7 @@ public class GUI extends JFrame {
 		panel_depthMotorData.add(tbox_depthMotorID);
 
 		JLabel lbl_depthMotorCurrent = new JLabel("Current (A):");
-		lbl_depthMotorCurrent.setForeground(Color.WHITE);
+		lbl_depthMotorCurrent.setForeground(Color.BLACK);
 		lbl_depthMotorCurrent.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_depthMotorCurrent.setBounds(10, 76, 88, 14);
 		panel_depthMotorData.add(lbl_depthMotorCurrent);
@@ -1087,7 +1091,7 @@ public class GUI extends JFrame {
 		panel_winchMotorData.add(tbox_winchMotorID);
 
 		JLabel lbl_winchMotorCurrent = new JLabel("Current (A):");
-		lbl_winchMotorCurrent.setForeground(Color.WHITE);
+		lbl_winchMotorCurrent.setForeground(Color.BLACK);
 		lbl_winchMotorCurrent.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_winchMotorCurrent.setBounds(10, 76, 88, 14);
 		panel_winchMotorData.add(lbl_winchMotorCurrent);
@@ -1301,7 +1305,7 @@ public class GUI extends JFrame {
 		lblBumpLeft.setOpaque(true);
 		lblBumpLeft.setHorizontalAlignment(SwingConstants.CENTER);
 		lblBumpLeft.setForeground(Color.WHITE);
-		lblBumpLeft.setBounds(220, 74, 58, 45);
+		lblBumpLeft.setBounds(220, 67, 58, 45);
 		panel_4.add(lblBumpLeft);
 		
 		lblBumpRight = new JLabel("RIGHT");
@@ -1309,15 +1313,23 @@ public class GUI extends JFrame {
 		lblBumpRight.setForeground(Color.WHITE);
 		lblBumpRight.setBackground(Color.GRAY);
 		lblBumpRight.setOpaque(true);
-		lblBumpRight.setBounds(289, 74, 58, 45);
+		lblBumpRight.setBounds(289, 67, 58, 45);
 		panel_4.add(lblBumpRight);
 		
 		JLabel lblBumps = new JLabel("Bump Sensors");
-		lblBumps.setFont(new Font("Dialog", Font.BOLD, 14));
+		lblBumps.setFont(new Font("Dialog", Font.BOLD, 15));
 		lblBumps.setHorizontalAlignment(SwingConstants.CENTER);
 		lblBumps.setForeground(Color.WHITE);
-		lblBumps.setBounds(220, 50, 127, 14);
+		lblBumps.setBounds(220, 48, 127, 20);
 		panel_4.add(lblBumps);
+		
+		lblLimitSwitch = new JLabel("LIMIT SWITCH");
+		lblLimitSwitch.setOpaque(true);
+		lblLimitSwitch.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLimitSwitch.setForeground(Color.WHITE);
+		lblLimitSwitch.setBackground(Color.GRAY);
+		lblLimitSwitch.setBounds(220, 124, 127, 28);
+		panel_4.add(lblLimitSwitch);
 		panel_leftMotorData.setLayout(null);
 
 
@@ -1333,7 +1345,7 @@ public class GUI extends JFrame {
 		tbox_leftMotorID.setColumns(10);
 
 		JLabel lbl_leftMotorCurrent = new JLabel("Current (A):");
-		lbl_leftMotorCurrent.setForeground(Color.WHITE);
+		lbl_leftMotorCurrent.setForeground(Color.BLACK);
 		lbl_leftMotorCurrent.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbl_leftMotorCurrent.setBounds(10, 76, 88, 14);
 		panel_leftMotorData.add(lbl_leftMotorCurrent);
@@ -1462,7 +1474,8 @@ public class GUI extends JFrame {
 			String listItem = "";
 			listItem += "(" + i + ") ";
 			listItem += msg.getType().toString() + ": ";
-			listItem += msg.convertRecoveryMessageString(); //This is where the opposite function is created
+			listItem += msg.getMessageString();
+//			listItem += msg.convertRecoveryMessageString(); //This is where the opposite function is created
 //			recovery_model.addElement(listItem);
 			recovery_model.add(0, listItem);
 		}
@@ -1638,26 +1651,27 @@ public class GUI extends JFrame {
 		tbox_winchMotorRLimit.setText((robotData.getDumpMotor().getReverseLimit().toString()));
 
 	//********Sensors*****************
+//		IMU
 		tbox_imuData.setText((robotData.getImu().getValue().toString()));
+//		Camera Angle 1
 		tbox_cameraAngleData1.setText((robotData.getCamServo1().getValue().toString()));
+//		Pose
+		pose = robotData.getPose().getValue(); //calculate the pose received
 		tbox_cameraAngleData2.setText((robotData.getPose().getValue().toString()));
-//		TODO: add the lblBumpRight button display
-//		System.out.print("Left = ");
-//		System.out.println(robotData.getLeftBump().getValue());
-//		System.out.print("Right = ");
-//		System.out.println(robotData.getRightBump().getValue());
-
+//		Bump Right Display
 		if (robotData.getLeftBump().getValue().floatValue() < 1.0){lblBumpLeft.setBackground(Color.GREEN);}
 		else if (robotData.getLeftBump().getValue().floatValue() == 1.0){lblBumpLeft.setBackground(Color.GRAY);}
-//		Bump Right Display
 		if (robotData.getRightBump().getValue().floatValue() < 1.0){lblBumpRight.setBackground(Color.GREEN);}
 		else if (robotData.getRightBump().getValue().floatValue() == 1.0){lblBumpRight.setBackground(Color.GRAY);}
 
-		pose = robotData.getPose().getValue();
-
+//		Camera that saw it
 		if (robotData.getCamera().getValue()==1.0){ tbox_IRData.setText("Right");}
 		else if (robotData.getCamera().getValue()==2.0){ tbox_IRData.setText("Left");}
 		else if(robotData.getCamera().getValue()!= 1.0 || robotData.getCamera().getValue()!= 2.0) { tbox_IRData.setText("Janeen");}
+
+//		Limit Switch
+		if (robotData.getLimitSwitch1().getValue().floatValue() > 0.0){lblLimitSwitch.setBackground(Color.RED);}
+		else if (robotData.getLimitSwitch1().getValue().floatValue() == 0.0){lblLimitSwitch.setBackground(Color.GRAY);}
 
 	}
 
@@ -1737,6 +1751,9 @@ public class GUI extends JFrame {
 		Message retract_digger = new MsgRetractDigger();
 		Message go_back = new MsgGoToDump();
 		Message dump = new MsgDump();
+
+//		Stage 2
+
 
 //		q.addAtBack(drive_to_ez);
 //		q.addAtBack(excavate);
